@@ -6,7 +6,7 @@ dependency berat. Fitur tambahan (LDA topik, baca PDF, Q&A via Claude) aktif
 otomatis kalau library opsionalnya terpasang.
 """
 
-from .loader import load_document
+from .loader import load_document, html_to_text, is_url, SUPPORTED_EXTENSIONS
 from .preprocess import tokenize_words, split_sentences, STOPWORDS
 from .analyze import (
     document_stats,
@@ -17,9 +17,13 @@ from .analyze import (
 )
 from .qa import answer_question
 from .report import build_report
+from .batch import analyze_documents, analyze_one, write_csv, expand_sources
 
 __all__ = [
     "load_document",
+    "html_to_text",
+    "is_url",
+    "SUPPORTED_EXTENSIONS",
     "tokenize_words",
     "split_sentences",
     "STOPWORDS",
@@ -30,6 +34,10 @@ __all__ = [
     "topics",
     "answer_question",
     "build_report",
+    "analyze_documents",
+    "analyze_one",
+    "write_csv",
+    "expand_sources",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

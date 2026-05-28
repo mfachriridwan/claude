@@ -13,18 +13,23 @@ Fitur:
 - 🧩 **Topic modeling** (LDA via scikit-learn, dengan fallback ko-okurensi)
 - 💬 **Tanya-jawab dokumen** (ekstraktif, opsional disintesis Claude)
 - 📄 **Laporan Markdown** lengkap dalam satu perintah
+- 📚 **Batch** banyak dokumen sekaligus → ekspor **CSV**
+- 📥 **Banyak format**: `.txt`, `.md`, `.html`, `.docx`, `.pdf`, dan **URL** http(s)
 
 ## Desain
 
 Core (`doknlp/`) ditulis **murni dengan standard library Python** sehingga jalan
-tanpa instalasi apa pun dan mudah dites. Fitur tambahan aktif otomatis bila
-library opsional terpasang:
+tanpa instalasi apa pun dan mudah dites — termasuk membaca **HTML, DOCX, dan
+URL** (lewat `html.parser`, `zipfile`, dan `urllib`). Fitur tambahan aktif
+otomatis bila library opsional terpasang:
 
 | Fitur | Library opsional | Fallback |
 |---|---|---|
 | Baca PDF | `pypdf` / `PyPDF2` | error informatif |
 | Topic modeling LDA | `scikit-learn` | ko-okurensi keyword |
 | Q&A `--llm` | `anthropic` + `ANTHROPIC_API_KEY` | jawaban ekstraktif |
+| Wordcloud di dashboard | `wordcloud` + `matplotlib` | grafik batang keyword |
+| Unduh URL lebih andal | `requests` | `urllib` (stdlib) |
 | Dashboard | `streamlit` | — |
 
 ## Pemakaian CLI
@@ -40,7 +45,22 @@ python riset.py topics dokumen.txt -k 5
 python riset.py ask dokumen.txt -q "apa kesimpulan utamanya?"
 python riset.py ask dokumen.txt -q "..." --llm        # sintesis via Claude
 python riset.py report dokumen.txt -o laporan.md
+
+# Sumber boleh berupa file, folder, pola glob, atau URL
+python riset.py stats artikel.docx
+python riset.py summarize halaman.html -n 5
+python riset.py keywords https://contoh.com/artikel -n 20
+
+# Batch: banyak dokumen sekaligus -> CSV
+python riset.py batch dokumen/ -o hasil.csv          # semua file dalam folder
+python riset.py batch *.pdf laporan.docx -o hasil.csv
+python riset.py batch dokumen/ -r                    # rekursif, tabel ke layar
 ```
+
+Kolom CSV batch: `sumber, kata, kalimat, kata_unik, rata_kata_per_kalimat,
+keberagaman_leksikal, estimasi_waktu_baca_menit, sentimen, polaritas,
+kata_kunci, error`. Dokumen yang gagal dibaca tetap dicatat dengan pesan di
+kolom `error` (proses tidak berhenti).
 
 ## Dashboard
 
@@ -66,12 +86,13 @@ pytest                # core tidak butuh dependency apa pun
 research_assistant/
 ├── riset.py              # entry point CLI
 ├── doknlp/               # core NLP (murni stdlib)
-│   ├── loader.py         # baca txt/md/pdf
+│   ├── loader.py         # baca txt/md/html/docx/pdf + URL
 │   ├── preprocess.py     # tokenisasi, stopword
 │   ├── analyze.py        # statistik, ringkasan, keyword, sentimen, topik
 │   ├── qa.py             # tanya-jawab dokumen
+│   ├── batch.py          # pemrosesan banyak dokumen + ekspor CSV
 │   └── report.py         # laporan Markdown
-├── dashboard/app.py      # dashboard Streamlit
-├── tests/test_doknlp.py  # tes pytest
+├── dashboard/app.py      # dashboard Streamlit (+ wordcloud, grafik topik, batch)
+├── tests/                # tes pytest
 └── requirements.txt
 ```

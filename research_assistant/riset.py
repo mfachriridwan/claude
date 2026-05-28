@@ -9,12 +9,16 @@ Contoh:
     python riset.py topics dokumen.txt -k 5
     python riset.py ask dokumen.txt -q "apa kesimpulan utamanya?"
     python riset.py report dokumen.txt -o laporan.md
+    python riset.py batch dokumen/ *.pdf https://contoh.com -o hasil.csv
     python riset.py dashboard
+
+Sumber dokumen bisa berupa .txt/.md/.html/.docx/.pdf atau URL http(s).
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 
 from doknlp import (
@@ -26,6 +30,8 @@ from doknlp import (
     topics,
     answer_question,
     build_report,
+    analyze_documents,
+    write_csv,
 )
 
 
@@ -97,11 +103,39 @@ def cmd_report(args) -> None:
         print(md)
 
 
+def cmd_batch(args) -> None:
+    rows = analyze_documents(args.sources, n_keywords=args.keywords,
+                             recursive=args.recursive)
+    if not rows:
+        print("Tidak ada dokumen yang cocok.", file=sys.stderr)
+        sys.exit(1)
+
+    if args.output:
+        write_csv(rows, args.output)
+        ok = sum(1 for r in rows if not r["error"])
+        print(f"{ok}/{len(rows)} dokumen dianalisis. CSV disimpan ke: {args.output}")
+        errors = [r for r in rows if r["error"]]
+        if errors:
+            print(f"\n{len(errors)} dokumen gagal:")
+            for r in errors:
+                print(f"  - {r['sumber']}: {r['error']}")
+    else:
+        # Tabel ringkas ke layar.
+        print(f"{'sumber':<40} {'kata':>7} {'sentimen':>10} {'polaritas':>10}")
+        print("-" * 70)
+        for r in rows:
+            if r["error"]:
+                print(f"{os.path.basename(str(r['sumber'])):<40} ERROR: {r['error']}")
+            else:
+                name = str(r["sumber"])
+                name = name if len(name) <= 40 else "..." + name[-37:]
+                print(f"{name:<40} {r['kata']:>7} {r['sentimen']:>10} {r['polaritas']:>10}")
+
+
 def cmd_dashboard(args) -> None:
     import subprocess
-    import os
 
-    app = os.path.join(os.path.dirname(__file__), "dashboard", "app.py")
+    app = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard", "app.py")
     print("Menjalankan dashboard Streamlit...")
     try:
         subprocess.run(["streamlit", "run", app], check=True)
@@ -156,6 +190,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--keywords", type=int, default=15)
     p.add_argument("--topics", type=int, default=5)
     p.set_defaults(func=cmd_report)
+
+    p = sub.add_parser("batch", help="Analisis banyak dokumen -> CSV")
+    p.add_argument("sources", nargs="+",
+                   help="file, folder, pola glob, atau URL (boleh banyak)")
+    p.add_argument("-o", "--output", help="simpan ke CSV (default tabel di layar)")
+    p.add_argument("--keywords", type=int, default=10, help="kata kunci per dokumen")
+    p.add_argument("-r", "--recursive", action="store_true",
+                   help="telusuri folder secara rekursif")
+    p.set_defaults(func=cmd_batch)
 
     p = sub.add_parser("dashboard", help="Jalankan dashboard Streamlit")
     p.set_defaults(func=cmd_dashboard)
