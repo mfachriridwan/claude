@@ -1,0 +1,17 @@
+# Core tidak butuh dependency apa pun (murni stdlib).
+# Berikut hanya untuk fitur opsional:
+
+# Dashboard interaktif
+streamlit>=1.30
+
+# Topic modeling LDA (kalau tidak ada, dipakai fallback ko-okurensi)
+scikit-learn>=1.3
+
+# Membaca file PDF
+pypdf>=4.0
+
+# Sintesis jawaban Q&A via Claude (perintah `ask --llm`)
+anthropic>=0.40
+
+# Menjalankan tes
+pytest>=7.0
