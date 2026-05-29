@@ -32,6 +32,8 @@ from doknlp import (
     build_report,
     analyze_documents,
     write_csv,
+    extract_lci,
+    write_lci_csv,
 )
 
 
@@ -132,10 +134,46 @@ def cmd_batch(args) -> None:
                 print(f"{name:<40} {r['kata']:>7} {r['sentimen']:>10} {r['polaritas']:>10}")
 
 
+def cmd_lci(args) -> None:
+    text = _load(args.file)
+    result = extract_lci(text, use_llm=args.llm)
+    print(f"Metode ekstraksi : {result['metode']}")
+    print(f"Functional unit  : {result['functional_unit'] or '(tidak terdeteksi)'}")
+    if result.get("system_boundary"):
+        print(f"System boundary  : {result['system_boundary']}")
+    print(f"Jumlah flow       : {result['jumlah_flow']}")
+    print("Per kategori      :", result["ringkasan_kategori"])
+    print()
+
+    flows = result["flows"]
+    if not flows:
+        print("Tidak ada data kuantitatif LCI yang terdeteksi.")
+    else:
+        print(f"{'kategori':<14} {'nilai':>12} {'satuan':<16} substansi")
+        print("-" * 70)
+        for f in flows[: args.limit]:
+            val = f["nilai"]
+            val_s = f"{val:,.4g}" if isinstance(val, (int, float)) else str(val)
+            print(f"{f['kategori']:<14} {val_s:>12} {str(f['satuan']):<16} {f['substansi']}")
+        if len(flows) > args.limit:
+            print(f"... dan {len(flows) - args.limit} flow lain (pakai -o untuk CSV penuh)")
+
+    if args.output:
+        write_lci_csv(flows, args.output)
+        print(f"\nLCI disimpan ke: {args.output}")
+    if args.json:
+        import json as _json
+
+        with open(args.json, "w", encoding="utf-8") as jf:
+            _json.dump(result, jf, ensure_ascii=False, indent=2)
+        print(f"JSON disimpan ke: {args.json}")
+
+
 def cmd_dashboard(args) -> None:
     import subprocess
 
-    app = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard", "app.py")
+    filename = "lci_app.py" if getattr(args, "lci", False) else "app.py"
+    app = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard", filename)
     print("Menjalankan dashboard Streamlit...")
     try:
         subprocess.run(["streamlit", "run", app], check=True)
@@ -200,7 +238,18 @@ def build_parser() -> argparse.ArgumentParser:
                    help="telusuri folder secara rekursif")
     p.set_defaults(func=cmd_batch)
 
+    p = sub.add_parser("lci", help="Ekstrak data Life Cycle Inventory dari paper")
+    p.add_argument("file", help="paper: .pdf/.docx/.html/.txt atau URL")
+    p.add_argument("-o", "--output", help="simpan flows ke CSV")
+    p.add_argument("--json", help="simpan hasil lengkap ke JSON")
+    p.add_argument("--llm", action="store_true",
+                   help="ekstraksi via Claude (butuh ANTHROPIC_API_KEY)")
+    p.add_argument("--limit", type=int, default=30, help="baris ditampilkan di layar")
+    p.set_defaults(func=cmd_lci)
+
     p = sub.add_parser("dashboard", help="Jalankan dashboard Streamlit")
+    p.add_argument("--lci", action="store_true",
+                   help="jalankan dashboard Paper -> LCI (bukan analisis umum)")
     p.set_defaults(func=cmd_dashboard)
 
     return parser

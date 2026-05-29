@@ -15,6 +15,8 @@ Fitur:
 - 📄 **Laporan Markdown** lengkap dalam satu perintah
 - 📚 **Batch** banyak dokumen sekaligus → ekspor **CSV**
 - 📥 **Banyak format**: `.txt`, `.md`, `.html`, `.docx`, `.pdf`, dan **URL** http(s)
+- ♻️ **Paper → Life Cycle Inventory (LCI)**: ekstrak functional unit + aliran
+  energi/material/emisi/air/limbah/transport (rule-based, atau Claude bila ada API key)
 
 ## Desain
 
@@ -62,16 +64,44 @@ keberagaman_leksikal, estimasi_waktu_baca_menit, sentimen, polaritas,
 kata_kunci, error`. Dokumen yang gagal dibaca tetap dicatat dengan pesan di
 kolom `error` (proses tidak berhenti).
 
+## Paper → Life Cycle Inventory (LCI)
+
+Ekstrak kandidat data LCI dari paper: **functional unit** + aliran input/output
+(energi, material, emisi udara/air, air, limbah, transport, lahan) lengkap
+dengan jumlah & satuan.
+
+```bash
+python riset.py lci paper.pdf                 # tabel LCI ke layar
+python riset.py lci paper.pdf -o lci.csv       # ekspor CSV
+python riset.py lci paper.pdf --json lci.json  # ekspor JSON lengkap
+python riset.py lci paper.pdf --llm            # ekstraksi via Claude (lebih akurat)
+python riset.py lci https://contoh.com/paper   # langsung dari URL
+```
+
+Dua mesin ekstraksi:
+
+- **Rule-based** (default): deteksi pola `angka + satuan`, klasifikasi ke
+  kategori LCI lewat kata kunci yang paling dekat dengan angka. Murni stdlib,
+  jalan offline. Hasilnya **kandidat** yang perlu diverifikasi.
+- **Claude** (`--llm`, butuh `ANTHROPIC_API_KEY`): ekstraksi terstruktur
+  (nama, tipe input/output, kategori, nilai, satuan, kompartemen) jauh lebih akurat.
+
+> ⚠️ Selalu verifikasi nilai & satuan terhadap paper asli sebelum dipakai
+> dalam studi LCA.
+
 ## Dashboard
 
 ```bash
 pip install streamlit
-python riset.py dashboard
-# atau: streamlit run dashboard/app.py
+python riset.py dashboard            # dashboard analisis dokumen umum
+python riset.py dashboard --lci      # dashboard Paper -> LCI
+# atau: streamlit run dashboard/app.py  /  streamlit run dashboard/lci_app.py
 ```
 
-Upload `.txt`/`.md` atau tempel teks, atur slider, lalu jelajahi tab
-Ringkasan / Kata Kunci / Topik / Tanya-Jawab.
+- **Dashboard umum**: upload `.txt`/`.md`/dll atau tempel teks, jelajahi tab
+  Ringkasan / Kata Kunci / Topik / Tanya-Jawab / Batch.
+- **Dashboard LCI**: upload paper → functional unit, tabel LCI per kategori,
+  grafik, dan ekspor CSV/JSON.
 
 ## Tes
 
@@ -91,8 +121,11 @@ research_assistant/
 │   ├── analyze.py        # statistik, ringkasan, keyword, sentimen, topik
 │   ├── qa.py             # tanya-jawab dokumen
 │   ├── batch.py          # pemrosesan banyak dokumen + ekspor CSV
+│   ├── lci.py            # ekstraksi Life Cycle Inventory (paper -> LCI)
 │   └── report.py         # laporan Markdown
-├── dashboard/app.py      # dashboard Streamlit (+ wordcloud, grafik topik, batch)
+├── dashboard/
+│   ├── app.py            # dashboard analisis dokumen (wordcloud, topik, batch)
+│   └── lci_app.py        # dashboard Paper -> LCI
 ├── tests/                # tes pytest
 └── requirements.txt
 ```

@@ -18,6 +18,14 @@ from .analyze import (
 from .qa import answer_question
 from .report import build_report
 from .batch import analyze_documents, analyze_one, write_csv, expand_sources
+from .lci import (
+    extract_lci,
+    extract_flows_rulebased,
+    detect_functional_unit,
+    write_lci_csv,
+    CATEGORY_KEYWORDS,
+    LCI_CSV_FIELDS,
+)
 
 __all__ = [
     "load_document",
@@ -38,6 +46,12 @@ __all__ = [
     "analyze_one",
     "write_csv",
     "expand_sources",
+    "extract_lci",
+    "extract_flows_rulebased",
+    "detect_functional_unit",
+    "write_lci_csv",
+    "CATEGORY_KEYWORDS",
+    "LCI_CSV_FIELDS",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
