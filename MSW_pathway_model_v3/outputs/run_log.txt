@@ -1,0 +1,450 @@
+21 locations loaded
+                        comp_year                        t_status   Q_2025    Q_alt  Q_managed_M1  Q_managed_M2  moisture   LHV  L0_od  L0_sl  wte_kwh  rdf_yield  rdf_ncv  ad_kwh  phb_kg  phb_tpa  phb_cost                     kiln  road_km  gate_LHV  gate_WtE_scale  gate_PSEL_generated gate_PSEL_M1  gate_PSEL_M2  gate_RDF  gate_PHB  landfilled_S5  norm_dom  norm_nd                  glass flags
+city                                                                                                                                                                                                                                                                                                                                                                                                        
+Kota Padang                  2023          stated_in_source_table   656.02   656.02           NaN        471.15      0.52  7.19  36.62  45.77   359.69       0.26    18.06   66.19    9.95  2382.66      5.97  Semen Padang (Indarung)    16.80      True            True                False          NaN         False      True      True           0.37       1.0      1.0     not_reported_blank     N
+Kab. Bogor                   2022          stated_in_source_table  2891.14  2891.14        638.94       1016.24      0.54  5.86  28.68  35.85   292.84       0.21    17.93   82.71    7.79  8223.23      5.39     Indocement Citeureup    19.94     False            True                 True        False          True      True      True           0.37       1.0      1.0  folded_into_lain_lain     G
+Kab. Serang                  2024          stated_in_source_table  1186.99  1186.99           NaN         88.43      0.52  7.86  29.55  36.94   392.96       0.27    19.78   73.12    8.03  3478.90      5.79     Indocement Citeureup   117.74      True            True                 True          NaN         False      True      True           0.35       1.0      1.0  folded_into_lain_lain     G
+Kota Denpasar                2023          stated_in_source_table   918.48   918.48         98.55        890.10      0.51  6.68  51.87  64.84   333.93       0.25    15.52   39.30   14.10  4725.43      5.64      Imasco Puger Jember   253.13     False            True                False        False         False      True      True           0.46       1.0      1.0  folded_into_lain_lain     G
+Kab. Cianjur                 2023          stated_in_source_table  1113.70  1113.70         29.74        338.12      0.53  5.95  35.97  44.96   297.62       0.22    16.72   66.65    9.77  3973.54      5.73      Semen Jawa Sukabumi    50.66     False            True                 True        False         False      True      True           0.41       1.0      1.0  folded_into_lain_lain    LG
+Kab. Indramayu               2023          stated_in_source_table  1151.89  1151.89         98.95        708.64      0.52  5.74  36.33  45.41   287.20       0.22    16.40   65.74    9.87  4150.22      5.70     Indocement Palimanan    54.98     False            True                 True        False         False      True      True           0.41       1.0      1.0  folded_into_lain_lain    LG
+Kota Semarang                2022  overview_index_year_unverified  1190.00  1252.84         98.41        707.22      0.48  7.08  34.51  43.13   354.13       0.27    17.46   56.39    9.38  4072.77      5.71     Semen Gresik Rembang   151.84      True            True                 True        False         False      True      True           0.41       1.0      1.0    reported_separately    LT
+Kab. Brebes                  2025  overview_index_year_unverified  1033.00  1033.00         23.97         23.97      0.41  8.65  29.08  36.34   432.43       0.32    19.24   44.67    7.90  2979.05      5.86     Semen Bima Ajibarang    79.62      True            True                 True        False         False      True      True           0.42       1.0      1.0    reported_separately     T
+Kab. Nganjuk                 2022  overview_index_year_unverified   744.00   783.29         84.30         84.30      0.54  6.03  43.48  54.35   301.64       0.21    16.72   61.91   11.82  3208.68      5.83                SIG Tuban   105.56     False            True                False        False         False      True      True           0.42       1.0      1.0    reported_separately     T
+Kab. Pati                    2024          stated_in_source_table   691.44   691.44        127.09        127.09      0.39  9.47  29.49  36.87   473.56       0.38    17.79   44.86    8.01  2022.66      6.06     Semen Gresik Rembang    63.74      True            True                False        False         False      True      True           0.36       1.0      1.0    reported_separately     R
+Kab. Magelang                2016  overview_index_year_unverified   671.00   783.00         70.12         70.12      0.48  7.34  35.46  44.33   367.13       0.29    16.94   56.53    9.64  2360.01      5.98     Semen Bima Ajibarang   166.63      True            True                False        False         False      True      True           0.39       1.0      1.0    reported_separately     T
+Kab. Pandeglang              2023          stated_in_source_table   526.76   526.76        156.98        156.98      0.54  6.71  27.59  34.49   335.74       0.24    18.20   87.14    7.50  1441.47      6.23            Cemindo Bayah    93.58     False            True                False        False         False      True      True           0.33       1.0      1.0    reported_separately      
+Kab. Pemalang                2025        RIPS_projection_for_2025   483.52   483.52         77.90         77.90      0.50  7.88  28.43  35.53   394.12       0.29    18.40   72.90    7.72  1363.29      6.26     Semen Bima Ajibarang    88.58      True            True                False        False         False      True      True           0.33       1.0      1.0    reported_separately      
+Kab. Temanggung              2022          stated_in_source_table   422.62   422.62         36.56         36.56      0.45  6.56  32.34  40.43   328.03       0.24    17.73   49.20    8.79  1355.68      6.26     Semen Bima Ajibarang   158.36     False            True                False        False         False      True      True           0.47       1.0      1.0    reported_separately      
+Kab. Pekalongan              2025          stated_in_source_table   560.08   560.08         87.26         87.26      0.49  8.33  38.45  48.06   416.50       0.32    17.67   55.66   10.45  2135.70      6.03     Semen Bima Ajibarang    93.48      True            True                False        False         False      True      True           0.35       1.0      1.0    reported_separately     L
+Kab. Sragen                  2016  overview_index_year_unverified   402.00   469.10         81.36         81.36      0.49  7.40  36.80  46.00   370.00       0.28    17.29   58.76   10.00  1467.45      6.22     Semen Gresik Rembang   104.67      True            True                False        False         False      True      True           0.38       1.0      1.0    reported_separately    LT
+Kab. Kutai Kartanegara       2021  overview_index_year_unverified   373.00   399.49        208.58        208.58      0.50  7.20  44.42  55.52   360.14       0.28    16.62   51.71   12.07  1643.33      6.16            Conch Tanjung   331.36      True            True                False        False         False     False      True           0.40       1.0      1.0    reported_separately    WT
+Kab. Kendal                  2014  overview_index_year_unverified   437.00   527.74        119.78        119.78      0.60  4.96  45.83  57.29   248.08       0.17    15.03   83.00   12.45  1986.58      6.06     Semen Bima Ajibarang   177.45     False            True                False        False         False      True      True           0.37       1.0      1.0    reported_separately    WT
+Kab. Wonogiri                2022  overview_index_year_unverified   422.00   444.28         84.48         84.48      0.56  5.99  42.44  53.05   299.44       0.23    15.72   79.26   11.53  1776.30      6.12     Semen Gresik Rembang   158.35     False            True                False        False         False      True      True           0.34       1.0      1.0    reported_separately   WRT
+Kota Pekalongan              2024          stated_in_source_table   163.88   163.88         78.92         78.92      0.51  7.84  38.63  48.29   392.02       0.29    17.94   62.79   10.50   627.97      6.67     Semen Bima Ajibarang   115.22      True            True                False        False         False      True      True           0.35       1.0      1.0    reported_separately     L
+Kota Magelang                2024          stated_in_source_table    49.51    49.51         33.91         33.91      0.46  8.14  38.17  47.72   407.09       0.32    17.42   50.40   10.37   187.47      7.38     Semen Bima Ajibarang   164.99      True           False                False        False         False      True     False           0.38       1.0      1.0    reported_separately     W
+
+Best feasible pathway by carbon value (USD per tonne CO2e), market scenario
+                       best_at_0 best_at_25 best_at_50 best_at_100
+city                                                              
+Kota Padang                   SL         SL         S5          S5
+Kab. Bogor                    SL         SL         S5          S5
+Kab. Serang                   SL         SL         S5          S5
+Kota Denpasar                 SL         SL         S5          S5
+Kab. Cianjur                  SL         SL         S5          S5
+Kab. Indramayu                SL         SL         S5          S5
+Kota Semarang                 SL         SL         S5          S5
+Kab. Brebes                   SL         SL         S5          S5
+Kab. Nganjuk                  SL         SL         S5          S5
+Kab. Pati                     SL         SL         S5          S5
+Kab. Magelang                 SL         SL         S5          S5
+Kab. Pandeglang               SL         SL         S5          S5
+Kab. Pemalang                 SL         SL         S5          S5
+Kab. Temanggung               SL         SL         SL          S5
+Kab. Pekalongan               SL         SL         S5          S5
+Kab. Sragen                   SL         SL         S5          S5
+Kab. Kutai Kartanegara        SL         SL         SL          S1
+Kab. Kendal                   SL         SL         S5          S5
+Kab. Wonogiri                 SL         SL         S5          S5
+Kota Pekalongan               SL         SL         S5          S5
+Kota Magelang                 SL         SL         SL          S5
+
+Probability of being best | scenario: market
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.46  0.01  0.01  0.00  0.03  0.49   S5  0.49
+Kab. Bogor              0.43  0.00  0.00  0.07  0.09  0.41   SL  0.43
+Kab. Serang             0.54  0.01  0.00  0.06  0.06  0.34   SL  0.54
+Kota Denpasar           0.43  0.16  0.02  0.00  0.06  0.32   SL  0.43
+Kab. Cianjur            0.48  0.02  0.01  0.02  0.05  0.42   SL  0.48
+Kab. Indramayu          0.49  0.02  0.01  0.02  0.05  0.42   SL  0.49
+Kota Semarang           0.47  0.03  0.01  0.01  0.06  0.42   SL  0.47
+Kab. Brebes             0.46  0.01  0.02  0.00  0.03  0.47   S5  0.47
+Kab. Nganjuk            0.51  0.03  0.00  0.00  0.04  0.41   SL  0.51
+Kab. Pati               0.29  0.00  0.10  0.00  0.02  0.58   S5  0.58
+Kab. Magelang           0.49  0.02  0.02  0.00  0.03  0.44   SL  0.49
+Kab. Pandeglang         0.58  0.00  0.00  0.08  0.02  0.31   SL  0.58
+Kab. Pemalang           0.54  0.00  0.01  0.01  0.01  0.43   SL  0.54
+Kab. Temanggung         0.69  0.01  0.00  0.00  0.02  0.28   SL  0.69
+Kab. Pekalongan         0.39  0.02  0.05  0.00  0.02  0.52   S5  0.52
+Kab. Sragen             0.49  0.01  0.04  0.00  0.02  0.44   SL  0.49
+Kab. Kutai Kartanegara  0.76  0.16  0.00  0.04  0.03  0.00   SL  0.76
+Kab. Kendal             0.54  0.01  0.00  0.03  0.03  0.38   SL  0.54
+Kab. Wonogiri           0.50  0.01  0.01  0.01  0.02  0.44   SL  0.50
+Kota Pekalongan         0.56  0.01  0.04  0.00  0.00  0.38   SL  0.56
+Kota Magelang           0.64  0.00  0.08  0.00  0.00  0.28   SL  0.64
+
+Probability of being best | scenario: perpres109
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.46  0.01  0.01  0.00  0.03  0.49   S5  0.49
+Kab. Bogor              0.36  0.22  0.00  0.07  0.08  0.28   SL  0.36
+Kab. Serang             0.18  0.72  0.00  0.02  0.02  0.06   S1  0.72
+Kota Denpasar           0.43  0.16  0.02  0.00  0.06  0.32   SL  0.43
+Kab. Cianjur            0.37  0.29  0.00  0.02  0.04  0.27   SL  0.37
+Kab. Indramayu          0.41  0.23  0.00  0.02  0.04  0.30   SL  0.41
+Kota Semarang           0.24  0.55  0.00  0.00  0.03  0.18   S1  0.55
+Kab. Brebes             0.10  0.84  0.00  0.00  0.01  0.05   S1  0.84
+Kab. Nganjuk            0.51  0.03  0.00  0.00  0.04  0.41   SL  0.51
+Kab. Pati               0.29  0.00  0.10  0.00  0.02  0.58   S5  0.58
+Kab. Magelang           0.49  0.02  0.02  0.00  0.03  0.44   SL  0.49
+Kab. Pandeglang         0.58  0.00  0.00  0.08  0.02  0.31   SL  0.58
+Kab. Pemalang           0.54  0.00  0.01  0.01  0.01  0.43   SL  0.54
+Kab. Temanggung         0.69  0.01  0.00  0.00  0.02  0.28   SL  0.69
+Kab. Pekalongan         0.39  0.02  0.05  0.00  0.02  0.52   S5  0.52
+Kab. Sragen             0.49  0.01  0.04  0.00  0.02  0.44   SL  0.49
+Kab. Kutai Kartanegara  0.76  0.16  0.00  0.04  0.03  0.00   SL  0.76
+Kab. Kendal             0.54  0.01  0.00  0.03  0.03  0.38   SL  0.54
+Kab. Wonogiri           0.50  0.01  0.01  0.01  0.02  0.44   SL  0.50
+Kota Pekalongan         0.56  0.01  0.04  0.00  0.00  0.38   SL  0.56
+Kota Magelang           0.64  0.00  0.08  0.00  0.00  0.28   SL  0.64
+
+Probability of being best | scenario: food_separated_at_source
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.25  0.01  0.01  0.41  0.02  0.30   S3  0.41
+Kab. Bogor              0.16  0.00  0.00  0.68  0.06  0.10   S3  0.68
+Kab. Serang             0.20  0.00  0.00  0.68  0.03  0.08   S3  0.68
+Kota Denpasar           0.27  0.16  0.02  0.21  0.05  0.28   S5  0.28
+Kab. Cianjur            0.22  0.02  0.01  0.47  0.04  0.24   S3  0.47
+Kab. Indramayu          0.22  0.02  0.01  0.47  0.04  0.24   S3  0.47
+Kota Semarang           0.23  0.03  0.01  0.42  0.05  0.27   S3  0.42
+Kab. Brebes             0.26  0.01  0.02  0.35  0.02  0.34   S3  0.35
+Kab. Nganjuk            0.25  0.03  0.00  0.44  0.03  0.24   S3  0.44
+Kab. Pati               0.21  0.00  0.10  0.13  0.02  0.54   S5  0.54
+Kab. Magelang           0.26  0.02  0.01  0.38  0.03  0.31   S3  0.38
+Kab. Pandeglang         0.24  0.00  0.00  0.70  0.01  0.05   S3  0.70
+Kab. Pemalang           0.26  0.00  0.01  0.52  0.01  0.20   S3  0.52
+Kab. Temanggung         0.32  0.01  0.00  0.53  0.01  0.13   S3  0.53
+Kab. Pekalongan         0.26  0.02  0.05  0.21  0.02  0.44   S5  0.44
+Kab. Sragen             0.29  0.01  0.04  0.32  0.01  0.32   S3  0.32
+Kab. Kutai Kartanegara  0.31  0.12  0.00  0.55  0.02  0.00   S3  0.55
+Kab. Kendal             0.26  0.01  0.00  0.54  0.02  0.17   S3  0.54
+Kab. Wonogiri           0.27  0.01  0.01  0.42  0.02  0.28   S3  0.42
+Kota Pekalongan         0.36  0.01  0.04  0.33  0.00  0.26   SL  0.36
+Kota Magelang           0.49  0.00  0.08  0.21  0.00  0.22   SL  0.49
+
+Probability of being best | scenario: residues_to_open_dump
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.31  0.03  0.11  0.04  0.02  0.48   S5  0.48
+Kab. Bogor              0.38  0.01  0.01  0.09  0.09  0.42   S5  0.42
+Kab. Serang             0.43  0.02  0.03  0.14  0.05  0.33   SL  0.43
+Kota Denpasar           0.42  0.22  0.04  0.04  0.06  0.22   SL  0.42
+Kab. Cianjur            0.41  0.03  0.05  0.07  0.05  0.39   SL  0.41
+Kab. Indramayu          0.42  0.03  0.04  0.06  0.05  0.39   SL  0.42
+Kota Semarang           0.39  0.06  0.04  0.06  0.06  0.39   SL  0.39
+Kab. Brebes             0.31  0.02  0.11  0.03  0.03  0.50   S5  0.50
+Kab. Nganjuk            0.46  0.06  0.04  0.06  0.04  0.34   SL  0.46
+Kab. Pati               0.12  0.01  0.22  0.02  0.01  0.63   S5  0.63
+Kab. Magelang           0.34  0.04  0.06  0.08  0.03  0.45   S5  0.45
+Kab. Pandeglang         0.33  0.00  0.04  0.28  0.01  0.33   SL  0.33
+Kab. Pemalang           0.27  0.00  0.11  0.11  0.01  0.50   S5  0.50
+Kab. Temanggung         0.43  0.02  0.05  0.16  0.02  0.33   SL  0.43
+Kab. Pekalongan         0.25  0.05  0.15  0.04  0.02  0.49   S5  0.49
+Kab. Sragen             0.30  0.03  0.14  0.08  0.01  0.45   S5  0.45
+Kab. Kutai Kartanegara  0.54  0.20  0.00  0.24  0.02  0.00   SL  0.54
+Kab. Kendal             0.43  0.02  0.03  0.12  0.03  0.36   SL  0.43
+Kab. Wonogiri           0.34  0.02  0.07  0.10  0.02  0.45   S5  0.45
+Kota Pekalongan         0.24  0.02  0.23  0.13  0.00  0.38   S5  0.38
+Kota Magelang           0.15  0.00  0.40  0.17  0.00  0.29   S2  0.40
+
+Probability of being best | scenario: managed_M1_status_index
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kab. Bogor              0.58  0.00  0.00  0.06  0.03  0.33   SL  0.58
+Kota Denpasar           0.61  0.00  0.08  0.00  0.00  0.31   SL  0.61
+Kab. Cianjur            0.81  0.00  0.02  0.01  0.00  0.16   SL  0.81
+Kab. Indramayu          0.72  0.00  0.02  0.01  0.00  0.24   SL  0.72
+Kota Semarang           0.71  0.00  0.03  0.00  0.00  0.25   SL  0.71
+Kab. Brebes             0.79  0.00  0.05  0.00  0.00  0.16   SL  0.79
+Kab. Nganjuk            0.72  0.00  0.01  0.00  0.00  0.27   SL  0.72
+Kab. Pati               0.40  0.00  0.16  0.00  0.00  0.43   S5  0.43
+Kab. Magelang           0.69  0.00  0.03  0.00  0.00  0.28   SL  0.69
+Kab. Pandeglang         0.72  0.00  0.00  0.06  0.00  0.22   SL  0.72
+Kab. Pemalang           0.71  0.00  0.01  0.01  0.00  0.27   SL  0.71
+Kab. Temanggung         0.88  0.00  0.00  0.00  0.00  0.12   SL  0.88
+Kab. Pekalongan         0.52  0.00  0.09  0.00  0.00  0.38   SL  0.52
+Kab. Sragen             0.63  0.00  0.06  0.00  0.00  0.31   SL  0.63
+Kab. Kutai Kartanegara  0.83  0.12  0.00  0.03  0.02  0.00   SL  0.83
+Kab. Kendal             0.67  0.00  0.01  0.02  0.01  0.29   SL  0.67
+Kab. Wonogiri           0.64  0.00  0.02  0.01  0.00  0.33   SL  0.64
+Kota Pekalongan         0.63  0.00  0.05  0.00  0.00  0.32   SL  0.63
+Kota Magelang           0.67  0.00  0.09  0.00  0.00  0.25   SL  0.67
+
+Probability of being best | scenario: managed_M2_local_first
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.49  0.01  0.01  0.00  0.02  0.47   SL  0.49
+Kab. Bogor              0.53  0.00  0.00  0.07  0.04  0.36   SL  0.53
+Kab. Serang             0.81  0.00  0.00  0.02  0.00  0.17   SL  0.81
+Kota Denpasar           0.43  0.16  0.02  0.00  0.06  0.33   SL  0.43
+Kab. Cianjur            0.59  0.01  0.02  0.02  0.02  0.35   SL  0.59
+Kab. Indramayu          0.53  0.01  0.01  0.02  0.03  0.40   SL  0.53
+Kota Semarang           0.52  0.02  0.02  0.01  0.04  0.40   SL  0.52
+Kab. Brebes             0.79  0.00  0.05  0.00  0.00  0.16   SL  0.79
+Kab. Nganjuk            0.72  0.00  0.01  0.00  0.00  0.27   SL  0.72
+Kab. Pati               0.40  0.00  0.16  0.00  0.00  0.43   S5  0.43
+Kab. Magelang           0.69  0.00  0.03  0.00  0.00  0.28   SL  0.69
+Kab. Pandeglang         0.72  0.00  0.00  0.06  0.00  0.22   SL  0.72
+Kab. Pemalang           0.71  0.00  0.01  0.01  0.00  0.27   SL  0.71
+Kab. Temanggung         0.88  0.00  0.00  0.00  0.00  0.12   SL  0.88
+Kab. Pekalongan         0.52  0.00  0.09  0.00  0.00  0.38   SL  0.52
+Kab. Sragen             0.63  0.00  0.06  0.00  0.00  0.31   SL  0.63
+Kab. Kutai Kartanegara  0.83  0.12  0.00  0.03  0.02  0.00   SL  0.83
+Kab. Kendal             0.67  0.00  0.01  0.02  0.01  0.29   SL  0.67
+Kab. Wonogiri           0.64  0.00  0.02  0.01  0.00  0.33   SL  0.64
+Kota Pekalongan         0.63  0.00  0.05  0.00  0.00  0.32   SL  0.63
+Kota Magelang           0.67  0.00  0.09  0.00  0.00  0.25   SL  0.67
+
+Probability of being best | scenario: GWP20
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.19  0.27  0.01  0.00  0.01  0.52   S5  0.52
+Kab. Bogor              0.19  0.08  0.00  0.04  0.03  0.66   S5  0.66
+Kab. Serang             0.21  0.28  0.00  0.02  0.02  0.47   S5  0.47
+Kota Denpasar           0.17  0.37  0.01  0.00  0.02  0.43   S5  0.43
+Kab. Cianjur            0.19  0.16  0.01  0.02  0.02  0.61   S5  0.61
+Kab. Indramayu          0.19  0.14  0.01  0.02  0.02  0.63   S5  0.63
+Kota Semarang           0.19  0.30  0.01  0.01  0.02  0.48   S5  0.48
+Kab. Brebes             0.18  0.25  0.01  0.00  0.01  0.54   S5  0.54
+Kab. Nganjuk            0.20  0.18  0.00  0.00  0.02  0.60   S5  0.60
+Kab. Pati               0.13  0.13  0.04  0.00  0.01  0.70   S5  0.70
+Kab. Magelang           0.20  0.26  0.01  0.00  0.01  0.51   S5  0.51
+Kab. Pandeglang         0.26  0.07  0.00  0.06  0.01  0.60   S5  0.60
+Kab. Pemalang           0.22  0.09  0.00  0.01  0.00  0.68   S5  0.68
+Kab. Temanggung         0.28  0.17  0.00  0.00  0.01  0.54   S5  0.54
+Kab. Pekalongan         0.17  0.35  0.03  0.00  0.01  0.45   S5  0.45
+Kab. Sragen             0.20  0.24  0.02  0.00  0.01  0.53   S5  0.53
+Kab. Kutai Kartanegara  0.36  0.46  0.00  0.16  0.02  0.00   S1  0.46
+Kab. Kendal             0.23  0.07  0.00  0.05  0.01  0.64   S5  0.64
+Kab. Wonogiri           0.21  0.14  0.00  0.01  0.01  0.62   S5  0.62
+Kota Pekalongan         0.23  0.21  0.03  0.00  0.00  0.54   S5  0.54
+Kota Magelang           0.27  0.00  0.05  0.00  0.00  0.67   S5  0.67
+
+Probability of being best | scenario: moisture_IPCC_default
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.23  0.05  0.01  0.00  0.02  0.69   S5  0.69
+Kab. Bogor              0.17  0.07  0.00  0.06  0.06  0.63   S5  0.63
+Kab. Serang             0.24  0.06  0.00  0.06  0.04  0.60   S5  0.60
+Kota Denpasar           0.33  0.27  0.00  0.00  0.05  0.35   S5  0.35
+Kab. Cianjur            0.26  0.07  0.00  0.03  0.04  0.59   S5  0.59
+Kab. Indramayu          0.25  0.06  0.00  0.04  0.04  0.60   S5  0.60
+Kota Semarang           0.26  0.10  0.00  0.01  0.04  0.57   S5  0.57
+Kab. Brebes             0.22  0.04  0.01  0.00  0.02  0.71   S5  0.71
+Kab. Nganjuk            0.32  0.09  0.00  0.02  0.04  0.53   S5  0.53
+Kab. Pati               0.12  0.05  0.05  0.00  0.01  0.77   S5  0.77
+Kab. Magelang           0.27  0.08  0.00  0.01  0.02  0.62   S5  0.62
+Kab. Pandeglang         0.27  0.03  0.00  0.07  0.02  0.61   S5  0.61
+Kab. Pemalang           0.24  0.02  0.00  0.01  0.01  0.72   S5  0.72
+Kab. Temanggung         0.47  0.02  0.00  0.02  0.02  0.48   S5  0.48
+Kab. Pekalongan         0.20  0.06  0.02  0.00  0.02  0.71   S5  0.71
+Kab. Sragen             0.28  0.04  0.01  0.01  0.01  0.65   S5  0.65
+Kab. Kutai Kartanegara  0.48  0.40  0.00  0.10  0.02  0.00   SL  0.48
+Kab. Kendal             0.32  0.08  0.00  0.08  0.03  0.49   S5  0.49
+Kab. Wonogiri           0.26  0.09  0.00  0.02  0.02  0.61   S5  0.61
+Kota Pekalongan         0.34  0.02  0.02  0.01  0.00  0.61   S5  0.61
+Kota Magelang           0.40  0.00  0.04  0.00  0.00  0.55   S5  0.55
+
+Probability of being best | scenario: tonnage_overview_projected
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.46  0.01  0.01  0.00  0.03  0.49   S5  0.49
+Kab. Bogor              0.43  0.00  0.00  0.07  0.09  0.41   SL  0.43
+Kab. Serang             0.54  0.01  0.00  0.06  0.06  0.34   SL  0.54
+Kota Denpasar           0.43  0.16  0.02  0.00  0.06  0.32   SL  0.43
+Kab. Cianjur            0.48  0.02  0.01  0.02  0.05  0.42   SL  0.48
+Kab. Indramayu          0.49  0.02  0.01  0.02  0.05  0.42   SL  0.49
+Kota Semarang           0.47  0.03  0.01  0.01  0.06  0.42   SL  0.47
+Kab. Brebes             0.46  0.01  0.02  0.00  0.03  0.47   S5  0.47
+Kab. Nganjuk            0.50  0.04  0.00  0.00  0.04  0.41   SL  0.50
+Kab. Pati               0.29  0.00  0.10  0.00  0.02  0.59   S5  0.59
+Kab. Magelang           0.48  0.02  0.01  0.00  0.04  0.45   SL  0.48
+Kab. Pandeglang         0.58  0.00  0.00  0.08  0.02  0.31   SL  0.58
+Kab. Pemalang           0.54  0.00  0.01  0.01  0.01  0.43   SL  0.54
+Kab. Temanggung         0.69  0.01  0.00  0.00  0.02  0.28   SL  0.69
+Kab. Pekalongan         0.39  0.02  0.05  0.00  0.02  0.52   S5  0.52
+Kab. Sragen             0.47  0.01  0.03  0.00  0.02  0.45   SL  0.47
+Kab. Kutai Kartanegara  0.76  0.17  0.00  0.04  0.03  0.00   SL  0.76
+Kab. Kendal             0.53  0.01  0.00  0.04  0.03  0.39   SL  0.53
+Kab. Wonogiri           0.50  0.01  0.01  0.01  0.02  0.44   SL  0.50
+Kota Pekalongan         0.56  0.01  0.04  0.00  0.00  0.38   SL  0.56
+Kota Magelang           0.64  0.00  0.08  0.00  0.00  0.28   SL  0.64
+
+Probability of being best | scenario: docf_rubber_0.5
+pathway                   SL    S1    S2    S3    S4    S5 best     p
+city                                                                 
+Kota Padang             0.46  0.01  0.01  0.00  0.03  0.49   S5  0.49
+Kab. Bogor              0.42  0.00  0.00  0.07  0.09  0.41   SL  0.42
+Kab. Serang             0.54  0.01  0.00  0.06  0.06  0.34   SL  0.54
+Kota Denpasar           0.42  0.17  0.03  0.00  0.06  0.33   SL  0.42
+Kab. Cianjur            0.48  0.02  0.01  0.02  0.05  0.42   SL  0.48
+Kab. Indramayu          0.48  0.02  0.01  0.02  0.05  0.42   SL  0.48
+Kota Semarang           0.47  0.03  0.01  0.01  0.06  0.42   SL  0.47
+Kab. Brebes             0.46  0.01  0.02  0.00  0.03  0.48   S5  0.48
+Kab. Nganjuk            0.50  0.04  0.00  0.00  0.04  0.41   SL  0.50
+Kab. Pati               0.28  0.00  0.10  0.00  0.02  0.59   S5  0.59
+Kab. Magelang           0.49  0.02  0.02  0.00  0.03  0.45   SL  0.49
+Kab. Pandeglang         0.58  0.00  0.00  0.08  0.02  0.32   SL  0.58
+Kab. Pemalang           0.53  0.00  0.01  0.01  0.01  0.44   SL  0.53
+Kab. Temanggung         0.67  0.01  0.00  0.00  0.02  0.30   SL  0.67
+Kab. Pekalongan         0.39  0.02  0.05  0.00  0.02  0.52   S5  0.52
+Kab. Sragen             0.48  0.01  0.04  0.00  0.02  0.45   SL  0.48
+Kab. Kutai Kartanegara  0.76  0.17  0.00  0.04  0.03  0.00   SL  0.76
+Kab. Kendal             0.54  0.01  0.00  0.03  0.03  0.38   SL  0.54
+Kab. Wonogiri           0.50  0.01  0.01  0.01  0.02  0.45   SL  0.50
+Kota Pekalongan         0.56  0.01  0.04  0.00  0.00  0.38   SL  0.56
+Kota Magelang           0.63  0.00  0.08  0.00  0.00  0.28   SL  0.63
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+  **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
+/usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+
+Median 90% interval width over locations (G in kg CO2e/t, C in USD/t)
+          G_w90                                  C_w90                                 
+source    both composition only parameters only  both composition only parameters only
+pathway                                                                               
+S1       266.6            210.4           137.5  41.0             12.4            39.1
+S2       337.6            132.4           309.6  16.3              5.1            15.5
+S3       453.5            253.7           386.0  15.2              0.4            15.1
+S4       547.0            198.1           500.7  43.3              5.3            43.3
+S5       244.9            109.9           220.9  18.9              5.5            17.3
+SL       542.7            203.2           494.3  11.3              0.0            11.3
+SL G: {'cap': 0.75, 's_garden': 0.26, 'moisture': 0.26, 'doc_k': 0.26, 's_plastic': 0.21} 
+   C: {'c_sl': 0.98, 'e_sl': 0.12, 'c_truck': 0.02, 'psi': 0.02, 'anc_rdf': 0.02}
+S1 G: {'s_plastic': 0.8, 'eta_wte': 0.33, 'efg_k': 0.32, 's_paper': 0.24, 's_food': 0.2} 
+   C: {'K_wte': 0.68, 'moisture': 0.32, 'p_el': 0.28, 's_plastic': 0.27, 'r': 0.25}
+S2 G: {'cap': 0.76, 'doc_k': 0.27, 's_food': 0.2, 's_paper': 0.18, 'psi': 0.18} 
+   C: {'o_rdf': 0.53, 'c_sl': 0.51, 'p_rdf': 0.3, 's_plastic': 0.29, 'K_rdf': 0.27}
+S3 G: {'cap': 0.66, 's_garden': 0.42, 's_food': 0.28, 'moisture': 0.28, 's_paper': 0.28} 
+   C: {'c_sl': 0.61, 'pre': 0.39, 'K_ad': 0.37, 'o_ad': 0.25, 'o_rdf': 0.23}
+S4 G: {'cap': 0.77, 's_garden': 0.25, 'moisture': 0.25, 'doc_k': 0.25, 's_plastic': 0.2} 
+   C: {'c_phb': 0.66, 'p_phb': 0.56, 'c_sl': 0.26, 'cap': 0.19, 'e_phb': 0.15}
+S5 G: {'cap': 0.62, 's_garden': 0.4, 'kappa': 0.26, 'psi': 0.25, 'doc_k': 0.22} 
+   C: {'o_rdf': 0.46, 'c_sl': 0.34, 'K_ad': 0.3, 'moisture': 0.3, 's_plastic': 0.29}
+                                          model, 21 locations                                                                                             reference
+bulk moisture (-)                  0.39 to 0.60 (median 0.51)  0.53 to 0.56 at transfer points (Prabowo et al. 2019); 0.64 to 0.66 at a landfill (Fiki et al. 2022)
+LHV as received (MJ/kg)               5.0 to 9.5 (median 7.2)            about 5 to 7 (HHV 6.9 to 9.0 measured, Prabowo et al. 2019; 6.5 assumed, Azis et al. 2021)
+HHV of dry matter (MJ/kg)          15.3 to 20.3 (median 18.1)             15.7 to 19.2, from HHV 6.9 to 9.0 as received at 53 to 56% moisture (Prabowo et al. 2019)
+L0 at MCF = 1 (kg CH4/t)                 34 to 65 (median 45)                                                  no Indonesian measurement; reported for transparency
+RDF yield (t/t MSW)                0.17 to 0.38 (median 0.27)                                                        0.20 to 0.42 (Indonesian RDF plants, GIZ 2023)
+RDF heating value (MJ/kg)          15.0 to 19.8 (median 17.5)                      12.6 to 13.8 for biodried whole waste (GIZ 2023); sorted and dried SRF is higher
+WtE net electricity (kWh/t)           248 to 474 (median 360)                              632 kWh/t at 35% gross conversion (Azis et al. 2021); model uses 18% net
+carbon in biogas / carbon in food                        0.74                                                                                       must be below 1
+
+Percent of wet mass with a known Level II/III parameter (terminal partition)
+        has_moisture_wet_fraction  has_DOC_dry_fraction  has_DOCf  has_carbon_dry_fraction
+count                       42.0                  42.0      42.0                     42.0
+mean                        86.6                  91.0      69.1                     86.6
+std                          4.1                   2.6       7.7                      4.1
+min                         78.4                  83.0      52.4                     78.4
+25%                         84.5                  89.8      65.5                     84.5
+50%                         87.6                  90.9      69.8                     87.6
+75%                         89.5                  93.0      73.2                     89.5
+max                         93.1                  96.4      84.7                     93.1
+
+Most probable pathway by scenario
+                        market perpres109 food_separated_at_source residues_to_open_dump managed_M1_status_index managed_M2_local_first GWP20 moisture_IPCC_default tonnage_overview_projected docf_rubber_0.5
+city                                                                                                                                                                                                         
+Kota Padang                S5         S5                       S3                    S5                     NaN                     SL    S5                    S5                         S5              S5
+Kab. Bogor                 SL         SL                       S3                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kab. Serang                SL         S1                       S3                    SL                     NaN                     SL    S5                    S5                         SL              SL
+Kota Denpasar              SL         SL                       S5                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Cianjur               SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Indramayu             SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kota Semarang              SL         S1                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Brebes                S5         S1                       S3                    S5                      SL                     SL    S5                    S5                         S5              S5
+Kab. Nganjuk               SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Pati                  S5         S5                       S5                    S5                      S5                     S5    S5                    S5                         S5              S5
+Kab. Magelang              SL         SL                       S3                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kab. Pandeglang            SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Pemalang              SL         SL                       S3                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kab. Temanggung            SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Pekalongan            S5         S5                       S5                    S5                      SL                     SL    S5                    S5                         S5              S5
+Kab. Sragen                SL         SL                       S3                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kab. Kutai Kartanegara     SL         SL                       S3                    SL                      SL                     SL    S1                    SL                         SL              SL
+Kab. Kendal                SL         SL                       S3                    SL                      SL                     SL    S5                    S5                         SL              SL
+Kab. Wonogiri              SL         SL                       S3                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kota Pekalongan            SL         SL                       SL                    S5                      SL                     SL    S5                    S5                         SL              SL
+Kota Magelang              SL         SL                       SL                    S2                      SL                     SL    S5                    S5                         SL              SL
+Done. Files written to /home/user/claude/MSW_pathway_model_v3/outputs

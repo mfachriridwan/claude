@@ -1,0 +1,43 @@
+city_name,stream,has_moisture_wet_fraction,has_DOC_dry_fraction,has_DOCf,has_carbon_dry_fraction
+Kab. Bogor,domestic,86.5,88.6,70.8,86.5
+Kab. Bogor,non_domestic,86.5,88.6,70.8,86.5
+Kab. Brebes,domestic,78.4,91.9,52.4,78.4
+Kab. Brebes,non_domestic,78.4,91.9,52.4,78.4
+Kab. Cianjur,domestic,87.5,89.0,73.5,87.5
+Kab. Cianjur,non_domestic,87.5,89.0,73.5,87.5
+Kab. Indramayu,domestic,86.3,87.9,73.2,86.3
+Kab. Indramayu,non_domestic,86.3,87.9,73.2,86.3
+Kab. Kendal,domestic,92.1,96.4,84.7,92.1
+Kab. Kendal,non_domestic,92.1,96.4,84.7,92.1
+Kab. Kutai Kartanegara,domestic,87.6,91.0,71.6,87.6
+Kab. Kutai Kartanegara,non_domestic,87.6,91.0,71.6,87.6
+Kab. Magelang,domestic,84.8,89.7,67.1,84.8
+Kab. Magelang,non_domestic,84.8,89.7,67.1,84.8
+Kab. Nganjuk,domestic,89.5,93.4,76.8,89.5
+Kab. Nganjuk,non_domestic,87.6,90.7,70.2,87.6
+Kab. Pandeglang,domestic,90.2,93.3,73.2,90.2
+Kab. Pandeglang,non_domestic,90.2,93.3,73.2,90.2
+Kab. Pati,domestic,80.8,91.2,55.3,80.8
+Kab. Pati,non_domestic,80.8,91.2,55.3,80.8
+Kab. Pekalongan,domestic,89.4,90.9,68.3,89.4
+Kab. Pekalongan,non_domestic,89.4,90.9,68.3,89.4
+Kab. Pemalang,domestic,87.9,90.2,65.9,87.9
+Kab. Pemalang,non_domestic,87.9,90.2,65.9,87.9
+Kab. Serang,domestic,93.1,94.1,65.4,93.1
+Kab. Serang,non_domestic,81.2,83.0,67.1,81.2
+Kab. Sragen,domestic,85.8,90.0,67.8,85.8
+Kab. Sragen,non_domestic,85.8,90.0,67.8,85.8
+Kab. Temanggung,domestic,79.2,90.0,60.8,79.2
+Kab. Temanggung,non_domestic,79.2,90.0,60.8,79.2
+Kab. Wonogiri,domestic,90.9,93.6,79.6,90.9
+Kab. Wonogiri,non_domestic,90.9,93.6,79.6,90.9
+Kota Denpasar,domestic,88.8,94.1,75.1,88.8
+Kota Denpasar,non_domestic,88.8,94.1,75.1,88.8
+Kota Magelang,domestic,84.4,89.9,63.7,84.4
+Kota Magelang,non_domestic,84.4,89.9,63.7,84.4
+Kota Padang,domestic,88.6,91.1,69.5,88.6
+Kota Padang,non_domestic,92.2,95.0,82.4,92.2
+Kota Pekalongan,domestic,90.6,91.8,70.5,90.6
+Kota Pekalongan,non_domestic,90.6,91.8,70.5,90.6
+Kota Semarang,domestic,82.8,88.5,64.5,82.8
+Kota Semarang,non_domestic,80.2,86.2,58.7,80.2

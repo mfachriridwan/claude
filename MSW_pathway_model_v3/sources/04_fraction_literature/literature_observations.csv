@@ -1,0 +1,11 @@
+source_id,geography,fraction,parameter,value,unit,basis,selection_status,source_url,source_locator,scope_note
+G2016,International,Plastic,LHV_median,30.5,MJ/kgTS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Not a resin-specific LHV
+G2016,International,Plastic,HHV_median,33.5,MJ/kgTS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Do not substitute HHV for LHV
+G2016,International,Plastic,chlorine_median,1.3,percent TS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Not applicable to each pure resin
+G2016,International,Plastic,ash_median,10,percent TS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Contamination and additives affect ash
+G2016,International,Glass,ash_median,99,percent TS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Not a colour-specific measurement
+G2016,International,Metal,ash_median,97,percent TS,dry solids,aggregate benchmark,https://doi.org/10.1016/j.wasman.2016.01.008,Section 3.2.3,Not a ferrous/non-ferrous-specific measurement
+M2026,Sumberejo Malang Indonesia,PET,composition_share,44.8,percent plastic stream,plastic-stream distribution,external Indonesian comparison,https://doi.org/10.1007/s11367-026-02751-9,Composition discussion and Figure S1,Confirm underlying node and measurement basis before transfer to other cities
+M2026,Sumberejo Malang Indonesia,LDPE,composition_share,42,percent plastic stream,plastic-stream distribution,external Indonesian comparison,https://doi.org/10.1007/s11367-026-02751-9,Composition discussion and Figure S1,Remaining resin shares not extracted
+M2026,Bakalan Malang Indonesia,LDPE,composition_share,32.5,percent plastic stream,plastic-stream distribution,external Indonesian comparison,https://doi.org/10.1007/s11367-026-02751-9,Composition discussion and Figure S1,Not total municipal waste percentage
+M2026,Krebet Senggrong Malang Indonesia,PET,composition_share,31.2,percent plastic stream,plastic-stream distribution,external Indonesian comparison,https://doi.org/10.1007/s11367-026-02751-9,Composition discussion and Figure S1,Not total municipal waste percentage

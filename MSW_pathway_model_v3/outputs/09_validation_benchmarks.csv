@@ -1,0 +1,9 @@
+,"model, 21 locations",reference
+bulk moisture (-),0.39 to 0.60 (median 0.51),0.53 to 0.56 at transfer points (Prabowo et al. 2019); 0.64 to 0.66 at a landfill (Fiki et al. 2022)
+LHV as received (MJ/kg),5.0 to 9.5 (median 7.2),"about 5 to 7 (HHV 6.9 to 9.0 measured, Prabowo et al. 2019; 6.5 assumed, Azis et al. 2021)"
+HHV of dry matter (MJ/kg),15.3 to 20.3 (median 18.1),"15.7 to 19.2, from HHV 6.9 to 9.0 as received at 53 to 56% moisture (Prabowo et al. 2019)"
+L0 at MCF = 1 (kg CH4/t),34 to 65 (median 45),no Indonesian measurement; reported for transparency
+RDF yield (t/t MSW),0.17 to 0.38 (median 0.27),"0.20 to 0.42 (Indonesian RDF plants, GIZ 2023)"
+RDF heating value (MJ/kg),15.0 to 19.8 (median 17.5),12.6 to 13.8 for biodried whole waste (GIZ 2023); sorted and dried SRF is higher
+WtE net electricity (kWh/t),248 to 474 (median 360),632 kWh/t at 35% gross conversion (Azis et al. 2021); model uses 18% net
+carbon in biogas / carbon in food,0.74,must be below 1

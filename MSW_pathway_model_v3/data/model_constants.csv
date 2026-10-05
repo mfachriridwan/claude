@@ -1,0 +1,24 @@
+key,value,unit,meaning,source
+GWP100_CH4,27.0,-,GWP100 of non-fossil CH4,IPCC AR6 WG1 Table 7.15
+GWP100_N2O,273.0,-,GWP100 of N2O,IPCC AR6 WG1 Table 7.15
+GWP20_CH4,79.7,-,GWP20 of non-fossil CH4,IPCC AR6 WG1 Table 7.15
+GWP20_N2O,273.0,-,N2O kept at GWP100 value in the GWP20 case,IPCC AR6 WG1 Table 7.15
+LAM,2.443,MJ/kg water,Latent heat of vaporisation,Physical constant
+RHO_CH4,0.716,kg/Nm3,Density of methane,Physical constant
+LHV_CH4,35.9,MJ/Nm3,Lower heating value of methane,Physical constant
+AVAIL,0.85,-,Plant availability (nameplate = throughput / 0.85),Analyst assumption
+P_EL_PSEL,0.2,USD/kWh,Perpres 109/2025 WtE tariff,Perpres 109/2025
+PC_MAX,100.0,USD/t CO2e,Highest carbon value sampled,High-Level Commission on Carbon Prices 2017
+QREF_wte,1000.0,t/d,Reference capacity WtE,Azis et al. 2021
+QREF_rdf,300.0,t/d,Reference capacity RDF,GIZ ERiC-DKTI 2023
+QREF_ad,100.0,t/d,Reference capacity AD,GIZ 2017 in UNDP 2021
+QREF_sl,500.0,t/d,Reference capacity sanitary landfill,World Bank 2024
+GATE_lhv_min,7.0,MJ/kg,G1 WtE minimum LHV as received,Rand et al. 2000
+GATE_q_wte,150.0,t/d,G2 WtE minimum supply,Rand et al. 2000
+GATE_q_psel,1000.0,t/d,G3 PSEL tariff eligibility,Perpres 109/2025
+GATE_ncv_rdf,12.56,MJ/kg,"G4 RDF minimum NCV (3,000 kcal/kg)",GIZ ERiC-DKTI 2023
+GATE_d_max,300.0,km,G5 maximum road distance to kiln,Analyst assumption
+GATE_phb_min,500.0,t PHB/yr,G6 PHB minimum costed scale,Chidambarampadmavathy et al. 2017
+SEED,42.0,-,Random seed,Model setting
+N_MC,4000.0,-,Monte Carlo draws per location and scenario,Model setting
+BASE_YEAR,2025.0,-,Baseline year,Study design

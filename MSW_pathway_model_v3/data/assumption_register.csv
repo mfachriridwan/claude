@@ -1,0 +1,62 @@
+id,key,central,low,high,unit,stage,meaning,source,status,evidence_type
+H11,g_default,0.0173,0.0065,0.0254,1/yr,H,Tonnage growth rate where the RIPS gives none (median of six RIPS rates),RIPS of six locations,A,assumption
+H12,gamma,0.27,0.04,0.62,-,H,Garden share of lumped 'organik' (median and range of 8 locations reporting both),input_kota; Edjabou et al. 2017,A,assumption
+H13,yard,1.0,0.5,1.0,-,H,Share of 'kayu' treated as garden where kayu >= 10% and no leaf category exists,RIPS notes,A,assumption
+H14,alpha_hi,80.0,80.0,80.0,-,H,"Dirichlet concentration, unflagged composition (heuristic, not statistically calibrated)",Analyst heuristic,A,heuristic
+H15,alpha_lo,40.0,40.0,40.0,-,H,"Dirichlet concentration, flagged composition (heuristic, not statistically calibrated)",Analyst heuristic,A,heuristic
+C8,F,0.5,0.475,0.525,-,C,Methane fraction of landfill gas,IPCC 2006 V5 Ch3,L,literature default
+C9,doc_k,1.0,0.8,1.2,x,C,Multiplier on DOC x DOCf (default uncertainty +-20%),IPCC 2006 V5 Ch3 Table 3.5,L,literature default
+C10,h_k,0.9,0.78,1.02,x,C,Calibration factor on legacy dry-matter LHV (not applied to the Gotze plastic value),Prabowo et al. 2019 (bulk HHV),V,calibration
+C10b,h_plastic_k,1.0,0.9,1.1,x,C,"Uncertainty multiplier on plastic dry LHV (aggregate median, resin mix unknown)",Analyst range around Gotze et al. 2016 median,A,assumption
+C11,efg_k,1.0,0.7,1.1,x,C,Multiplier on grid emission factor (lower bound = decarbonising grid),ESDM factors via JCM 2022,A,assumption
+C12,docf_rubber,0.0,0.0,0.5,-,C,DOCf of rubber/leather: gap scenario (0 = not degradable; 0.5 = IPCC 2006 generic default),IPCC 2006 V5 Ch3 (generic DOCf 0.5); no fraction-specific value,A,scenario (data gap)
+B5,mcf_od,0.8,0.4,0.8,-,B,"Methane correction factor, open dump",IPCC 2006 V5 Ch3 Table 3.1,L,literature default
+B6,mcf_sl,1.0,1.0,1.0,-,B,"Methane correction factor, managed anaerobic landfill",IPCC 2006 V5 Ch3 Table 3.1,L,literature default
+B7,ox,0.1,0.0,0.1,-,B,"Oxidation in cover soil, sanitary landfill",IPCC 2006 V5 Ch3 Table 3.2,L,literature default
+B8,cap,0.5,0.3,0.8,-,B,"Lifetime landfill-gas collection efficiency, sanitary landfill",Barlaz et al. 2009; Anshassi et al. 2022; Wei et al. 2024,V,literature range
+B9,anc_od,1.0,0.0,3.0,kg CO2e/t,B,Diesel for dump operation,Manfredi et al. 2009,L,literature
+B10,anc_sl,5.0,2.0,10.0,kg CO2e/t,B,Diesel and materials for sanitary landfill operation,Manfredi et al. 2009,L,literature
+W4,eta_wte,0.18,0.14,0.22,-,S1,Net electrical efficiency of grate incinerator on low-LHV waste,Astrup et al. 2015; Rand et al. 2000,L,literature
+W5,n2o_wte,0.05,0.02,0.08,kg N2O/t,S1,N2O from continuous stoker incineration,IPCC 2006 V5 Ch5 Table 5.6,L,literature default
+W6,anc_wte,10.0,5.0,30.0,kg CO2e/t,S1,Auxiliary fuel and flue-gas reagents,Astrup et al. 2009,L,literature
+W7,ash,0.25,0.15,0.3,t/t,S1,Bottom ash and APC residue sent to landfill,Rand et al. 2000,L,literature
+R6,tau_k,1.0,0.85,1.1,x,S2,Multiplier on RDF transfer coefficients,Nasrullah et al. 2014,V,assumption range
+R7,omega,0.2,0.15,0.25,-,S2,Target moisture of RDF (off-taker limit 20-25%),GIZ ERiC-DKTI 2023,V,specification
+R8,q_dry,3.2,2.6,4.0,GJ/t water,S2,Heat to evaporate water in the dryer (self-supplied by burning RDF),Engineering range for rotary dryers,L,engineering range
+R9,e_rdf,40.0,20.0,70.0,kWh/t,S2,"Electricity for shredding, screening, baling",Engineering range for MT plants,A,assumption
+R10,psi,0.9,0.8,1.0,-,S2,GJ coal displaced per GJ RDF in the kiln,Silva et al. 2021; Khandelwal et al. 2019,L,literature
+R11,ef_coal,96.1,94.6,101.0,kg CO2/GJ,S2,Combustion emission factor of displaced coal (sub-bituminous),IPCC 2006 V2 Ch2 Table 2.3,L,literature default
+R12,ef_truck,0.1,0.06,0.15,kg CO2e/t-km,S2,Truck transport of RDF incl. empty return,GLEC Framework,L,literature
+R13,tort,1.3,1.2,1.5,x,S2,Road distance / straight-line distance to nearest kiln,Analyst assumption,A,assumption
+R14,anc_rdf,3.0,1.0,6.0,kg CO2e/t,S2,Diesel for loaders at the RDF plant,Analyst assumption,A,assumption
+A6,kappa,0.7,0.5,0.9,-,S3,Share of food waste captured into the digester,Mayer et al. 2019,L,literature
+A7,vs_ts,0.87,0.8,0.92,-,S3,Volatile solids / total solids of food waste,Zhang et al. 2007,L,literature
+A8,y_ch4,0.36,0.28,0.44,Nm3 CH4/kg VS,S3,"Methane yield realised in a full-scale digester (BMP-type parameter, not landfill DOCf)",Zhang et al. 2007,L,literature
+A9,eta_chp,0.36,0.32,0.4,-,S3,Electrical efficiency of biogas engine,Mayer et al. 2019,L,literature
+A10,par_ad,0.2,0.1,0.3,-,S3,"Own electricity use (pulping, mixing, dewatering)",Mayer et al. 2019,L,literature
+A11,fug_ad,0.05,0.01,0.1,-,S3,Fugitive methane from the biogas plant,IPCC 2006 V5 Ch4,L,literature default
+A12,anc_ad,3.0,1.0,6.0,kg CO2e/t,S3,Diesel for loaders at the AD plant (per t feed),Analyst assumption,A,assumption
+A13,pre,0.4,0.25,0.6,-,S3,Front-end separation of food from mixed waste: share of RDF-line cost and electricity,Analyst assumption,A,assumption
+A14,dig,0.2,0.1,0.35,t/t feed,S3,Dewatered digestate sent to the residue landfill,Analyst assumption,A,assumption
+P6,r_phb,2.3,2.0,2.8,t CH4/t PHB,S4,Methane per tonne PHB (1.79 as carbon + 0.52 for process energy),Chidambarampadmavathy et al. 2017,V,literature
+P7,ef_phb,0.5,0.0,1.5,kg CO2e/kg,S4,Nutrients and extraction chemicals,Rostkowski et al. 2012,L,literature
+P8,ef_pp,1.9,1.6,3.4,kg CO2e/kg,S4,Cradle-to-gate footprint of displaced polypropylene,PlasticsEurope; Chidambarampadmavathy et al. 2017,L,literature
+P9,sub_pp,1.0,0.7,1.0,kg/kg,S4,kg PP displaced per kg PHB,Chidambarampadmavathy et al. 2017,L,literature
+T7,r,0.1,0.08,0.12,1/yr,T,"Real discount rate, same for all pathways",Analyst assumption,A,assumption
+T8,n,20.0,15.0,30.0,yr,T,"Economic lifetime, same for all pathways",Analyst assumption,A,assumption
+T9,b,0.7,0.6,0.85,-,T,"Capacity exponent for CAPEX scaling, same for all units",Tsilemou & Panagiotakopoulos 2006,L,literature
+T10,K_wte,120000000.0,100000000.0,200000000.0,USD @1000 t/d,T,WtE CAPEX at reference capacity,Azis et al. 2021 (USD 102.2 M),A,assumption
+T11,o_wte,27.0,21.0,37.0,USD/t,T,WtE O&M,Azis et al. 2021; GIZ 2017 in UNDP 2021,V,literature
+T12,K_rdf,12300000.0,9000000.0,16000000.0,USD @300 t/d,T,RDF plant CAPEX at reference capacity (Rp 200 bn),GIZ ERiC-DKTI 2023,V,literature
+T13,o_rdf,12.0,8.0,21.0,USD/t,T,RDF plant O&M,GIZ ERiC-DKTI 2023; GIZ 2017 in UNDP 2021,V,literature
+T14,K_ad,7000000.0,4000000.0,14000000.0,USD @100 t/d,T,AD plant CAPEX at reference feed capacity,GIZ 2017 in UNDP 2021; Aleluia & Ferrao 2017,L,literature
+T15,o_ad,14.0,10.6,30.0,USD/t feed,T,AD plant O&M,GIZ 2017 in UNDP 2021,V,literature
+T16,c_sl,20.0,12.0,30.0,USD/t @500 t/d,T,Full cost of sanitary landfill with gas collection and flare,World Bank 2024,V,literature
+T17,e_sl,0.3,0.2,0.4,-,T,Scale elasticity of landfill cost per tonne,Tsilemou & Panagiotakopoulos 2006,L,literature
+T18,c_od,4.0,2.0,8.0,USD/t,T,Cost of operating an open dump,Analyst assumption,A,assumption
+T19,c_phb,6.8,4.8,9.6,USD/kg @500 t/a,T,PHB production cost excl. methane feedstock,Listewnik et al. in Chidambarampadmavathy 2017; Levett et al. 2016,A,assumption
+T20,e_phb,0.083,0.05,0.15,-,T,Scale elasticity of PHB unit cost,Levett et al. 2016,A,assumption
+T21,p_el,0.07,0.05,0.1,USD/kWh,T,Market value of electricity (grid generation cost),Kepmen ESDM 169/2021 (BPP),L,literature
+T22,p_rdf,1.6,1.0,2.6,USD/GJ,T,Price of RDF at kiln gate,Field data; GIZ 2023,A,assumption
+T23,p_phb,4.0,2.5,6.0,USD/kg,T,Selling price of PHB,Market reports; Levett et al. 2016,L,literature
+T24,c_truck,0.1,0.05,0.15,USD/t-km,T,Cost of trucking RDF,Analyst assumption,A,assumption
