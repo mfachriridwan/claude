@@ -11,52 +11,60 @@ for f in (fig_tonnage, fig_qmanaged, fig_robust, fig_hierarchy): f(d)
 inp, t2, t5, reg = d["inp"], d["t2"], d["t5"], d["reg"]
 story = []
 A = story.append
-TITLE = "MSW recovery pathways in Indonesia: methodology v3.1 (2025 baseline)"
+TITLE = "MSW recovery pathways in Indonesia: methodology v3.2 (2025 baseline)"
 
 # ---------------------------------------------------------------------------------------------- title
 A(P("Screening LCA and TEA of Municipal Solid Waste<br/>Recovery Pathways in Indonesia", "title"))
-A(P("Methodology v3.1: 2025 tonnage baseline, Level I/II/III taxonomy, auditable material parameters, "
-    "managed-waste candidates, fossil energy and land use, decision rules from scenario discovery, and a reproducible "
-    "decision tool", "subtitle"))
+A(P("Methodology v3.2: ex-ante decision support before facilities exist &mdash; 2025 tonnage baseline, auditable "
+    "parameters with verified secondary data, carbon-inclusive cost at fixed carbon values, decision rules, break-even "
+    "targets and the value of information", "subtitle"))
 A(P("Muhammad Fachri Ridwan &mdash; Master of Environmental Management, The University of Queensland<br/>"
     "Supervisor: Prof. Anthony Halog &mdash; October 2026 &mdash; Companion code: msw_pathway_model_v3.py / "
     "MSW_pathway_model_v3.ipynb; user tool: MSW_Decision_Tool_Colab.ipynb", "subtitle"))
 A(Spacer(1, 6))
-mp = N["mp"]
-box = [P("<b>What changed in v3 and what it shows</b>", "box")] + bullets([
-    "<b>One source of truth.</b> Every parameter, constant, coordinate and threshold is read from <i>data/*.csv</i>, "
-    "which <i>build_database_v3.py</i> builds from the update package. The model file holds no numbers. "
-    f"{N['valid'][0]} of {N['valid'][1]} validation checks pass (Section 7).",
-    "<b>2025 baseline with three separate years.</b> Composition sampling year, tonnage source year and baseline year are "
-    "stored separately. Tonnage is projected once, Q<sub>2025</sub> = Q<sub>t</sub>(1+g)<super>2025&minus;t</super>; the "
-    "parser refuses the old file, so a second projection cannot happen. "
-    f"{(inp.tonnage_year_status == 'overview_index_year_unverified').sum()} overview totals have an unverified year; they are "
-    "used as reported and a projected alternative is run as a scenario. They are not labelled as 2025 observations.",
-    "<b>Composition is a proxy.</b> RIPS percentages from the sampling year (2014 to 2025) are normalised per stream "
-    "(factor recorded) and used for 2025 without any trend. They are not a measured 2025 composition.",
-    "<b>Managed waste (Table 5) kept in two series.</b> M1 is the RIPS status index (19 locations); M2 uses a local "
-    "indicator where one is held. The two use different definitions; differences reach 86 percentage points. Padang's "
-    "93.71% is provisional (the 141.76 t/d recovery may be a potential); Serang's 14% is a target, not a baseline.",
-    "<b>Taxonomy and parameters.</b> 10 Level I groups, 36 Level II fractions and a provisional catalogue of 56 Level III "
-    "refinements, keyed by (level, code). Level II/III parameters are parent-category proxies or explicit gaps; Level II/III "
-    "allocations are priors and never enter the model results. Rubber/leather DOCf is a declared gap (scenario 0 to 0.5).",
-    "<b>Results barely move; their status is clearer.</b> At central values sanitary landfill with flare has the lowest "
-    f"social cost everywhere up to USD 25/t CO<sub>2</sub>e; RDF + AD is best in {N['best50'].get('S5', 0)} locations at "
-    f"USD 50 and {N['best100'].get('S5', 0)} at USD 100. Over the sampled carbon range, landfill is most probable in "
-    f"{mp.get('SL', 0)} locations and RDF + AD in {mp.get('S5', 0)}, but {N['n_ties']} of the 21 leads are below 0.05. "
-    "The ranking is sensitive to the moisture assumption: with IPCC default moisture RDF + AD becomes most probable in "
-    f"{N['mp_all']['moisture_IPCC_default'].get('S5', 0)} locations.",
-    "<b>New in v3.1: conditions, energy, land, tool.</b> Scenario discovery over 40,000 combinations of city conditions "
-    "turns the model into decision rules (Section 11). Fossil cumulative energy demand and land take are added "
-    "(Section 10). Sobol indices confirm that as-received moisture and landfill-gas collection decide the landfill versus "
-    "RDF + AD comparison. A Colab notebook lets other researchers and planners run the model for their own cities "
-    "(Section 12).",
-    "<b>Still provisional.</b> Composition proxies of different years, legacy heating values and RDF transfer coefficients, "
-    "status L literature values and class-5 costs. Section 13 states the limits of validity."], "box")
+st = N["stress"]
+box = [P("<b>What v3.2 does and what it shows</b>", "box")] + bullets([
+    "<b>Ex-ante decision support.</b> None of the six options exists as a facility in the 21 locations. The model is a "
+    "screening tool for local governments, planners and funders <i>before</i> a feasibility study or tender: it tells them "
+    "under which conditions each option is worth pursuing, which performance an option must reach to beat a sanitary "
+    "landfill, and which local data are worth collecting first. This, not the ranking of 21 cases, is the contribution.",
+    f"<b>Secondary data re-checked.</b> 23 secondary values were re-verified against their sources (Section 6.1): "
+    f"{N['n_corrected']} were corrected (RDF O&amp;M and price, Sumatera grid factor, the WtE and RDF benchmarks), "
+    "landfill-gas collection was widened to 0.20&ndash;0.80, and status V is now kept only for the four values confirmed in "
+    "the source text. Benchmarks that could not be confirmed were removed.",
+    "<b>Carbon-inclusive cost, fixed carbon values.</b> Options are ranked by C + pG/1000 (USD/t), called the "
+    "carbon-inclusive cost because health and local pollution are not valued. Results are given for fixed carbon values "
+    "0, 2 (the UU 7/2021 carbon tax), 25, 50 and 100 USD/t CO<sub>2</sub>e with Monte Carlo standard errors "
+    f"(at most {N['se_max']:.3f}).",
+    "<b>Main result.</b> At central values the sanitary landfill with flare has the lowest carbon-inclusive cost in all 21 "
+    f"locations up to 50 USD/t; at 100 USD/t RDF + AD is best in {N['best100'].get('S5', 0)} locations and WtE in "
+    f"{N['best100'].get('S1', 0)}. With uncertainty, RDF + AD is the most probable option at 100 USD/t in "
+    f"{N['mp100']['market'].get('S5', 0)} locations (median P = {N['p_S5_100'][0]:.2f}). Its abatement cost against the landfill is "
+    f"{N['s5_mac'][0]:.0f} ({N['s5_mac'][1]:.0f} to {N['s5_mac'][2]:.0f}) USD/t CO<sub>2</sub>e.",
+    "<b>What decides.</b> Food separated at source makes AD preferable above about 30&ndash;45 USD/t; the Perpres 109/2025 "
+    "tariff with at least 1,000 t/day and LHV of 7 MJ/kg makes WtE preferable; RDF + AD needs a high carbon value and a "
+    f"kiln within about 300 km. The 100 USD/t result is fragile: the high moisture bound or a 22% lower RDF heating value "
+    f"returns the choice to the landfill in {int(st.loc['moisture_high_bound', 100])} and "
+    f"{int(st.loc['rdf_ncv_stress', 100])} of 21 locations.",
+    f"<b>What to measure first.</b> The expected value of perfect information is {N['evpi'][50]:.2f} USD/t at 50 USD/t and "
+    f"{N['evpi'][100]:.2f} USD/t at 100 USD/t (median); waste characterisation (moisture, composition) and landfill-gas "
+    "performance carry most of it. These are the measurements a city should fund before committing to a technology.",
+    "<b>AD on mixed waste made realistic.</b> Food separated mechanically from mixed waste is given 0.6 (0.35&ndash;0.85) of "
+    "the methane yield of source-separated food and 5 (0&ndash;10) USD/t extra pre-treatment; the optimistic case is a scenario.",
+    f"<b>Reproducible.</b> {N['valid'][0]} of {N['valid'][1]} validation checks pass, including an explicit hand "
+    "recalculation for Kota Padang; a Colab notebook runs everything for new cities (Section 12)."], "box")
 A(boxed(box))
 
 # ---------------------------------------------------------------------------------------------- 1
-A(P("1 Scope of the update and vocabulary of evidence", "h1"))
+A(P("1 Purpose, scope of the update and vocabulary of evidence", "h1"))
+A(P("<b>Purpose: ex-ante decision support.</b> Indonesian cities must choose among WtE, RDF, AD and improved landfilling "
+    "before any such facility is built, usually with no local performance data. This study is therefore a modelling "
+    "study: it does not evaluate existing plants but estimates, before investment, under which city and waste-system "
+    "conditions each option would become preferable. Its outputs are designed for the stakeholders who make that choice "
+    "(city and regency environment agencies, Bappeda, the Ministry of Environment, PLN and cement companies as offtakers, "
+    "and funders): (i) decision rules stated in observable conditions, (ii) break-even targets that a tender or pilot "
+    "must reach, and (iii) a ranking of the data worth collecting first, expressed in USD per year. Results are "
+    "screening-level and must be confirmed by a feasibility study."))
 A(P("This document updates the v2 methodology with the research package of October 2026 (folders 02 to 04). The package "
     "was read in the order its START_HERE file prescribes: the v2 code and PDF, then the assumption audit "
     "(ASSUMPTION_SOURCE_AUDIT.md), which overrides the interpretation of the older allocation workbook, then the 2025 "
@@ -279,15 +287,26 @@ A(eqrow(r"G_{LF}(m,m_{in})=\mathrm{CH_4}(m,\mathrm{MCF})\,(1-\eta)(1-OX)\,GWP_{C
 A(P("Pathways (S5 combines the S2 and S3 units; rejects and digestate go to the residue landfill):"))
 A(eqrow(r"G_1=E_{fos}(s)+n_{N_2O}GWP_{N_2O}+a_W-E_{el}EF_{grid}+G_{LF}(0,\alpha_{ash}),\quad E_{el}=\frac{10^3}{3.6}H\eta_W", "g1", "7"))
 A(eqrow(r"G_2=E_{fos}(r)+e_REF_{grid}+a_R+M_{del}\,d\,ef_{truck}-\psi E_{net}EF_{coal}+G_{LF}(s-r),\quad r_j=\tau_jk_\tau s_j", "g2", "8"))
+A(P("For AD the methane volume of food separated from mixed waste is V = 10<super>3</super> a (1&minus;w<sub>food</sub>) "
+    "(VS/TS) y<sub>CH4</sub> k<sub>mech</sub>, where k<sub>mech</sub> = 0.6 (0.35&ndash;0.85) is the yield of mechanically "
+    "separated food relative to source-separated food (Seruga et al. 2020, full scale, about 0.84; Basinas et al. lower), and "
+    "the cost includes c<sub>pre</sub> = 5 (0&ndash;10) USD per tonne of feed for depackaging and grit removal. Both are 1 and 0 "
+    "in the scenarios <i>AD_feed_optimistic</i> and <i>food_separated_at_source</i>."))
 A(eqrow(r"G_3=V\rho_{CH_4}f_{AD}GWP_{CH_4}+a\,a_A+\pi(e_REF_{grid}+a_R)-E_{AD}EF_{grid}+G_{LF}(s-a\,e_{food},\delta a)", "g3", "9"))
 A(eqrow(r"G_4=G_{SL}+P\,(ef_{PHB}-\sigma\,ef_{PP}),\quad P=\eta\,\mathrm{CH_4}(s,1)/R\qquad G_5=G_{AD}(a)+G_{RDF}(s-a\,e_{food})+G_{LF}(\mathrm{rej},\delta a)", "g45", "10"))
 A(P("Techno-economic assessment and decision:"))
 A(eqrow(r"CRF=\frac{r(1+r)^n}{(1+r)^n-1},\quad c^{cap}_u=\frac{CRF\,K_{ref}\,(q/0.85/q_{ref})^b}{365\,q},\quad "
-        r"SC_k=C_k+p\,G_k/10^3,\quad MAC_k=10^3\,\frac{C_k-C_0}{G_0-G_k}", "tea", "11"))
+        r"CIC_k=C_k+p\,G_k/10^3,\quad MAC_k=10^3\,\frac{C_k-C_0}{G_0-G_k}", "tea", "11"))
 A(P("The gates G1 to G6 (WtE LHV &ge; 7 MJ/kg and Q &ge; 150 t/d, PSEL tariff at Q &ge; 1,000 t/d, RDF NCV &ge; 12.56 MJ/kg, "
     "kiln within 300 km road distance, PHB &ge; 500 t/yr) are read from <i>model_constants.csv</i>. Feasible options are "
-    "screened by Pareto dominance on (G, C), and the probability of being best is the share of Monte Carlo draws in which an "
-    "option has the lowest social cost with the carbon value p sampled uniformly from 0 to 100 USD/t CO<sub>2</sub>e."))
+    "screened by Pareto dominance on (G, C). The best option is the feasible option with the lowest <b>carbon-inclusive cost</b> "
+    "CIC<sub>k</sub> (USD per tonne MSW). CIC is not a full social cost: it values only greenhouse gases, at a carbon value p "
+    "that is a <i>policy choice</i>. p is therefore not sampled as an uncertain parameter; results are reported at fixed "
+    "values p = 0, 2 (Indonesian carbon tax, Rp 30/kg CO<sub>2</sub>e, UU 7/2021), 25, 50 and 100 USD/t CO<sub>2</sub>e. "
+    "For each p the probability of being best is the share of N = 4,000 Monte Carlo draws in which an option has the "
+    "lowest CIC, reported with its Monte Carlo standard error &radic;(P(1&minus;P)/N) &le; 0.008. A small lead between two "
+    "options is not a statistical tie: the standard error is small, and the lead measures how much the choice depends on "
+    "inputs that are still uncertain (decision uncertainty), which Section 9 decomposes."))
 
 # ---------------------------------------------------------------------------------------------- 5
 A(P("5 Uncertainty: priors, sampling noise and scenarios kept apart", "h1"))
@@ -297,7 +316,13 @@ A(P("Three kinds of uncertainty are distinguished. (1) <b>Composition</b>: a Dir
     "them. The Dirichlet therefore represents prior uncertainty about how well an 8-day sample of a past year represents "
     "2025, not measured sampling variability. (2) <b>Parameters</b>: triangular distributions from the register (Section 6), "
     "a common wetness draw for moisture, the harmonisation priors &gamma; and yard, the rubber DOCf gap (0 to 0.5) and the "
-    "carbon value. (3) <b>Data scenarios</b>: discrete alternatives that are not given probabilities (Table S4)."))
+    "realism parameters of AD on mixed waste. (3) <b>Data scenarios and stress tests</b>: discrete alternatives that are not "
+    "given probabilities (Table S4). The carbon value is a policy setting and is fixed, not sampled (Section 4.1)."))
+A(P("<b>Missing categories.</b> A category that a RIPS does not report (glass in Kota Padang) has zero share in the main "
+    "case. This is a modelling assumption, not a measurement of zero. The scenario <i>glass_imputed</i> gives such a "
+    "location a glass share drawn from the 15 locations that report glass (median 1.2%, 10th&ndash;90th percentile "
+    "0.7&ndash;4.5%), and <i>dirichlet_pseudocount</i> adds 0.5 to every Dirichlet concentration so that no fraction can be "
+    "exactly zero in a draw. Neither changes the most probable option at any carbon value (Table S6)."))
 us = d["usplit"]
 rows = [["Option", "G: composition only", "G: parameters only", "G: both", "C: composition only", "C: parameters only", "C: both"]]
 for k in PW:
@@ -310,36 +335,63 @@ A(P("Parameter uncertainty dominates cost; composition contributes a large share
 A(table([["Scenario", "What changes", "Status"],
          ["market", "Main case: market prices, no support, residues to sanitary landfill, GWP100, as-received moisture", "main"],
          ["perpres109", "WtE electricity at USD 0.20/kWh where Q &ge; 1,000 t/d", "policy"],
-         ["food_separated_at_source", "No front-end sorting cost for AD (&pi; = 0)", "what-if"],
+         ["food_separated_at_source", "Food arrives separated: no front-end sorting (&pi; = 0), k<sub>mech</sub> = 1, c<sub>pre</sub> = 0", "what-if"],
+         ["AD_feed_optimistic", "Mixed-waste AD as good as source-separated food (k<sub>mech</sub> = 1, c<sub>pre</sub> = 0)", "what-if"],
          ["residues_to_open_dump", "Residues dumped instead of landfilled (illegal; sensitivity only)", "what-if"],
          ["managed_M1_status_index", "Plant size = status-index share &times; Q2025 (19 locations)", "data scenario"],
          ["managed_M2_local_first", "Plant size = local indicator where held, else status index (21; mixed definitions)", "data scenario"],
          ["GWP20", "20-year horizon for methane", "method"],
          ["moisture_IPCC_default", "IPCC moisture (as generated) instead of as-received values", "data scenario"],
          ["tonnage_overview_projected", "Overview totals projected from the composition year", "data scenario"],
-         ["docf_rubber_0.5", "Rubber/leather DOCf at the IPCC 2006 generic default 0.5", "data gap"]],
+         ["docf_rubber_0.5", "Rubber/leather DOCf at the IPCC 2006 generic default 0.5", "data gap"],
+         ["glass_imputed", "Glass share imputed where glass is not reported", "data gap"],
+         ["dirichlet_pseudocount", "Pseudocount 0.5 added to every Dirichlet concentration", "method"],
+         ["moisture_high_bound", "Moisture as received at the upper end of every fraction range", "stress test"],
+         ["rdf_ncv_stress", "RDF energy &times; 0.78 (NCV about 13&ndash;14 MJ/kg, below the 15&ndash;16.7 reported at Cilacap)", "stress test"],
+         ["phb_large_scale_cost", "PHB at an aspirational large-scale cost (1.3 USD/kg, no scale penalty)", "what-if"]],
         [4.0, 10.6, 2.4]))
 A(P("Table S4: Scenarios. Each uses the same random numbers per location, so differences come only from what the scenario "
-    "changes. With 4,000 draws, probability differences below about 0.03 are noise.", "cap"))
+    "changes. With 4,000 draws the Monte Carlo standard error of a probability is at most 0.008.", "cap"))
 
 # ---------------------------------------------------------------------------------------------- 6
 A(P("6 Assumption register", "h1"))
-A(P("Status: V = checked against the source text during this project; L = literature value recalled from the cited source "
-    "and still to be checked against the original before submission; A = analyst assumption. Evidence type follows Table 1. "
+A(P("Status: V = confirmed against the source text in the October 2026 verification (Section 6.1); L = literature value "
+    "with a cited source that was not, or only partly, confirmed; A = analyst assumption. Evidence type follows Table 1. "
     "The register is <i>data/assumption_register.csv</i>; the table below is generated from it."))
 rows = [["ID", "Key", "Meaning", "Central (range)", "Unit", "Source", "St."]]
 for r in reg.itertuples():
     rng_ = num(r.central) + (f" ({num(r.low)} to {num(r.high)})" if r.low != r.high else "")
     rows.append([r.id, r.key, r.meaning, rng_, r.unit, r.source, r.status])
 A(table(rows, [0.9, 1.6, 6.0, 2.4, 1.6, 3.9, 0.6]))
-A(P("Table 3: Assumption register (61 entries; CED/LU factors in Table 8). New or changed in v3: H14-H15 (heuristic Dirichlet concentrations made "
-    "explicit), C10b (plastic LHV range), C12 (rubber DOCf gap scenario, previously a fixed 0.5).", "cap"))
+A(P(f"Table 3: Assumption register ({len(reg)} entries; CED/LU factors in Table 8, realism and scenario parameters in "
+    "<i>data/scenario_parameters.csv</i>). New or changed in v3: H14-H15 (heuristic Dirichlet concentrations made "
+    "explicit), C10b (plastic LHV range), C12 (rubber DOCf gap scenario). Changed in v3.2: see Table 3a.", "cap"))
+A(P("6.1 Verification of secondary data (October 2026)", "h2"))
+A(P("Every secondary value that drives a result or a benchmark was re-checked against its source. Full texts could not be "
+    "downloaded in the working environment, so the check used publisher abstracts, indexed records and search-engine "
+    "extracts of the sources; the method of each check is recorded in <i>data/secondary_data_verification.csv</i>. A value "
+    "was <i>confirmed</i> when the number appeared in the source record, <i>corrected</i> when the source gave a different "
+    "number, and <i>not verified</i> when it could not be found; unverified benchmark values were removed rather than kept. "
+    "The previous value is kept in the file for audit."))
+ver = d["ver"]
+rows = [["Item", "Value used (v3.2)", "Previous value", "Result", "Evidence"]]
+for r in ver.itertuples():
+    rows.append([r.item, str(r.value_used), str(r.previous_value), r.result, str(r.evidence)[:170]])
+A(table(rows, [3.0, 3.0, 2.8, 1.9, 6.3]))
+A(P("Table 3a: Secondary-data verification. Status V in the register is kept only for the four values confirmed in the "
+    "source record (food-waste methane yield, WtE CAPEX and O&amp;M, electricity price); other values formerly marked V are "
+    "now L. The 21 RIPS compositions and tonnages were not re-verified because the source PDFs were not available; their "
+    "row-level page locators are kept in the input file.", "cap"))
 
 # ---------------------------------------------------------------------------------------------- 7
-A(P("7 Validation", "h1"))
+A(P("7 Verification and validation", "h1"))
+A(P("Because the facilities do not exist, the model cannot be validated against their measured performance. Four layers "
+    "are therefore kept apart, following the usual distinction between verification (is the model computed as specified?) "
+    "and validation (does it represent the system well enough for its purpose?)."))
 v = d["val"]
-A(P(f"<i>validate_v3.py</i> ran {len(v)} checks on the database and the parser; all {N['valid'][0]} passed. The groups "
-    "requested in the brief were all run:"))
+A(P(f"<b>(a) Verification of the code and data.</b> <i>validate_v3.py</i> ran {len(v)} checks; {N['valid'][0]} passed. They "
+    "include an explicit hand recalculation of every result for Kota Padang (the worked example), which must reproduce "
+    "the model to 10<super>&minus;6</super>."))
 rows = [["Group", "Checks", "Examples of what is tested"]]
 ex = {"blank vs zero": "blank DOCf stays blank; parser treats blank and reported-zero glass without imputation; old file rejected",
       "taxonomy": "(level, code) unique in 3 tables; 10/36/56 counts; every parent exists; 6.* documented",
@@ -350,17 +402,46 @@ ex = {"blank vs zero": "blank DOCf stays blank; parser treats blank and reported
       "wet/dry": "DOC_dry(1-w) = IPCC wet DOC; LHV dry basis, LHV not HHV; DOCf separate from AD yield; soil/wood separated",
       "provenance": "every row has source, locator and status; proxies keep proxy status; heuristics labelled",
       "CED/LU": "factors have source and status; land take non-negative; landfill area = 1/(rho H) x gross; G and C unchanged",
-      "template": "user-template round trip reproduces v3 results; invalid input rejected; blank glass not zero; single projection"}
+      "template": "user-template round trip reproduces results; invalid input rejected; blank glass not zero; single projection",
+      "v3.2 data": "corrected values in use; ESDM 2018 grid factors; status V only where confirmed; every item has evidence",
+      "v3.2 model": "AD penalty changes only S3/S5; glass imputation only where not reported; RDF NCV stress applied",
+      "v3.2 decision": "P(best) sums to 1; standard errors bounded; EVPPI <= EVPI; break-even closes the gap; Padang hand calculation",
+      "v3.2 wording": "no 'statistical tie' or 'social cost' as decision metric in code and tool"}
 for g, q in v.groupby("group", sort=False):
     rows.append([g, f"{(q.result == 'PASS').sum()}/{len(q)}", ex.get(g, "")])
 A(table(rows, [2.6, 1.3, 13.1]))
-A(P("Table S5: Validation checks by group (full list in <i>outputs/validation_report.md</i>). In addition the model asserts "
-    "the single projection for every location, the S5 mass balance and that biogas carbon is below food carbon.", "cap"))
+A(P("Table S5: Verification checks by group (full list in <i>outputs/validation_report.md</i>). The model also asserts the "
+    "single projection for every location, the S5 mass balance and that biogas carbon is below food carbon.", "cap"))
+A(P("<b>(b) Benchmark validation.</b> Intermediate outputs that do not depend on a facility existing (moisture, heating "
+    "value, RDF yield and quality, WtE electricity per tonne) were compared with independent Indonesian values from the "
+    "verified sources. The verdict is computed, not judged (Table 4)."))
 b = d["bench"]
-rows = [["Quantity", "Model, 21 locations", "Reference"]] + [[i, r.iloc[0], r.iloc[1]] for i, r in b.iterrows()]
-A(table(rows, [3.6, 4.0, 9.4]))
-A(P("Table 4: Model outputs against published Indonesian values (main case). The model's bulk moisture is at the dry end "
-    "and its heating value at the high end of the measured range, as in v2.", "cap"))
+rows = [["Quantity", "Model, 21 locations", "Reference (verified source)", "Verdict"]] + \
+       [[i, r.model_21_locations, r.reference, r.verdict] for i, r in b.iterrows()]
+A(table(rows, [3.2, 3.2, 7.6, 3.0]))
+A(P("Table 4: Benchmark validation (main case). The RDF heating value lies at the upper end of, and partly above, the "
+    "Cilacap range; WtE electricity overlaps the Indonesian design values at their lower end. Both are tested further in "
+    "the stress tests.", "cap"))
+A(P("<b>(c) Stress tests.</b> Assumptions without a local measurement were pushed to the ends of their plausible range and "
+    "the number of locations whose most probable option changes was counted at each carbon value (Table S6)."))
+st = N["stress"]
+rows = [["Stress test or scenario"] + [f"{pc} USD/t" for pc in st.columns]]
+for s_, r in st.iterrows():
+    rows.append([SCN.get(s_, s_)] + [f"{int(x)}" for x in r.values])
+A(table(rows, [5.2] + [2.36] * len(st.columns)))
+A(P("Table S6: Number of the 21 locations whose most probable option changes relative to the market case. The PHB "
+    "row is an aspirational what-if, not a stress test.", "cap"))
+A(P(f"No stress test changes the decision up to 25 USD/t. At 100 USD/t the RDF + AD lead is fragile: the high moisture "
+    f"bound and a 22% lower RDF heating value each return {int(st.loc['moisture_high_bound', 100])} and "
+    f"{int(st.loc['rdf_ncv_stress', 100])} locations to the landfill. The drier IPCC moisture moves "
+    f"{int(st.loc['moisture_IPCC_default', 50])} locations away from the landfill at 50 USD/t. Glass imputation and the "
+    "pseudocount change at most two locations, at 100 USD/t only."))
+A(P("<b>(d) Field validation, ex ante.</b> When a city moves towards a facility, the model should be checked against (i) a "
+    "local waste characterisation with proximate analysis (moisture, ash, heating value as received) and (ii) performance "
+    "data from analogous Indonesian facilities: the Cilacap and Jeranjang RDF plants for RDF yield and quality, the "
+    "Bantargebang and Putri Cempo pilots for WtE output, and landfill-gas collection measured at a sanitary landfill. "
+    "Section 9 ranks these measurements by their value of information, so that the field work is ordered by how much "
+    "it can change the decision."))
 
 # ---------------------------------------------------------------------------------------------- 8
 A(PageBreak())
@@ -375,49 +456,54 @@ A(table(rows, [2.8, 2.2, 2.4, 2.3, 1.9, 2.0, 2.4, 1.0]))
 A(P("Table 6: Pathway results per tonne of MSW, central values, market case: median (minimum to maximum) over the 21 "
     "locations, including those failing a gate (last column: number that pass). G, &Delta;G in kg CO<sub>2</sub>e/t; C in "
     "USD/t; MAC in USD/t CO<sub>2</sub>e.", "cap"))
-mc = d["mc"]; w = mc[mc.scenario == "market"].pivot(index="city", columns="pathway", values="p_best").reindex(ch.city)
+pb = d["pbest"]; pb = pb[pb.scenario == "market"]
 bst = d["best"][d["best"].scenario == "market"].set_index("city")
-rows = [["Location", "Flags"] + PW + ["0", "25", "50", "100"]]
+rows = [["Location", "Flags", "Central best: 0 / 25 / 50 / 100", "P(SL) at 50", "P(S5) at 50", "P(SL) at 100", "P(S5) at 100",
+         "P(S1) at 100", "Most probable at 100"]]
 for c_ in ch.itertuples():
-    p = w.loc[c_.city]; srt = np.sort(p.values)
-    row = [c_.city, c_.flags if isinstance(c_.flags, str) else ""]
-    for k in PW:
-        s_ = f"{p[k]:.2f}"
-        if p[k] == srt[-1]: s_ = f"<b>{s_}</b>" + ("*" if srt[-1] - srt[-2] < 0.05 else "")
-        row.append(s_)
-    row += [bst.loc[c_.city, f"best_at_{pc}"] for pc in (0, 25, 50, 100)]
-    rows.append(row)
-A(table(rows, [3.4, 1.0] + [1.15] * 6 + [1.1] * 4))
-A(P("Table 7: Probability of being the best feasible option in the market case (carbon value sampled from 0 to 100 USD/t), "
-    "and the best option at central values for carbon values of 0, 25, 50 and 100. Bold: most probable; *: lead below 0.05. "
-    "Flags: L lumped organics, W kayu as garden, R rounded percentages, G glass in lain-lain, N glass not reported, T tonnage "
-    "year unverified.", "cap"))
-A(figure(OUT / "fig_probability_best.png", 17, "Figure 7: Probability of being the best feasible option in three scenarios."))
-A(figure(fig_robust(d), 15.5, "Figure 8: Most probable option per location in each scenario (colour) and its probability (number)."))
-mpa = N["mp_all"]
+    g = pb[pb.city == c_.city].set_index(["carbon_value", "pathway"])
+    f = lambda pc, k: f"{g.loc[(pc, k), 'p_best']:.2f} &plusmn; {1.96 * g.loc[(pc, k), 'se']:.2f}"
+    q100 = g.xs(100).p_best
+    rows.append([c_.city, c_.flags if isinstance(c_.flags, str) else "",
+                 " / ".join(bst.loc[c_.city, f"best_at_{pc}"] for pc in (0, 25, 50, 100)),
+                 f(50, "SL"), f(50, "S5"), f(100, "SL"), f(100, "S5"), f(100, "S1"), f"{q100.idxmax()} ({q100.max():.2f})"])
+A(table(rows, [3.0, 0.9, 2.5, 1.65, 1.65, 1.65, 1.65, 1.65, 2.35]))
+A(P("Table 7: Decision results per location, market case. Central best: lowest carbon-inclusive cost at central values for "
+    "carbon values of 0, 25, 50 and 100 USD/t CO<sub>2</sub>e. P(k) at p: probability that option k has the lowest "
+    "carbon-inclusive cost at the fixed carbon value p, &plusmn; the 95% Monte Carlo interval (4,000 draws). At 0, 2 and "
+    "25 USD/t the landfill is most probable everywhere (<i>outputs/15_p_best_fixed_carbon_value.csv</i>). Flags: L lumped "
+    "organics, W kayu as garden, R rounded percentages, G glass in lain-lain, N glass not reported, T tonnage year unverified.",
+    "cap"))
+A(figure(OUT / "fig_probability_best.png", 17, "Figure 7: Probability of being the best feasible option at fixed carbon "
+         "values (top) and in three scenarios at 50 USD/t (bottom)."))
+A(figure(fig_robust(d, 100), 16, "Figure 8: Most probable option per location in each scenario at 100 USD/t CO<sub>2</sub>e "
+         "(colour) and its probability (number)."))
+m50, m100 = N["mp50"], N["mp100"]
 A(P("<b>What the numbers say.</b>", "body"))
-for t in bullets([
-    f"<b>Landfill first, RDF + AD at moderate carbon values.</b> Sanitary landfill with flare has the lowest social cost in "
-    f"all 21 locations at 0 and 25 USD/t. RDF + AD is best in {N['best50'].get('S5',0)} locations at USD 50 and "
-    f"{N['best100'].get('S5',0)} at USD 100; its abatement cost against landfill is {N['s5_mac'][0]:.0f} "
-    f"({N['s5_mac'][1]:.0f} to {N['s5_mac'][2]:.0f}) USD/t CO<sub>2</sub>e. Over the sampled carbon range the two are "
-    f"close: {N['n_ties']} of 21 leads are below 0.05.",
+for t_ in bullets([
+    f"<b>Landfill first.</b> Sanitary landfill with flare has the lowest carbon-inclusive cost at central values in all 21 "
+    f"locations at 0, 25 and 50 USD/t, and is the most probable option everywhere up to 50 USD/t (median P = "
+    f"{N['mpp50'].median():.2f} at 50 USD/t). At the current carbon tax (about 2 USD/t) no recovery option is preferred.",
+    f"<b>RDF + AD at a high carbon value.</b> At 100 USD/t RDF + AD is best at central values in {N['best100'].get('S5',0)} "
+    f"locations and most probable in {m100['market'].get('S5',0)} (median P = {N['p_S5_100'][0]:.2f}, range "
+    f"{N['p_S5_100'][1]:.2f} to {N['p_S5_100'][2]:.2f}). Its abatement cost against the landfill is {N['s5_mac'][0]:.0f} "
+    f"({N['s5_mac'][1]:.0f} to {N['s5_mac'][2]:.0f}) USD/t CO<sub>2</sub>e, so it becomes preferable only above that carbon value.",
     f"<b>WtE</b> needs a heating value of at least 7 MJ/kg, 1,000 t/day and the Perpres 109/2025 tariff together; with the "
-    f"tariff it is most probable in {mpa['perpres109'].get('S1',0)} locations (Serang, Semarang, Brebes). Brebes qualifies "
-    "on generated waste only; 2.3% of it is managed (status index). Semarang's tonnage is an overview total of unverified "
-    "year.",
-    f"<b>AD alone</b> becomes most probable in {mpa['food_separated_at_source'].get('S3',0)} locations if food arrives "
-    "separated, and almost never for mixed waste. <b>PHB</b> is not preferred anywhere; it avoids only 14 (11 to 20) kg "
-    "CO<sub>2</sub>e/t against a landfill at more than USD 990/t CO<sub>2</sub>e.",
-    f"<b>Managed tonnage.</b> On the status-index series (M1) landfill is most probable in {mpa['managed_M1_status_index'].get('SL',0)} "
-    f"of 19 locations; on the local-first series (M2) in {mpa['managed_M2_local_first'].get('SL',0)} of 21. Plants are "
-    "expensive at today's managed tonnage under both definitions.",
-    "<b>Data scenarios.</b> Projecting the overview totals and raising rubber DOCf to 0.5 change no most-probable option. "
-    f"IPCC default moisture changes it in most locations: RDF + AD becomes most probable in "
-    f"{mpa['moisture_IPCC_default'].get('S5',0)} locations, because drier waste carries more degradable carbon into the "
-    "landfill baseline and more heat into RDF. GWP20 has a similar effect "
-    f"({mpa['GWP20'].get('S5',0)} RDF + AD, {mpa['GWP20'].get('S1',0)} WtE)."]):
-    A(t)
+    f"tariff it is most probable at 50 USD/t in {m50['perpres109'].get('S1',0)} locations. Without the tariff it wins only "
+    "where the grid is coal-heavy and the waste dry (Kab. Kutai Kartanegara at 100 USD/t).",
+    f"<b>AD alone</b> becomes most probable in {m50['food_separated_at_source'].get('S3',0)} locations at 50 USD/t if food "
+    "arrives separated at source. For mixed waste it never does, even when the mixed-waste penalty is removed "
+    f"(<i>AD_feed_optimistic</i>: landfill most probable in {m50['AD_feed_optimistic'].get('SL',0)} locations at 50 USD/t). "
+    "Source separation, not digester technology, is the condition for AD.",
+    f"<b>PHB</b> is not preferred at the cost assumed for a first plant. Only the aspirational large-scale cost "
+    f"(1.3 USD/kg) would make it most probable in {m50['phb_large_scale_cost'].get('S4',0)} locations; that is a research "
+    "target, not a planning value.",
+    f"<b>Managed tonnage.</b> On the status-index series (M1) the landfill is most probable at 50 USD/t in "
+    f"{m50['managed_M1_status_index'].get('SL',0)} of 19 locations, on the local-first series (M2) in "
+    f"{m50['managed_M2_local_first'].get('SL',0)} of 21.",
+    f"<b>Climate metric.</b> With GWP20 the landfill loses its lead at 50 USD/t everywhere (RDF + AD "
+    f"{m50['GWP20'].get('S5',0)}, WtE {m50['GWP20'].get('S1',0)}): the choice of time horizon is as consequential as the carbon value."]):
+    A(t_)
 A(figure(OUT / "fig_tradeoff.png", 16, "Figure 9: GHG avoided against extra cost, Monte Carlo medians, one dot per location and option."))
 A(figure(OUT / "fig_sensitivity.png", 16, "Figure 10: Inputs that drive the results: mean absolute Spearman rank correlation over the locations."))
 A(P("For climate the landfill-gas collection efficiency dominates every option that landfills residues, followed by the "
@@ -427,6 +513,56 @@ A(P("For climate the landfill-gas collection efficiency dominates every option t
 
 # ---------------------------------------------------------------------------------------------- 10-12 (v3.1)
 A(PageBreak())
+A(P("9 Break-even targets and the value of information", "h1"))
+A(P("Facilities do not yet exist, so their performance is uncertain. Two analyses turn that uncertainty into guidance for "
+    "stakeholders. <b>Break-even targets</b>: with all other inputs central, one input is swept and the value at which an "
+    "option's carbon-inclusive cost equals the landfill's is found (<i>mswpath.thresholds</i>). These are targets a tender, a "
+    "pilot or an offtake contract must reach. <b>Value of information</b>: for a fixed carbon value the net benefit of option "
+    "k in draw i is NB<sub>ik</sub> = &minus;CIC<sub>ik</sub>. The expected value of perfect information,"))
+A(eqrow(r"EVPI=\mathrm{E}_i\left[\max_k NB_{ik}\right]-\max_k \mathrm{E}_i\left[NB_{ik}\right],\qquad "
+        r"EVPPI(X)=\mathrm{E}_X\left[\max_k \mathrm{E}(NB_k\,|\,X)\right]-\max_k \mathrm{E}\left[NB_k\right]", "voi", "12"))
+A(P("is the most a city should pay, per tonne, to remove all uncertainty before choosing; EVPPI is the same for one group of "
+    "inputs X that one measurement campaign would resolve. E(NB<sub>k</sub> | X) is estimated by regression on X (Strong et al. "
+    "2014; quadratic, additive in the inputs of a group), and the EVPPI of random noise is subtracted as a bias floor. "
+    "Multiplied by the 2025 tonnage, the values are in USD per year."))
+rows = [["Input (S5 RDF + AD vs SL, 100 USD/t)", "Central", "Better if", "Break-even: median (range)", "n crossing", "never", "already"]]
+A(table(rows + thr_summary(d, "S5", 100), [4.6, 1.4, 1.5, 4.2, 1.7, 1.4, 1.6]))
+rows = [["Input (S5 RDF + AD vs SL, 50 USD/t)", "Central", "Better if", "Break-even: median (range)", "n crossing", "never", "already"]]
+A(table(rows + thr_summary(d, "S5", 50), [4.6, 1.4, 1.5, 4.2, 1.7, 1.4, 1.6]))
+A(P("Table 7a: Break-even values for RDF + AD against the landfill over the 21 locations (units as in the register: "
+    "k<sub>mech</sub> &ndash;; c<sub>pre</sub> and RDF O&amp;M USD/t; RDF price USD/GJ; collection efficiency &ndash;). "
+    "'never': no value in the tested range closes the gap; 'already': RDF + AD is cheaper over the whole range; 'n crossing': "
+    "locations where a break-even exists. Other options in <i>outputs/17_break_even_thresholds_vs_SL.csv</i>.", "cap"))
+A(P("At 50 USD/t RDF + AD matches the landfill only if RDF O&amp;M falls well below the verified 18.4 USD/t, the RDF price "
+    "rises several-fold above today's 1.15 USD/GJ, or landfill-gas collection is poor (below about 0.25). At 100 USD/t it is "
+    "already cheaper in most locations and stays so unless RDF O&amp;M exceeds about 29 USD/t or collection exceeds about 0.66. "
+    "For a city these are concrete conditions to write into a tender: a maximum gate fee for RDF processing, a minimum kiln "
+    "price, and a measured collection efficiency for the landfill alternative."))
+vg = N["voi_top"]
+rows = [["Measurement group", "25 USD/t", "50 USD/t", "100 USD/t", "Max over locations at 100, USD/yr"]]
+order = vg[100].group.tolist()
+for g_ in order:
+    r_ = [g_]
+    for pc in (25, 50, 100):
+        q = vg[pc].set_index("group").loc[g_]
+        r_.append(f"{q.median_evppi:.3f}")
+    r_.append(f"{vg[100].set_index('group').loc[g_].max_usd_per_year:,.0f}")
+    rows.append(r_)
+rows.append(["EVPI (all inputs), median USD/t"] + [f"{N['evpi'][pc]:.2f}" for pc in (25, 50, 100)] +
+            [f"{N['evpi_yr_max'][100]:,.0f}"])
+A(table(rows, [6.4, 2.2, 2.2, 2.2, 4.0]))
+A(P("Table 7b: Value of information, median EVPPI over 21 locations in USD per tonne MSW (market case, 4,000 draws). The "
+    "last column multiplies by the location's 2025 tonnage.", "cap"))
+A(figure(OUT / "fig_voi.png", 16.5, "Figure 10a: Value of information by measurement group at three carbon values: median over "
+         "21 locations (bar) and maximum (dot)."))
+A(P(f"Uncertainty is worth little at 25 USD/t (EVPI {N['evpi'][25]:.2f} USD/t), because the landfill wins almost regardless. "
+    f"At 100 USD/t the EVPI rises to {N['evpi'][100]:.2f} USD/t, about {N['evpi_yr'][100]:,.0f} USD per year for the median "
+    "location, and waste characterisation (as-received moisture and composition) and landfill-gas performance carry most "
+    "of it, followed by WtE performance and cost. Group values are conservative (additive regression within a group, noise "
+    "floor subtracted), so they need not add up to the EVPI. The rule for a city is direct: if a local waste-characterisation campaign with "
+    "proximate analysis, or a landfill-gas pumping test, costs less than its EVPPI for one year, it should be done before "
+    "any technology commitment. AD-specific data matter only where food can be separated at source."))
+
 A(P("10 Fossil energy (CED) and land take (v3.1)", "h1"))
 A(P("Two indicators are added to climate change and cost. Both reuse the inventory of the existing model, so they "
     "add no new flows, only conversion factors (<i>data/lcia_factors.csv</i>, drawn after all v3 parameters so that G "
@@ -469,7 +605,7 @@ A(P("The research question asks for conditions, not for a ranking of 21 cases. T
     "collection and landfill cost; all other parameters were sampled from the register. Composition was drawn from a "
     f"Dirichlet distribution centred on the mean of the 21 RIPS compositions with concentration {d['meta']['dirichlet_alpha0']:.0f} fitted to their "
     "between-city spread (method of moments), so the rules describe compositions like those observed and are "
-    "extrapolations outside them. For each draw the best feasible option (lowest social cost) was recorded. A "
+    "extrapolations outside them. For each draw the best feasible option (lowest carbon-inclusive cost) was recorded. A "
     f"classification tree of depth 4 reproduces that choice in {100*d['cart_acc']['acc_test']:.0f}% of held-out draws "
     f"(majority-class baseline {100*d['cart_acc']['baseline']:.0f}%); PRIM (Friedman and Fisher 1999) searched for boxes "
     "of conditions in which one option is best with high density."))
@@ -486,20 +622,26 @@ A(table(rows, [2.6, 1.4, 1.4, 1.4, 10.2]))
 A(P("Table 11: PRIM boxes. Coverage: share of all draws where the option is best that fall in the box; density: "
     "share of draws in the box where it is best. RDF alone and PHB are best in fewer than 3% of draws.", "cap"))
 im = d["imp"]
+_pr = d["prim"].set_index("option")
+prim_box_text = lambda k: str(_pr.loc[k, "box"]).replace("_", " ").replace("; ", ", ")
+prim_den = lambda k: float(_pr.loc[k, "density"])
+prim_lim = lambda k: str(_pr.loc[k, "box"]).split(";")[0].split(" to ")[-1] + " USD/t"
 A(P("<b>Reading the rules.</b> The carbon value (importance "
     f"{im['carbon_value']:.2f}), source separation of food ({im['food_separated']:.2f}), plant scale "
     f"({im['Q_tpd']:.2f}) and kiln distance ({im['kiln_km']:.2f}) carry the decision; heating value and the tariff matter "
     "only for WtE. For <b>mixed waste without the WtE tariff</b>, the sanitary landfill with flare is best in "
     f"{100*N['disc_mix'].get('SL',0):.0f}% of draws and RDF + AD in {100*N['disc_mix'].get('S5',0):.0f}%. The rules are:"))
 for t in bullets([
-    "<b>Sanitary landfill with flare</b> is preferred when the carbon value is below about 40 USD/t (purity 0.95), and "
-    "above that when no cement kiln lies within about 300 km.",
-    "<b>RDF + AD</b> is preferred for mixed waste when the carbon value exceeds about 55 USD/t and a kiln lies within "
-    "about 300 km, at any scale (PRIM: carbon value above 51 USD/t, kiln within 296 km, gas collection below 0.68).",
-    "<b>WtE</b> is preferred when the Perpres 109/2025 tariff applies, at least 1,000 t/day are delivered and the LHV is "
-    "at least 7 MJ/kg (PRIM density 0.97); without the tariff it is rarely best.",
-    "<b>AD alone</b> is preferred when food waste arrives separated at source and the carbon value exceeds about "
-    "30 USD/t, below 1,000 t/day.",
+    f"<b>Sanitary landfill with flare</b> is preferred for mixed waste without the WtE tariff in most of the condition "
+    f"space; its densest PRIM box is a carbon value below about {prim_lim('SL')} with no tariff and no source separation "
+    f"(density {prim_den('SL'):.2f}).",
+    "<b>RDF + AD</b> is the only recovery option that can beat the landfill for mixed waste without the tariff, and only "
+    f"in a narrow region: {prim_box_text('S5')} (PRIM density {prim_den('S5'):.2f}). It never forms a tree leaf, i.e. it "
+    "is never the majority choice in any broad region of conditions.",
+    f"<b>WtE</b> is preferred when the Perpres 109/2025 tariff applies, at least 1,000 t/day are delivered and the LHV is "
+    f"at least 7 MJ/kg (PRIM density {prim_den('S1'):.2f}); without the tariff it is rarely best.",
+    f"<b>AD alone</b> is preferred when food waste arrives separated at source and the carbon value exceeds about "
+    f"30&ndash;45 USD/t (tree split at 28 USD/t; PRIM: {prim_box_text('S3')}).",
     "<b>RDF alone and PHB</b> are best in fewer than 3% of all draws: they are dominated by RDF + AD and by flaring."]):
     A(t)
 A(figure(OUT / "fig_condition_maps.png", 15.5, "Figure 12: Condition maps. Each cell shows the most frequent best "
@@ -513,15 +655,15 @@ rows = [["Output", "Most influential inputs: total index ST (first-order S1)"]]
 nm = {"wetness": "moisture (wetness)", "cap": "landfill-gas collection", "o_rdf": "RDF O&amp;M", "K_ad": "AD CAPEX",
       "p_rdf": "RDF price", "c_sl": "landfill cost", "doc_k": "DOC x DOCf multiplier", "gamma": "garden share of organik",
       "efg_k": "grid factor multiplier", "eta_wte": "WtE efficiency", "h_k": "LHV calibration", "ox": "cover oxidation"}
-for lab, t in (("Social-cost gap RDF + AD minus landfill at 50 USD/t", N["sobol_gap"]), ("GHG of the sanitary landfill", N["sobol_gsl"]),
+for lab, t in (("Carbon-inclusive cost gap RDF + AD minus landfill at 50 USD/t", N["sobol_gap"]), ("GHG of the sanitary landfill", N["sobol_gsl"]),
                ("GHG of WtE", N["sobol_gs1"])):
     rows.append([lab, "; ".join(f"{nm.get(r.input, r.input)} {r.ST:.2f} ({r.S1:.2f})" for r in t.itertuples())])
 A(table(rows, [5.0, 12.0]))
 A(P("Table 12: Sobol indices, mean over the 21 locations (<i>outputs/discovery_sobol_mean.csv</i>).", "cap"))
 A(P("Moisture as received and landfill-gas collection efficiency together explain about half of the variance of the "
-    "social-cost gap between RDF + AD and the landfill, which is why the moisture scenario of Section 8 can reverse the "
+    "carbon-inclusive cost gap between RDF + AD and the landfill, which is why the moisture scenario of Section 8 can reverse the "
     "ranking. These two quantities, together with RDF operating cost and price, are the data to measure first."))
-A(figure(OUT / "fig_sobol.png", 15, "Figure 13: Sobol indices for the social-cost gap RDF + AD minus landfill and for "
+A(figure(OUT / "fig_sobol.png", 15, "Figure 13: Sobol indices for the carbon-inclusive cost gap RDF + AD minus landfill and for "
          "the GHG of the landfill, mean over 21 locations."))
 
 A(P("12 A reproducible decision tool for researchers and planners", "h1"))
@@ -531,7 +673,7 @@ A(P("The model is packaged as the Python package <i>mswpath</i> (core model, inp
     "a one-row-per-city template (<i>templates/city_input_template.xlsx</i>, with an English/Indonesian column guide), "
     "validates it, applies the same single-projection and normalisation rules and reports every assumption it applies; "
     "(iii) offers an interactive form for one city; (iv) re-runs scenario discovery and applies the decision tree to a "
-    "city described by the user; and (v) writes Excel and HTML reports in English or Indonesian that carry the caveats "
+    "city described by the user; (v) reports break-even targets and the value of information for a chosen city; and (vi) writes Excel and HTML reports in English or Indonesian that carry the caveats "
     "and the data-quality warnings. A round-trip test confirms that two RIPS locations entered through the template "
     "reproduce the database results. Versions are pinned in <i>requirements.txt</i>, random seeds are fixed and "
     "<i>CITATION.cff</i> gives the citation."))
@@ -539,18 +681,26 @@ A(P("The model is packaged as the Python package <i>mswpath</i> (core model, inp
 # ---------------------------------------------------------------------------------------------- 9
 A(P("13 Limits of validity", "h1"))
 for t in bullets([
+    "<b>Ex-ante screening.</b> No option is built in the study locations, so results are estimates for decision support "
+    "before investment, not an evaluation of plants. Break-even targets and the value of information say what a "
+    "feasibility study must confirm; they do not replace it.",
+    "<b>Secondary-data check.</b> The October 2026 verification used abstracts, indexed records and search extracts because "
+    "full texts could not be downloaded; values marked L should be checked against the full texts before publication.",
     "<b>Temporal proxy.</b> Compositions sampled 2014 to 2025 represent 2025 without a trend; eight tonnages have an unverified "
     "year. Results describe a 2025 baseline <i>conditional</i> on these proxies, not a measured 2025 state.",
     "<b>Managed-waste definitions.</b> No single indicator exists for all 21 locations. Rankings on managed tonnage are valid "
     "only within series M1, and series M2 mixes definitions. Padang's share is provisional.",
     "<b>Moisture and heating value.</b> No fraction-level moisture or LHV has been measured for the study locations; the "
-    "as-received moisture is calibrated to two published samples and the LHV values are legacy. The moisture scenario shows "
-    "that this choice can reverse the ranking between landfill and RDF + AD. Local proximate analysis is the priority.",
+    "LHV values are legacy. The moisture scenarios and stress tests show that this choice can reverse the ranking between "
+    "landfill and RDF + AD at high carbon values, and the value-of-information analysis ranks local proximate analysis "
+    "first.",
     "<b>Level II/III.</b> Level II/III compositions are model allocations and their parameters are proxies; they cannot support "
     "fraction-level conclusions (for example on recycling of specific resins) until local sorting data exist.",
     "<b>Foreign benchmarks.</b> Danish residual household waste is not Indonesian mixed MSW and not non-domestic waste.",
     "<b>Global defaults.</b> IPCC defaults are global and describe waste as generated, not at the landfill gate.",
-    "<b>Screening level.</b> One impact category; no time dynamics of landfill gas; class-5 costs not escalated; provisional "
+    "<b>Carbon-inclusive cost.</b> Only greenhouse gases are valued; health, air pollution, odour, leachate and jobs are not. "
+    "CED and land take are reported but not monetised.",
+    "<b>Screening level.</b> One impact category in the decision; no time dynamics of landfill gas; class-5 costs not escalated; provisional "
     "coordinates; independent triangular inputs; Status L values still to be checked against the originals.",
     "<b>Coverage.</b> 21 locations, 12 in Central Java; conclusions about Indonesian conditions in general need more regions."]):
     A(t)
@@ -586,6 +736,14 @@ REFS = [
  "Republic of Indonesia. UU 18/2008; UU 7/2021; Perpres 109/2025; SNI 19-3964-1994; RIPS of the 21 cities/regencies (row-level locators in input_kota_2025_updated.csv).",
  "Tchobanoglous, G., Theisen, H., Vigil, S. (1993). Integrated Solid Waste Management. McGraw-Hill.",
  "Zhang, R., El-Mashad, H.M., Hartman, K., et al. (2007). Characterization of food waste as feedstock for anaerobic digestion. Bioresource Technology 98, 929-935.",
+ "Seruga, P., et al. (2020). Anaerobic digestion performance: separate collected vs. mechanical segregated organic fractions of municipal solid waste as feedstock. Energies 13.",
+ "Basinas, P., et al. (2020). Assessment of high-solid mesophilic and thermophilic anaerobic digestion of mechanically-separated municipal solid waste. Environmental Research.",
+ "Basinas, P., et al. (2021). Dry anaerobic digestion of the fine particle fraction of mechanically-sorted organic fraction of municipal solid waste in laboratory and pilot reactor. Waste Management.",
+ "Yuliani, M., et al. (2022). Kajian tekno-ekonomi penerapan insinerator waste-to-energy di Indonesia (kasus pada Kota X). Jurnal Teknologi Lingkungan.",
+ "Zeng, J.-C., et al. (2024). Environmental, energy, and techno-economic assessment of waste-to-energy incineration. Sustainability.",
+ "Febijanto, I., et al. (2024). Municipal solid waste reduction through incineration for electricity purposes and its environmental performance: a case study in Bantargebang, West Java, Indonesia. Evergreen.",
+ "Ministry of Energy and Mineral Resources (ESDM) (2018). Grid emission factors of the Indonesian electricity systems, as listed for the Joint Crediting Mechanism by GEC (jcmsbsd30_emission_factor).",
+ "Strong, M., Oakley, J.E., Brennan, A. (2014). Estimating multiparameter partial expected value of perfect information from a probabilistic sensitivity analysis sample: a nonparametric regression approach. Medical Decision Making 34, 311-326.",
  "Friedman, J.H., Fisher, N.I. (1999). Bump hunting in high-dimensional data. Statistics and Computing 9, 123-143.",
  "Saltelli, A., Annoni, P., Azzini, I., Campolongo, F., Ratto, M., Tarantola, S. (2010). Variance based sensitivity analysis of model output: design and estimator for the total sensitivity index. Computer Physics Communications 181, 259-270.",
  "Breiman, L., Friedman, J.H., Olshen, R.A., Stone, C.J. (1984). Classification and Regression Trees. Wadsworth.",

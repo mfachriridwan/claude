@@ -1,6 +1,6 @@
-# Validation report (v3)
+# Validation report (v3.2)
 
-60 of 60 checks passed.
+78 of 78 checks passed.
 
 | Group | Check | Result | Detail |
 |---|---|---|---|
@@ -9,7 +9,7 @@
 | blank vs zero | Benchmark blanks are not zero (e.g. 4.3, 9.3, 9.4 remain blank) | PASS |  |
 | blank vs zero | Glass blank (not reported) distinguished from glass folded or reported | PASS |  |
 | blank vs zero | Parser: blank glass and reported-zero glass give the same shares (no imputation) | PASS |  |
-| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmph4epbkql.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
+| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmpkid7_gw2.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
 | taxonomy | (level, code) unique in crosswalk | PASS | 102 rows |
 | taxonomy | (level, code) unique in parameters | PASS | 102 rows |
 | taxonomy | (level, code) unique in benchmarks | PASS | 92 rows |
@@ -64,3 +64,21 @@
 | template | Validator rejects a composition far from 100% and an unknown grid | PASS | 2 errors |
 | template | Blank glass in the template is 'not reported', not zero | PASS |  |
 | template | Template tonnage projected once: Q2025 = Qt (1.02)^3 | PASS |  |
+| v3.2 data | Every secondary-data item has a verification result, evidence and method | PASS | 23 items |
+| v3.2 data | Corrected register values are the ones used (o_rdf 18.4, p_rdf 1.15, cap low 0.20, c_sl low 9) | PASS |  |
+| v3.2 data | Grid factors from ESDM 2018 (Jamali 0.877, Sumatera 0.832, Mahakam 1.128) | PASS | {'Jamali': 0.877, 'Sumatera': 0.832, 'Mahakam': 1.128} |
+| v3.2 data | Status V kept only for values confirmed in the 2026-10 check (y_ch4, K_wte, o_wte, p_el) | PASS | y_ch4, K_wte, o_wte, p_el |
+| v3.2 data | Every register row records its v3.1 status and the 2026-10 verification outcome | PASS |  |
+| v3.2 data | Scenario/realism parameters have source, status and use (main case or scenario) | PASS |  |
+| v3.2 data | Main case: no glass imputation, no pseudocount, RDF NCV multiplier 1 | PASS |  |
+| v3.2 model | AD-feed penalty changes only S3 and S5 (SL, S1, S2, S4 identical) | PASS |  |
+| v3.2 model | AD-feed penalty makes S3 and S5 dearer and less climate-beneficial | PASS |  |
+| v3.2 model | Glass imputation leaves locations that report glass unchanged | PASS |  |
+| v3.2 model | Glass imputation adds glass only where glass is not reported, shares still sum to 1 | PASS | 1 locations without glass |
+| v3.2 model | RDF NCV stress lowers delivered RDF energy by the multiplier (0.78) | PASS | 18.1 -> 14.1 MJ/kg |
+| v3.2 decision | P(best | carbon value) sums to 1 over options in every location | PASS | range 1.000 to 1.000 |
+| v3.2 decision | Monte Carlo standard error of P(best) is at most 0.5/sqrt(N) | PASS |  |
+| v3.2 decision | EVPI >= 0 and every (net) EVPPI <= EVPI | PASS | EVPI 2.86 USD/t |
+| v3.2 decision | Break-even value makes the option's carbon-inclusive cost equal SL's | PASS | S2 p_rdf* = 3.172 USD/GJ, gap -0.000 USD/t |
+| v3.2 decision | Explicit hand recalculation (Kota Padang) reproduces every model output | PASS |  |
+| v3.2 wording | No 'statistical tie' and no 'social cost' used as the decision metric in code or tool | PASS |  |

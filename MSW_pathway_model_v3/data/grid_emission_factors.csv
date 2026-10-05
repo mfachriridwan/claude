@@ -1,4 +1,4 @@
 grid_region,ef_kgCO2_per_kWh,source
-Jamali,0.87,ESDM factors via JCM/GEC 2022
-Sumatera,0.94,ESDM factors via JCM/GEC 2022
-Mahakam,1.14,ESDM factors via JCM/GEC 2022
+Jamali,0.877,"ESDM 2018 grid factor, JCM Case 1 (grid only), as listed by GEC (search snippet)"
+Sumatera,0.832,"CORRECTED from 0.94: ESDM 2018 grid factor, JCM Case 1, as listed by GEC (search snippet)"
+Mahakam,1.128,"ESDM 2018 grid factor, JCM Case 1, as listed by GEC (search snippet); previously 1.14"

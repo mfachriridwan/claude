@@ -100,10 +100,10 @@ SOB = pd.concat([sobol_indices(M, i, N=512) for i in range(len(M.H))], ignore_in
 SOB.to_csv(OUT / "discovery_sobol_by_location.csv.gz", index=False, compression="gzip")
 SOBM = SOB.groupby(["output", "input"])[["S1", "ST"]].mean().reset_index()
 SOBM.to_csv(OUT / "discovery_sobol_mean.csv", index=False)
-top = (SOBM[SOBM.output == "SCgap_S5_SL"].sort_values("ST", ascending=False).head(12))
+top = (SOBM[SOBM.output == "CICgap_S5_SL"].sort_values("ST", ascending=False).head(12))
 print(top.to_string())
 fig, ax = plt.subplots(1, 2, figsize=(13, 5))
-for a, outn, ttl in zip(ax, ("SCgap_S5_SL", "G_SL"), ("Social-cost gap RDF + AD minus landfill at 50 USD/t", "GHG of sanitary landfill")):
+for a, outn, ttl in zip(ax, ("CICgap_S5_SL", "G_SL"), ("Carbon-inclusive cost gap RDF + AD minus landfill at 50 USD/t", "GHG of sanitary landfill")):
     t = SOBM[SOBM.output == outn].sort_values("ST", ascending=False).head(10).iloc[::-1]
     a.barh(t.input, t.ST, color="#c9d6e8", label="total (ST)"); a.barh(t.input, t.S1, color="#46719e", height=0.45, label="first order (S1)")
     a.set_title(ttl + "\n(mean over 21 locations)", fontsize=9); a.legend(frameon=False, fontsize=8); a.set_xlabel("Sobol index")

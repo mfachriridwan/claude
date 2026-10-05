@@ -324,10 +324,10 @@ REG = [  # id, key, central, low, high, unit, stage, meaning, source, status, ev
  ("B5", "mcf_od", 0.80, 0.40, 0.80, "-", "B", "Methane correction factor, open dump", "IPCC 2006 V5 Ch3 Table 3.1", "L", "literature default"),
  ("B6", "mcf_sl", 1.00, 1.00, 1.00, "-", "B", "Methane correction factor, managed anaerobic landfill", "IPCC 2006 V5 Ch3 Table 3.1", "L", "literature default"),
  ("B7", "ox", 0.10, 0.00, 0.10, "-", "B", "Oxidation in cover soil, sanitary landfill", "IPCC 2006 V5 Ch3 Table 3.2", "L", "literature default"),
- ("B8", "cap", 0.50, 0.30, 0.80, "-", "B", "Lifetime landfill-gas collection efficiency, sanitary landfill", "Barlaz et al. 2009; Anshassi et al. 2022; Wei et al. 2024", "V", "literature range"),
+ ("B8", "cap", 0.50, 0.20, 0.80, "-", "B", "Lifetime landfill-gas collection efficiency, sanitary landfill", "Range bounded by literature: 50-95% in US landfills with effective covers (Barlaz et al. 2009, as cited by US EPA); often below 20-30% in high-food-waste landfills (China, search snippets). Central value is an assumption for a new Indonesian sanitary landfill", "A", "assumption bounded by literature"),
  ("B9", "anc_od", 1.0, 0.0, 3.0, "kg CO2e/t", "B", "Diesel for dump operation", "Manfredi et al. 2009", "L", "literature"),
  ("B10", "anc_sl", 5.0, 2.0, 10.0, "kg CO2e/t", "B", "Diesel and materials for sanitary landfill operation", "Manfredi et al. 2009", "L", "literature"),
- ("W4", "eta_wte", 0.18, 0.14, 0.22, "-", "S1", "Net electrical efficiency of grate incinerator on low-LHV waste", "Astrup et al. 2015; Rand et al. 2000", "L", "literature"),
+ ("W4", "eta_wte", 0.18, 0.14, 0.22, "-", "S1", "Net electrical efficiency of grate incinerator on low-LHV waste", "Astrup et al. 2015; Rand et al. 2000; Indonesian design study: 26% efficiency and 15% own use, i.e. about 22% net (Yuliani et al. 2022, abstract)", "L", "literature"),
  ("W5", "n2o_wte", 0.05, 0.02, 0.08, "kg N2O/t", "S1", "N2O from continuous stoker incineration", "IPCC 2006 V5 Ch5 Table 5.6", "L", "literature default"),
  ("W6", "anc_wte", 10.0, 5.0, 30.0, "kg CO2e/t", "S1", "Auxiliary fuel and flue-gas reagents", "Astrup et al. 2009", "L", "literature"),
  ("W7", "ash", 0.25, 0.15, 0.30, "t/t", "S1", "Bottom ash and APC residue sent to landfill", "Rand et al. 2000", "L", "literature"),
@@ -342,10 +342,10 @@ REG = [  # id, key, central, low, high, unit, stage, meaning, source, status, ev
  ("R14", "anc_rdf", 3.0, 1.0, 6.0, "kg CO2e/t", "S2", "Diesel for loaders at the RDF plant", "Analyst assumption", "A", "assumption"),
  ("A6", "kappa", 0.70, 0.50, 0.90, "-", "S3", "Share of food waste captured into the digester", "Mayer et al. 2019", "L", "literature"),
  ("A7", "vs_ts", 0.87, 0.80, 0.92, "-", "S3", "Volatile solids / total solids of food waste", "Zhang et al. 2007", "L", "literature"),
- ("A8", "y_ch4", 0.36, 0.28, 0.44, "Nm3 CH4/kg VS", "S3", "Methane yield realised in a full-scale digester (BMP-type parameter, not landfill DOCf)", "Zhang et al. 2007", "L", "literature"),
+ ("A8", "y_ch4", 0.36, 0.28, 0.44, "Nm3 CH4/kg VS", "S3", "Methane yield of source-separated food waste realised in a digester (BMP-type parameter, not landfill DOCf)", "Zhang et al. 2007: 348 mL/g VS after 10 d and 435 mL/g VS after 28 d in batch tests (abstract confirmed)", "V", "literature"),
  ("A9", "eta_chp", 0.36, 0.32, 0.40, "-", "S3", "Electrical efficiency of biogas engine", "Mayer et al. 2019", "L", "literature"),
  ("A10", "par_ad", 0.20, 0.10, 0.30, "-", "S3", "Own electricity use (pulping, mixing, dewatering)", "Mayer et al. 2019", "L", "literature"),
- ("A11", "fug_ad", 0.05, 0.01, 0.10, "-", "S3", "Fugitive methane from the biogas plant", "IPCC 2006 V5 Ch4", "L", "literature default"),
+ ("A11", "fug_ad", 0.05, 0.01, 0.10, "-", "S3", "Fugitive methane from the biogas plant (share of methane produced)", "IPCC 2006 V5 Ch4 (unintentional leakage); Table 4.1 default 0.8 g CH4/kg wet waste (range 0-8) seen in search snippet: the 5% used here (about 2.8 kg/t feed) is conservative for AD", "L", "literature default"),
  ("A12", "anc_ad", 3.0, 1.0, 6.0, "kg CO2e/t", "S3", "Diesel for loaders at the AD plant (per t feed)", "Analyst assumption", "A", "assumption"),
  ("A13", "pre", 0.40, 0.25, 0.60, "-", "S3", "Front-end separation of food from mixed waste: share of RDF-line cost and electricity", "Analyst assumption", "A", "assumption"),
  ("A14", "dig", 0.20, 0.10, 0.35, "t/t feed", "S3", "Dewatered digestate sent to the residue landfill", "Analyst assumption", "A", "assumption"),
@@ -356,19 +356,19 @@ REG = [  # id, key, central, low, high, unit, stage, meaning, source, status, ev
  ("T7", "r", 0.10, 0.08, 0.12, "1/yr", "T", "Real discount rate, same for all pathways", "Analyst assumption", "A", "assumption"),
  ("T8", "n", 20.0, 15.0, 30.0, "yr", "T", "Economic lifetime, same for all pathways", "Analyst assumption", "A", "assumption"),
  ("T9", "b", 0.70, 0.60, 0.85, "-", "T", "Capacity exponent for CAPEX scaling, same for all units", "Tsilemou & Panagiotakopoulos 2006", "L", "literature"),
- ("T10", "K_wte", 120e6, 100e6, 200e6, "USD @1000 t/d", "T", "WtE CAPEX at reference capacity", "Azis et al. 2021 (USD 102.2 M)", "A", "assumption"),
- ("T11", "o_wte", 27.0, 21.0, 37.0, "USD/t", "T", "WtE O&M", "Azis et al. 2021; GIZ 2017 in UNDP 2021", "V", "literature"),
- ("T12", "K_rdf", 12.3e6, 9e6, 16e6, "USD @300 t/d", "T", "RDF plant CAPEX at reference capacity (Rp 200 bn)", "GIZ ERiC-DKTI 2023", "V", "literature"),
- ("T13", "o_rdf", 12.0, 8.0, 21.0, "USD/t", "T", "RDF plant O&M", "GIZ ERiC-DKTI 2023; GIZ 2017 in UNDP 2021", "V", "literature"),
+ ("T10", "K_wte", 120e6, 100e6, 200e6, "USD @1000 t/d", "T", "WtE CAPEX at reference capacity", "Azis et al. 2021: USD 102.2 M for 1,000 t/d; Yuliani et al. 2022: Rp 2.2 bn per t/d, about USD 135 M per 1,000 t/d (abstracts confirmed)", "V", "literature range"),
+ ("T11", "o_wte", 27.0, 21.0, 37.0, "USD/t", "T", "WtE O&M", "Azis et al. 2021: USD 12.1 M/yr at 1,000 t/d (about 33 USD/t); Yuliani et al. 2022: Rp 167 M/yr per t/d (about 28 USD/t) (abstracts confirmed)", "V", "literature"),
+ ("T12", "K_rdf", 12.3e6, 9e6, 16e6, "USD @300 t/d", "T", "RDF plant CAPEX at reference capacity", "GIZ ERiC-DKTI 2023 (report exists; its figure not verified). Cross-check: Cilacap TPST/RDF Rp 81.2 bn for 120 t/d, scaled to 300 t/d with b = 0.7 = about USD 9.5 M (search snippet)", "L", "literature (partly verified)"),
+ ("T13", "o_rdf", 18.4, 12.0, 24.5, "USD/t", "T", "RDF plant O&M", "CORRECTED: Indonesian comparative data give Rp 300,000-400,000 per t processed (COSTING journal, search snippet) = 18.4-24.5 USD/t; low bound = previous central (12 USD/t)", "L", "literature (search snippet)"),
  ("T14", "K_ad", 7e6, 4e6, 14e6, "USD @100 t/d", "T", "AD plant CAPEX at reference feed capacity", "GIZ 2017 in UNDP 2021; Aleluia & Ferrao 2017", "L", "literature"),
  ("T15", "o_ad", 14.0, 10.6, 30.0, "USD/t feed", "T", "AD plant O&M", "GIZ 2017 in UNDP 2021", "V", "literature"),
- ("T16", "c_sl", 20.0, 12.0, 30.0, "USD/t @500 t/d", "T", "Full cost of sanitary landfill with gas collection and flare", "World Bank 2024", "V", "literature"),
+ ("T16", "c_sl", 20.0, 9.0, 30.0, "USD/t @500 t/d", "T", "Full cost of sanitary landfill with gas collection and flare", "World Bank 2024 guidelines (figure not verified); Indonesia: controlled landfill about Rp 145,000/t (Kulon Progo 2025) and central-government standard Rp 400,000/t (BPK news, search snippet); Cointreau-Levine 2000: 8-15 USD/t for middle-income countries", "L", "literature (search snippet)"),
  ("T17", "e_sl", 0.30, 0.20, 0.40, "-", "T", "Scale elasticity of landfill cost per tonne", "Tsilemou & Panagiotakopoulos 2006", "L", "literature"),
  ("T18", "c_od", 4.0, 2.0, 8.0, "USD/t", "T", "Cost of operating an open dump", "Analyst assumption", "A", "assumption"),
  ("T19", "c_phb", 6.8, 4.8, 9.6, "USD/kg @500 t/a", "T", "PHB production cost excl. methane feedstock", "Listewnik et al. in Chidambarampadmavathy 2017; Levett et al. 2016", "A", "assumption"),
  ("T20", "e_phb", 0.083, 0.05, 0.15, "-", "T", "Scale elasticity of PHB unit cost", "Levett et al. 2016", "A", "assumption"),
- ("T21", "p_el", 0.07, 0.05, 0.10, "USD/kWh", "T", "Market value of electricity (grid generation cost)", "Kepmen ESDM 169/2021 (BPP)", "L", "literature"),
- ("T22", "p_rdf", 1.6, 1.0, 2.6, "USD/GJ", "T", "Price of RDF at kiln gate", "Field data; GIZ 2023", "A", "assumption"),
+ ("T21", "p_el", 0.07, 0.05, 0.10, "USD/kWh", "T", "Market value of electricity (grid generation cost)", "Kepmen ESDM 169/2021 (BPP; figure not verified); Zeng et al. 2024: current Indonesian electricity price 0.069 USD/kWh (abstract confirmed)", "V", "literature"),
+ ("T22", "p_rdf", 1.15, 0.58, 1.34, "USD/GJ", "T", "Price of RDF at kiln gate", "CORRECTED: Rp 150,000-350,000 per t RDF reported for Bantargebang/DKI and Rp 300,000/t elsewhere (news, search snippets), converted at 16 GJ/t (Cilacap RDF about 16.7 MJ/kg) and IDR 16,300/USD", "L", "literature (search snippet)"),
  ("T23", "p_phb", 4.0, 2.5, 6.0, "USD/kg", "T", "Selling price of PHB", "Market reports; Levett et al. 2016", "L", "literature"),
  ("T24", "c_truck", 0.10, 0.05, 0.15, "USD/t-km", "T", "Cost of trucking RDF", "Analyst assumption", "A", "assumption"),
 ]
@@ -399,8 +399,9 @@ CONSTANTS = [  # key, value, unit, meaning, source
  ("BASE_YEAR", 2025, "-", "Baseline year", "Study design"),
 ]
 
-GRID = [("Jamali", 0.87, "ESDM factors via JCM/GEC 2022"), ("Sumatera", 0.94, "ESDM factors via JCM/GEC 2022"),
-        ("Mahakam", 1.14, "ESDM factors via JCM/GEC 2022")]
+GRID = [("Jamali", 0.877, "ESDM 2018 grid factor, JCM Case 1 (grid only), as listed by GEC (search snippet)"),
+        ("Sumatera", 0.832, "CORRECTED from 0.94: ESDM 2018 grid factor, JCM Case 1, as listed by GEC (search snippet)"),
+        ("Mahakam", 1.128, "ESDM 2018 grid factor, JCM Case 1, as listed by GEC (search snippet); previously 1.14")]
 KILN = [("Semen Padang (Indarung)", -0.96, 100.47), ("Indocement Citeureup", -6.49, 106.88), ("SBI Narogong", -6.48, 106.95),
         ("Semen Jawa Sukabumi", -6.98, 106.83), ("Cemindo Bayah", -6.94, 106.25), ("Indocement Palimanan", -6.70, 108.40),
         ("SBI Cilacap", -7.69, 109.02), ("Semen Bima Ajibarang", -7.42, 109.07), ("Semen Gresik Rembang", -6.86, 111.47),
@@ -408,9 +409,32 @@ KILN = [("Semen Padang (Indarung)", -0.96, 100.47), ("Indocement Citeureup", -6.
         ("Conch Tanjung", -2.10, 115.42)]
 
 
+# Secondary-data verification carried out in October 2026 (web search snippets and the Consensus paper database;
+# direct page downloads were blocked in this session). "confirmed" = the value or range appears in the source text read;
+# "corrected" = the value used before was not supported and was replaced; "not verified" = no source text could be read.
+VERIF = {
+    "cap": ("bounded by literature", "50-95% for US landfills with effective covers (Barlaz et al. 2009 via US EPA document); Chinese high-food-waste landfills often below 20-30%; low bound widened from 0.30 to 0.20"),
+    "eta_wte": ("consistent", "Yuliani et al. 2022 (Jurnal Teknologi Lingkungan): 1,500 t/d, LHV 6,276 kJ/kg, 26% efficiency, 15% own use"),
+    "y_ch4": ("confirmed", "Zhang et al. 2007 (Bioresource Technology): 348 and 435 mL CH4/g VS after 10 and 28 days"),
+    "fug_ad": ("partly confirmed", "IPCC 2006 V5 Ch4 Table 4.1: 0.8 g CH4/kg wet waste (0-8); model 5% of produced CH4 is conservative"),
+    "K_wte": ("confirmed", "Azis et al. 2021 (Sustainability): USD 102.2 M for 1,000 t/d; Yuliani et al. 2022: Rp 2.2 bn per t/d"),
+    "o_wte": ("confirmed", "Azis et al. 2021: USD 12.1 M/yr; Yuliani et al. 2022: Rp 167 M/yr per t/d"),
+    "K_rdf": ("partly confirmed", "GIZ ERiC-DKTI 2023 report exists (LCDI repository) but its figure could not be read; Cilacap RDF Rp 81.2 bn for 120 t/d (news)"),
+    "o_rdf": ("corrected", "12 -> 18.4 USD/t: RDF O&M Rp 300,000-400,000/t (COSTING journal, Indonesian comparison)"),
+    "c_sl": ("partly confirmed", "Rp 145,000/t controlled landfill (Kulon Progo 2025), Rp 400,000/t central-government standard (BPK news); low bound 12 -> 9 USD/t"),
+    "p_el": ("confirmed", "Zeng et al. 2024 (Sustainability): Indonesian electricity price 0.069 USD/kWh"),
+    "p_rdf": ("corrected", "1.6 -> 1.15 USD/GJ: RDF Rp 150,000-350,000/t (DKI Bantargebang), Rp 300,000/t (news); 16 GJ/t"),
+}
+CONFIRMED_V = {"y_ch4", "K_wte", "o_wte", "p_el"}      # status V only when confirmed in this session
+
+
 def build_register():
     reg = pd.DataFrame(REG, columns=["id", "key", "central", "low", "high", "unit", "stage", "meaning", "source",
                                      "status", "evidence_type"])
+    reg["status_v3_1"] = reg.status
+    reg.loc[(reg.status == "V") & ~reg.key.isin(CONFIRMED_V), "status"] = "L"
+    reg["verification_2026_10"] = reg.key.map(lambda k: VERIF.get(k, ("not verified in this session", ""))[0])
+    reg["verification_note"] = reg.key.map(lambda k: VERIF.get(k, ("", ""))[1])
     write(reg, "assumption_register.csv")
     write(pd.DataFrame(CONSTANTS, columns=["key", "value", "unit", "meaning", "source"]), "model_constants.csv")
     write(pd.DataFrame(GRID, columns=["grid_region", "ef_kgCO2_per_kWh", "source"]), "grid_emission_factors.csv")
@@ -698,6 +722,69 @@ def build_lcia():
     return df
 
 
+
+# ---------------------------------------------------------------------------------------------
+# 9. Scenario and realism parameters (v3.2), drawn after the CED/LU factors
+# ---------------------------------------------------------------------------------------------
+def build_scenario_params(inp):
+    g = inp.loc[inp.glass_status == "reported_separately", "dom_kaca"].astype(float) / 100
+    rows = [
+        ("y_pen_mech", 0.60, 0.35, 0.85, "-", "S3, S5 (mixed waste)", "Methane yield of food separated mechanically from mixed waste, relative to source-separated food",
+         "Seruga et al. 2020 (Energies, full scale): 111.1 vs 105.3 m3 biogas/t at 58-60% vs 51-53% CH4, ratio about 0.84; Basinas et al. 2020, 2021 (Environ. Res.; Waste Manag.): 0.11-0.18 m3 CH4/kg VS for mechanically sorted OFMSW vs 0.30-0.40 for source-sorted (Davidsson et al. 2006), ratio 0.3-0.55; Ebner et al. 2021: 206-245 L/kg VS",
+         "L", "literature range (abstracts)", "main case"),
+        ("pre_ofmsw", 5.0, 0.0, 10.0, "USD/t feed", "S3, S5 (mixed waste)", "Extra pre-treatment of mechanically separated food (depackaging, removal of plastics and grit)",
+         "Analyst assumption; mechanically sorted OFMSW contains non-biodegradable material and gives digestate with high heavy-metal content (Basinas et al. 2021)", "A", "assumption", "main case"),
+        ("glass_imp", 0.0, 0.0, 0.0, "-", "composition", "Glass share imputed where glass is not reported (main case: none, i.e. treated as 0)",
+         "Modelling assumption: a non-reported category is given zero share in the computation", "A", "assumption", "main case"),
+        ("glass_imp_dist", float(g.median()), float(g.quantile(0.1)), float(g.quantile(0.9)), "-", "composition",
+         "Distribution used by the scenario glass_imputed (median, p10, p90 of the 15 locations that report glass separately)",
+         "Computed from input_kota_2025_updated.csv", "A", "imputation from observed data", "scenario"),
+        ("pseudo", 0.0, 0.0, 0.0, "-", "composition", "Dirichlet pseudocount added to every fraction (main case 0)", "Modelling choice", "A", "assumption", "main case"),
+        ("pseudo_scen", 0.5, 0.5, 0.5, "-", "composition", "Pseudocount used by the scenario dirichlet_pseudocount", "Modelling choice", "A", "assumption", "scenario"),
+        ("rdf_ncv_k", 1.0, 1.0, 1.0, "x", "S2, S5", "Multiplier on the energy content of the delivered RDF (main case 1)", "-", "A", "assumption", "main case"),
+        ("rdf_ncv_k_scen", 0.78, 0.78, 0.78, "x", "S2, S5", "Stress test: RDF energy scaled so that its NCV falls to about 13-14 MJ/kg (lower than the 15-16.7 MJ/kg reported for Cilacap)",
+         "Calibration stress test", "A", "stress test", "scenario"),
+    ]
+    df = pd.DataFrame(rows, columns=["key", "central", "low", "high", "unit", "applies_to", "meaning", "source", "status",
+                                     "evidence_type", "use"])
+    write(df, "scenario_parameters.csv")
+    return df
+
+
+SECONDARY = [  # item, used in model, value used, previous value, source claimed, result, evidence, link
+ ("WtE capital cost", "K_wte", "USD 120 M (100-200) per 1,000 t/d", "same", "Azis et al. 2021", "confirmed", "USD 102.2 M for 1,000 t/d; Yuliani et al. 2022: Rp 2.2 bn per t/d", "https://doi.org/10.3390/su13137232"),
+ ("WtE O&M", "o_wte", "27 (21-37) USD/t", "same", "Azis et al. 2021", "confirmed", "USD 12.1 M/yr at 1,000 t/d; Yuliani: Rp 167 M/yr per t/d", "https://doi.org/10.3390/su13137232"),
+ ("WtE net efficiency", "eta_wte", "0.18 (0.14-0.22)", "same", "Astrup 2015; Rand 2000", "consistent", "Indonesian design: 26% efficiency, 15% own use (about 22% net), Yuliani et al. 2022", "https://consensus.app/papers/details/e70eb5ca8fcb55b48d9cfa92f8e4a8fc/"),
+ ("WtE net electricity benchmark", "validation", "-", "632 kWh/t from 750 t/day at 35% (Azis 2021)", "Azis et al. 2021", "corrected", "Abstract: about 19.7 MW from 1,000 t/day, i.e. about 473 kWh/t; Yuliani 2022: 24.08 MW net from 1,500 t/day, i.e. about 385 kWh/t net", "https://doi.org/10.3390/su13137232"),
+ ("MSW calorific value as received", "validation", "-", "HHV 6.9-9.0 MJ/kg (Prabowo 2019)", "Prabowo et al. 2019", "partly confirmed", "6,860 and 8,970 kJ/kg as received (abstract does not say HHV or LHV); Yuliani 2022: 6,276 kJ/kg", "https://doi.org/10.14716/ijtech.v10i6.3607"),
+ ("MSW moisture at transfer points", "validation", "-", "0.53-0.56 (Prabowo 2019)", "Prabowo et al. 2019", "not verified", "Moisture not in the abstract; replaced by Cilacap raw MSW 55.44% moisture before biodrying (Presipitasi/UPN Jatim, search snippet)", "https://ejournal.undip.ac.id/index.php/presipitasi/article/view/28551"),
+ ("Landfill waste moisture", "validation", "-", "0.64-0.66 (Fiki et al. 2022)", "Fiki et al. 2022", "not verified", "Paper confirmed (Jatibarang, biodrying to 44.65% moisture in 21 days); the initial moisture is not in the snippet", "https://ejournal.undip.ac.id/index.php/ilmulingkungan/article/view/42283"),
+ ("RDF heating value", "validation", "-", "12.6-13.8 MJ/kg (GIZ 2023)", "GIZ ERiC-DKTI 2023", "corrected", "Cilacap RDF: 3,991 kcal/kg (16.7 MJ/kg), 24.2% moisture, 17.3% ash; about 15 MJ/kg after biodrying (search snippets)", "https://envirotek.upnjatim.ac.id/index.php/envirotek/article/download/282/143"),
+ ("RDF O&M", "o_rdf", "18.4 (12-24.5) USD/t", "12 (8-21)", "GIZ 2023", "corrected", "Rp 300,000-400,000 per t processed (COSTING journal, search snippet)", "https://journal.ipm2kpe.or.id/index.php/COSTING/article/download/10879/6687/102989"),
+ ("RDF price at kiln", "p_rdf", "1.15 (0.58-1.34) USD/GJ", "1.6 (1.0-2.6)", "field data; GIZ 2023", "corrected", "Rp 150,000-350,000/t (DKI Bantargebang), Rp 300,000/t (news snippets)", "https://news.detik.com/berita/d-6630626/pemprov-dki-ungkap-alasan-peresmian-rdf-bantargebang-molor-jadi-juni"),
+ ("RDF plant capital cost", "K_rdf", "USD 12.3 M (9-16) per 300 t/d", "same", "GIZ 2023", "partly confirmed", "GIZ report exists; Cilacap Rp 81.2 bn for 120 t/d (scaled: about USD 9.5 M per 300 t/d)", "https://lcdi-indonesia.id/wp-content/uploads/2024/04/Kajian-Analisis-Offtaker-RDF-ERiC-DKTI.pdf"),
+ ("Sanitary landfill cost", "c_sl", "20 (9-30) USD/t", "20 (12-30)", "World Bank 2024", "partly confirmed", "Rp 145,000/t controlled landfill, Rp 400,000/t standard (BPK news); Cointreau-Levine 2000: 8-15 USD/t middle-income", "https://yogyakarta.bpk.go.id/wp-content/uploads/2025/05/44.-Radar_20_Apr_2-Insinerator-TPA-Banyuroto.pdf"),
+ ("Landfill gas collection", "cap", "0.50 (0.20-0.80)", "0.50 (0.30-0.80)", "Barlaz 2009; Anshassi 2022; Wei 2024", "bounded by literature", "50-95% in US landfills with effective covers; often below 20-30% in high-food-waste landfills; Wei et al. 2024 not found", "https://downloads.regulations.gov/EPA-HQ-OAR-2024-0453-0008/content.pdf"),
+ ("Grid factor Jamali", "grid", "0.877", "0.87", "ESDM via JCM", "confirmed", "ESDM 2018, JCM Case 1 (grid only): 0.877 t CO2/MWh", "https://gec.jp/jcm/jp/kobo/h30/mp/jcmsbsd30_emission_factor0723.pdf"),
+ ("Grid factor Sumatera", "grid", "0.832", "0.94", "ESDM via JCM", "corrected", "ESDM 2018, JCM Case 1: 0.832 t CO2/MWh", "https://gec.jp/jcm/jp/kobo/h30/mp/jcmsbsd30_emission_factor0723.pdf"),
+ ("Grid factor Mahakam", "grid", "1.128", "1.14", "ESDM via JCM", "confirmed (rounded before)", "ESDM 2018, JCM Case 1: 1.128 t CO2/MWh", "https://gec.jp/jcm/jp/kobo/h30/mp/jcmsbsd30_emission_factor0723.pdf"),
+ ("Electricity price", "p_el", "0.07 (0.05-0.10) USD/kWh", "same", "Kepmen ESDM 169/2021", "confirmed", "Zeng et al. 2024: 0.069 USD/kWh", "https://consensus.app/papers/details/ba1a83a2610758dc91bf43e431c4660d/"),
+ ("Food-waste methane yield", "y_ch4", "0.36 (0.28-0.44) Nm3/kg VS", "same", "Zhang et al. 2007", "confirmed", "348 (10 d) and 435 (28 d) mL/g VS", "https://zjubiolab.zju.edu.cn/shiji/userfiles/lab-paper/000292-20101226120531.pdf"),
+ ("Fugitive methane AD", "fug_ad", "5% (1-10%) of CH4 produced", "same", "IPCC 2006 V5 Ch4", "partly confirmed", "Table 4.1: 0.8 g CH4/kg wet waste (0-8); model value conservative", "https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/5_Volume5/V5_4_Ch4_Bio_Treat.pdf"),
+ ("Mechanically separated food: methane yield", "y_pen_mech", "0.60 (0.35-0.85) x source-separated", "1 (not modelled)", "new", "literature range", "Seruga 2020 (full scale, ratio about 0.84); Basinas 2020, 2021 (0.11-0.18 vs 0.30-0.40 m3/kg VS); Ebner 2021", "https://consensus.app/papers/details/ae04ae4ff6285f3c9bca764fbc132d08/"),
+ ("PHB production cost", "c_phb", "6.8 USD/kg at 500 t/a, falling with scale", "same", "Chidambarampadmavathy 2017; Levett 2016", "partly confirmed", "Abstract: cost could fall to AUD 1.5-2.0/kg with centralised large-scale extraction (aspirational); see scenario phb_large_scale_cost", "https://ideas.repec.org/a/eee/rensus/v71y2017icp555-562.html"),
+ ("WtE at small scale in Indonesia", "validation", "-", "-", "new", "observation", "Bantargebang pilot (100 t/d design, 70.6 t/d average, 2022): 956 MWh generated vs 1,369 MWh own demand (Febijanto et al. 2024); consistent with the 150 t/d scale gate", "https://consensus.app/papers/details/9716277794bc5caeac238dd8f9fdda0a/"),
+ ("RIPS composition and tonnage", "input", "21 RIPS extracts", "-", "RIPS documents", "not re-verified", "Source PDFs not available in this session; row-level locators kept in the input file", ""),
+]
+
+
+def build_secondary_verification():
+    df = pd.DataFrame(SECONDARY, columns=["item", "model_key", "value_used", "previous_value", "source_claimed", "result",
+                                          "evidence", "link"])
+    df["method"] = "web search snippets / Consensus abstracts (page downloads blocked); October 2026"
+    write(df, "secondary_data_verification.csv")
+    return df
+
 if __name__ == "__main__":
     print("Building v3 database from sources/")
     inp = build_input()
@@ -708,4 +795,6 @@ if __name__ == "__main__":
     build_benchmarks(cross)
     build_compositions(inp, cross)
     build_lcia()
+    build_scenario_params(inp)
+    build_secondary_verification()
     print("Done.")

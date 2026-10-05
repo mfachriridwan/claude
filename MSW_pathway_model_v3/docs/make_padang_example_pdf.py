@@ -17,7 +17,7 @@ FR = o["M"].FR
 COL = {"SL": "#8c8c8c", "S1": "#d62728", "S2": "#ff7f0e", "S3": "#2ca02c", "S4": "#9467bd", "S5": "#1f77b4"}
 f0 = lambda x, d=1: f"{x:,.{d}f}"
 story = []; A = story.append
-RUN = "Worked example: Kota Padang (MSW pathway model v3.1)"
+RUN = "Worked example: Kota Padang (MSW pathway model v3.2)"
 
 # ------------------------------------------------------------------------------------------------ figures
 def fig_comp():
@@ -88,22 +88,21 @@ def fig_decision():
     for k in PW:
         ls = "-" if u["feasible_central"][k] else ":"
         ax[0].plot(sc.index, sc[k], ls, color=COL[k], label=NAMES[k] + ("" if u["feasible_central"][k] else " (fails a gate)"))
-    ax[0].set_xlabel("Carbon value, USD/t CO2e"); ax[0].set_ylabel("Social cost C + pG, USD/t"); ax[0].legend(fontsize=7, frameon=False)
+    ax[0].set_xlabel("Carbon value, USD/t CO2e"); ax[0].set_ylabel("Carbon-inclusive cost C + pG/1000, USD/t"); ax[0].legend(fontsize=7, frameon=False)
     ax[0].set_title("Central values", fontsize=9)
     pb = u["p_by_pc"][PW]
-    x = np.arange(len(pb)); bot = np.zeros(len(pb))
     for k in PW:
-        ax[1].bar(x, pb[k], bottom=bot, color=COL[k], width=0.85); bot += pb[k].values
-    ax[1].set_xticks(x, [f"{int(i.left)+ (i.left>0)}-{int(i.right)}" for i in pb.index], fontsize=7, rotation=30)
-    ax[1].set_xlabel("Carbon value bin, USD/t CO2e"); ax[1].set_ylabel("Probability of being best"); ax[1].set_ylim(0, 1)
-    ax[1].set_title("Monte Carlo (4,000 draws)", fontsize=9)
+        ax[1].plot(pb.index, pb[k], "-o", ms=2.5, color=COL[k], label=NAMES[k])
+    for pc in (2, 25, 50, 100): ax[1].axvline(pc, c="#bbbbbb", lw=0.6, ls=":")
+    ax[1].set_xlabel("Fixed carbon value, USD/t CO2e"); ax[1].set_ylabel("P(best | carbon value)"); ax[1].set_ylim(0, 1)
+    ax[1].set_title("Monte Carlo (4,000 draws at each carbon value)", fontsize=9)
     fig.tight_layout(); p = FIG / "pd_decision.png"; fig.savefig(p, dpi=200); plt.close(fig); return p
 
 
 def fig_tornado():
     t = u["tornado"]; b = u["tornado_base"]
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.6))
-    for a, out_, lab in zip(ax, ("gap_S5_SL", "G_SL"), ("Social-cost gap RDF + AD minus landfill at 50 USD/t (USD/t)",
+    for a, out_, lab in zip(ax, ("gap_S5_SL", "G_SL"), ("Carbon-inclusive cost gap RDF + AD minus landfill at 50 USD/t (USD/t)",
                                                         "GHG of sanitary landfill (kg CO2e/t)")):
         q = t[t.output == out_].sort_values("swing", ascending=False).head(12).iloc[::-1]
         y = np.arange(len(q))
@@ -118,7 +117,7 @@ def fig_tornado():
 def fig_sobol():
     s = u["sobol"]
     fig, ax = plt.subplots(1, 3, figsize=(11, 3.8))
-    for a, out_, lab in zip(ax, ("SCgap_S5_SL", "G_SL", "C_S5"), ("Social-cost gap S5 - SL at 50 USD/t", "GHG of landfill", "Cost of RDF + AD")):
+    for a, out_, lab in zip(ax, ("CICgap_S5_SL", "G_SL", "C_S5"), ("Carbon-inclusive cost gap S5 - SL at 50 USD/t", "GHG of landfill", "Cost of RDF + AD")):
         q = s[s.output == out_].sort_values("ST", ascending=False).head(8).iloc[::-1]
         a.barh(q.input, q.ST, color="#c9d6e8", label="total ST"); a.barh(q.input, q.S1, color="#46719e", height=0.45, label="first order S1")
         a.set_title(lab, fontsize=9); a.tick_params(labelsize=7.5); a.legend(fontsize=7, frameon=False)
@@ -129,11 +128,13 @@ def fig_sobol():
 r = o["row"]
 A(P("Worked Example: Kota Padang", "title"))
 A(P("Step-by-step calculation of climate impact, cost, fossil energy and land take per tonne of MSW, with uncertainty "
-    "and sensitivity analysis &mdash; MSW pathway model v3.1, baseline year 2025", "subtitle"))
+    "and sensitivity analysis &mdash; MSW pathway model v3.2, baseline year 2025", "subtitle"))
 A(P("Muhammad Fachri Ridwan &mdash; The University of Queensland &mdash; October 2026 &mdash; companion to "
     "MSW_Methodology_v3_EN.pdf", "subtitle"))
 A(Spacer(1, 6))
-pbest = lambda k: u["dist"].query("indicator == 'p_best' and option == @k").p50.iloc[0]
+pf = u["p_fixed"].set_index(["carbon_value", "option"])
+pbest = lambda k, pc: pf.loc[(pc, k), "p"]
+pse = lambda k, pc: pf.loc[(pc, k), "se"]
 sobST = lambda o_, i_: u["sobol"].query("output == @o_ and input == @i_").ST.iloc[0]
 pstar = 1e3 * (res["S5"]["C"] - res["SL"]["C"]) / (res["SL"]["G"] - res["S5"]["G"])
 best50 = min((k for k in PW if u["feasible_central"][k]), key=lambda k: res[k]["C"] + 50 * res[k]["G"] / 1e3)
@@ -146,19 +147,21 @@ box = [P("<b>Summary for Kota Padang (central values unless stated)</b>", "box")
     "kg CO<sub>2</sub>e/t.",
     f"Net cost per tonne: landfill {res['SL']['C']:.1f}, WtE {res['S1']['C']:.1f}, RDF {res['S2']['C']:.1f}, AD "
     f"{res['S3']['C']:.1f}, PHB {res['S4']['C']:.1f}, RDF + AD {res['S5']['C']:.1f} USD/t.",
-    f"At a carbon value of 50 USD/t the lowest social cost is {NAMES[best50]}; RDF + AD overtakes the landfill at "
+    f"At a carbon value of 50 USD/t the lowest carbon-inclusive cost is {NAMES[best50]}; RDF + AD overtakes the landfill at "
     f"{pstar:.0f} USD/t CO<sub>2</sub>e.",
-    f"Monte Carlo (4,000 draws, carbon value 0&ndash;100 USD/t): RDF + AD is best in "
-    f"{100*pbest('S5'):.0f}% of draws and the landfill in {100*pbest('SL'):.0f}%: a statistical tie.",
-    "Sensitivity: as-received moisture and landfill-gas collection efficiency dominate the comparison between landfill "
+    f"Monte Carlo (4,000 draws per fixed carbon value): the landfill is best with probability {pbest('SL', 50):.2f} at "
+    f"50 USD/t; at 100 USD/t RDF + AD with {pbest('S5', 100):.2f} and the landfill with {pbest('SL', 100):.2f} "
+    f"(standard errors &le; {pf.se.max():.3f}). This is decision uncertainty, not sampling noise.",
+    "Sensitivity: landfill-gas collection efficiency and as-received moisture dominate the comparison between landfill "
     "and RDF + AD (Sobol total indices "
-    f"{sobST('SCgap_S5_SL', 'wetness'):.2f} and {sobST('SCgap_S5_SL', 'cap'):.2f})."], "box")
+    f"{sobST('CICgap_S5_SL', 'cap'):.2f} and {sobST('CICgap_S5_SL', 'wetness'):.2f}).",
+    "Ex ante: no RDF, AD or WtE plant exists in Padang. Section 10 gives the targets an RDF + AD project would have to meet "
+    "and the measurements worth making first."], "box")
 A(boxed(box))
 A(P("<b>How this document was produced.</b> <i>docs/padang_calc.py</i> writes out every equation of the model again "
     "with named intermediate quantities and stops if any result differs from the model output (GHG, cost, CED and land "
     "take of all options agree to 10<super>&minus;6</super>). <i>docs/padang_uncertainty.py</i> runs the Monte Carlo with "
-    "the same random numbers as the 21-location analysis, so the probabilities are identical to Table 7 of the "
-    "methodology. Symbols follow the methodology (Section 4.1)."))
+    "the same random numbers as the 21-location analysis, so the probabilities match Table 7 of the methodology. Symbols follow the methodology (Section 4.1)."))
 
 # ---- 1 inputs
 A(P("1 Inputs from the RIPS", "h1"))
@@ -282,13 +285,15 @@ A(P("Table 6: RDF. The methane from rejected wet organics is the largest positiv
 A3 = res["S3"]["ad"]; lf3 = res["S3"]["lf"]
 A(P("5.3 S3 Anaerobic digestion of food waste", "h2"))
 A(P(f"Food captured a = &kappa;s<sub>food</sub> = {PR['kappa']:.2f} &times; {o['frac'].s['food']:.4f} = {A3['a']:.4f} t/t. "
-    f"Methane V = a &times; 1000 &times; (1&minus;w<sub>food</sub>) &times; VS/TS &times; y<sub>CH4</sub> = {A3['a']:.4f} "
-    f"&times; 1000 &times; {1-o['char'].w['food']:.2f} &times; {PR['vs_ts']:.2f} &times; {PR['y_ch4']:.2f} = {A3['V']:.2f} "
+    f"Methane V = a &times; 1000 &times; (1&minus;w<sub>food</sub>) &times; VS/TS &times; y<sub>CH4</sub> &times; k<sub>mech</sub> = {A3['a']:.4f} "
+    f"&times; 1000 &times; {1-o['char'].w['food']:.2f} &times; {PR['vs_ts']:.2f} &times; {PR['y_ch4']:.2f} &times; {PR['y_pen_mech']:.2f} = {A3['V']:.2f} "
     f"Nm<super>3</super>/t; fugitive {PR['fug_ad']:.2f}; electricity exported {A3['el']:.1f} kWh/t "
     f"(&eta;<sub>CHP</sub> {PR['eta_chp']:.2f}, own use {PR['par_ad']:.2f}). The rest of the waste "
     f"({lf3['t']-A3['a']*PR['dig']:.4f} t) and the digestate ({A3['a']*PR['dig']:.4f} t) go to the landfill "
     f"({lf3['ch4']:.2f} kg CH<sub>4</sub>/t generated). Front-end separation of food from mixed waste is charged as "
-    f"&pi; = {PR['pre']:.2f} of the RDF line."))
+    f"&pi; = {PR['pre']:.2f} of the RDF line. Food separated mechanically from mixed waste digests less well than "
+    f"source-separated food, hence k<sub>mech</sub> = {PR['y_pen_mech']:.2f}, and needs depackaging and grit removal, "
+    f"charged as c<sub>pre</sub> = {PR['pre_ofmsw']:.1f} USD per tonne of feed (pretreatment in the cost column)."))
 A(comp_table("S3"))
 A(P("Table 7: AD of food waste separated from mixed waste.", "cap"))
 s4 = res["S4"]
@@ -305,7 +310,8 @@ A(P(f"The whole tonne passes the RDF line, which also separates the food: {A3['a
     f"the remaining {1-A3['a']:.4f} t sorted as in S2 (RDF {L5['m_del']:.4f} t/t, NCV {L5['ncv']:.2f} MJ/kg); only the "
     f"rejects ({L5['rej'].sum():.4f} t/t) and digestate go to the landfill ({res['S5']['lf']['ch4']:.2f} kg CH<sub>4</sub>/t)."))
 A(comp_table("S5"))
-A(P("Table 9: RDF + AD. No separate front-end step is charged because the RDF line separates the food.", "cap"))
+A(P("Table 9: RDF + AD. No separate front-end step is charged because the RDF line separates the food; the digester "
+    "carries the same k<sub>mech</sub> and c<sub>pre</sub> as S3.", "cap"))
 A(figure(fig_components("parts", "kg CO2e per tonne MSW", "pd_ghg.png", "GHG components per tonne (hatched = credits); diamonds = net"),
          16, "Figure 3: GHG components of each option for Kota Padang."))
 A(figure(fig_components("cost", "USD per tonne MSW", "pd_cost.png", "Cost components per tonne (hatched = revenues); diamonds = net"),
@@ -324,21 +330,21 @@ for k in ["OD"] + PW:
                  f"{res[k]['CED']:,.0f}", f"{res[k]['LU']:.4f}"])
 A(table(rows, [3.6, 1.1, 1.9, 1.7, 1.7, 1.5, 2.1, 1.7, 1.7]))
 A(P("Table 10: Central results for Kota Padang (market case, GWP100).", "cap"))
-A(P("The best option minimises the social cost SC<sub>k</sub> = C<sub>k</sub> + p G<sub>k</sub>/1000 among the options "
+A(P("The best option minimises the carbon-inclusive cost CIC<sub>k</sub> = C<sub>k</sub> + p G<sub>k</sub>/1000 among the options "
     "that pass their gates. Two options with straight lines cross at p* = 1000(C<sub>b</sub>&minus;C<sub>a</sub>)/"
     "(G<sub>a</sub>&minus;G<sub>b</sub>): for RDF + AD against the landfill p* = "
     f"1000 &times; ({res['S5']['C']:.2f} &minus; {res['SL']['C']:.2f}) / ({res['SL']['G']:.1f} &minus; {res['S5']['G']:.1f}) = "
     f"{1e3*(res['S5']['C']-res['SL']['C'])/(res['SL']['G']-res['S5']['G']):.1f} USD/t CO<sub>2</sub>e."))
-A(figure(fig_decision(), 16, "Figure 5: Left: social cost of each option against the carbon value (central values). "
-         "Right: probability of being best within each carbon-value bin (Monte Carlo)."))
+A(figure(fig_decision(), 16, "Figure 5: Left: carbon-inclusive cost of each option against the carbon value (central values). "
+         "Right: probability of being best at each fixed carbon value (Monte Carlo, 4,000 draws; dotted lines at 2, 25, 50 and 100)."))
 
 # ---- 7 uncertainty
 A(PageBreak())
 A(P("7 Uncertainty analysis", "h1"))
 A(P(f"4,000 Monte Carlo draws. Composition: Dirichlet around the RIPS proxy with concentration "
     f"&alpha;<sub>0</sub> = {u['alpha0']:.0f} (heuristic; unflagged data). Parameters: triangular distributions of the "
-    "register (58 inputs) and the CED/land-use factors; one common wetness draw moves all moistures; the carbon value is "
-    "uniform on 0&ndash;100 USD/t."))
+    f"register ({len(o['M'].REG)} inputs), the realism parameters k<sub>mech</sub> and c<sub>pre</sub> and the CED/land-use "
+    "factors; one common wetness draw moves all moistures. The carbon value is a policy choice and is held fixed."))
 cp = u["comp"]
 rows = [["Fraction", "Central", "p5", "median", "p95"]] + [[k, f"{rw.central:.3f}", f"{rw.p5:.3f}", f"{rw.p50:.3f}", f"{rw.p95:.3f}"] for k, rw in cp.iterrows()]
 A(table(rows, [3.0, 2.4, 2.4, 2.4, 2.4]))
@@ -346,16 +352,17 @@ A(P(f"Table 11: Sampled composition (share of wet mass). Bulk moisture p5&ndash;
     f"{u['moist'][2]:.2f}; LHV {u['lhv'][0]:.1f}&ndash;{u['lhv'][2]:.1f} MJ/kg; WtE heating-value gate passed in "
     f"{100*u['p_lhv_gate']:.0f}% of draws.", "cap"))
 d = u["dist"]
-rows = [["Option", "G p5 / p50 / p95", "&Delta;G vs OD p50 (p5-p95)", "C p5 / p50 / p95", "CED p50 MJ/t", "P(feasible)", "P(Pareto)", "P(best)"]]
+rows = [["Option", "G p5 / p50 / p95", "&Delta;G vs OD p50 (p5-p95)", "C p5 / p50 / p95", "CED p50 MJ/t", "P(feasible)", "P(best) at 50", "P(best) at 100"]]
 for k in PW:
     g = d[(d.option == k) & (d.indicator == "G")].iloc[0]; cc = d[(d.option == k) & (d.indicator == "C")].iloc[0]
     dg = d[(d.option == k) & (d.indicator == "dG_OD")].iloc[0]; ce = d[(d.option == k) & (d.indicator == "CED")].iloc[0]
     pv = lambda ind: d[(d.option == k) & (d.indicator == ind)].p50.iloc[0]
     rows.append([NAMES[k], f"{g.p5:.0f} / {g.p50:.0f} / {g.p95:.0f}", f"{dg.p50:.0f} ({dg.p5:.0f}-{dg.p95:.0f})",
                  f"{cc.p5:.1f} / {cc.p50:.1f} / {cc.p95:.1f}", f"{ce.p50:,.0f}", f"{pv('p_feasible'):.2f}",
-                 f"{pv('p_front'):.2f}", f"<b>{pv('p_best'):.3f}</b>"])
+                 f"{pbest(k, 50):.3f} &plusmn; {1.96*pse(k, 50):.3f}", f"{pbest(k, 100):.3f} &plusmn; {1.96*pse(k, 100):.3f}"])
 A(table(rows, [3.2, 2.7, 2.9, 2.7, 1.8, 1.3, 1.3, 1.2]))
-A(P("Table 12: Monte Carlo results for Kota Padang (market case). P(best) is evaluated over the sampled carbon value.", "cap"))
+A(P("Table 12: Monte Carlo results for Kota Padang (market case). P(best) at a fixed carbon value of 50 or 100 USD/t "
+    "CO<sub>2</sub>e, &plusmn; 95% Monte Carlo interval.", "cap"))
 A(figure(fig_mc(), 16, "Figure 6: Distributions of GHG, GHG avoided against the open dump and net cost (boxes: "
          "interquartile range; whiskers: 5th-95th percentiles)."))
 sp = u["split"]
@@ -371,10 +378,10 @@ A(P(f"Composition uncertainty matters most for WtE (through the plastic share: "
 
 # ---- 8 sensitivity
 A(P("8 Sensitivity analysis", "h1"))
-A(P("<b>8.1 One-at-a-time (tornado).</b> Each input of the register is set to its low and its high value with all others "
-    "at their central values. The decisive output is the social-cost gap between RDF + AD and the landfill at 50 USD/t "
-    f"(base value {u['tornado_base']['gap_S5_SL']:.2f} USD/t; negative = RDF + AD cheaper in social terms)."))
-A(figure(fig_tornado(), 16, "Figure 7: Tornado diagrams for Kota Padang. Left: social-cost gap S5 minus SL at 50 USD/t "
+A(P("<b>8.1 One-at-a-time (tornado).</b> Each input of the register (and k<sub>mech</sub>, c<sub>pre</sub>) is set to its low and its high value with all others "
+    "at their central values. The decisive output is the carbon-inclusive cost gap between RDF + AD and the landfill at 50 USD/t "
+    f"(base value {u['tornado_base']['gap_S5_SL']:.2f} USD/t; negative = RDF + AD cheaper on carbon-inclusive cost)."))
+A(figure(fig_tornado(), 16, "Figure 7: Tornado diagrams for Kota Padang. Left: carbon-inclusive cost gap S5 minus SL at 50 USD/t "
          "(red dashed line: break-even). Right: GHG of the sanitary landfill."))
 tt = u["tornado"]; q = tt[tt.output == "gap_S5_SL"].sort_values("swing", ascending=False).head(10)
 rows = [["Input", "Meaning", "Range", "Gap at low", "Gap at high", "Crosses zero?"]]
@@ -382,14 +389,14 @@ for rw in q.itertuples():
     rows.append([rw.input, rw.meaning, f"{num(rw.low)} to {num(rw.high)}", f"{rw.at_low:.2f}", f"{rw.at_high:.2f}",
                  "yes" if np.sign(rw.at_low) != np.sign(rw.at_high) else "no"])
 A(table(rows, [1.8, 6.6, 2.4, 1.8, 1.8, 1.8]))
-A(P("Table 14: The ten inputs with the largest swing of the S5 &minus; SL social-cost gap. 'Crosses zero' means that the "
+A(P("Table 14: The ten inputs with the largest swing of the S5 &minus; SL carbon-inclusive cost gap. 'Crosses zero' means that the "
     "input alone, within its range, can reverse the choice between the two options.", "cap"))
 A(P("<b>8.2 Variance-based (Sobol).</b> First-order (S1) and total (ST) indices from 1,024 Saltelli base samples (all "
     "register inputs plus the wetness draw varied together; composition fixed at the Padang values)."))
 A(figure(fig_sobol(), 16, "Figure 8: Sobol indices for Kota Padang."))
 sb = u["sobol"]
 rows = [["Output", "Most influential inputs: ST (S1)"]]
-for outn, lab in (("SCgap_S5_SL", "Social-cost gap S5 - SL at 50 USD/t"), ("G_SL", "GHG landfill"), ("G_S1", "GHG WtE"),
+for outn, lab in (("CICgap_S5_SL", "Carbon-inclusive cost gap S5 - SL at 50 USD/t"), ("G_SL", "GHG landfill"), ("G_S1", "GHG WtE"),
                   ("G_S5", "GHG RDF + AD"), ("C_S1", "Cost WtE"), ("C_S5", "Cost RDF + AD")):
     qq = sb[sb.output == outn].sort_values("ST", ascending=False).head(5)
     rows.append([lab, "; ".join(f"{x.input} {x.ST:.2f} ({x.S1:.2f})" for x in qq.itertuples())])
@@ -406,24 +413,53 @@ A(P("Table 16: Spearman rank correlations in the Monte Carlo sample (composition
 # ---- 9 scenarios
 A(P("9 Scenarios", "h1"))
 sc = u["scen"]
-rows = [["Scenario", "Q t/d", "Best at 0", "25", "50", "100"] + [f"P({k})" for k in PW]]
+rows = [["Scenario", "Q t/d", "Central best at 0", "25", "50", "100", "Most probable at 50 (P)", "Most probable at 100 (P)"]]
 for rw in sc.itertuples():
     if isinstance(getattr(rw, "note", None), str):
-        rows.append([SCN.get(rw.scenario, rw.scenario), "n.a.", "", "", "", ""] + [""] * 6 ); continue
-    pv = [getattr(rw, f"p_{k}") for k in PW]; mx = max(pv)
-    rows.append([SCN.get(rw.scenario, rw.scenario), f"{rw.Q:,.0f}", rw.best_0, rw.best_25, rw.best_50, rw.best_100] +
-                [(f"<b>{x:.2f}</b>" if x == mx else f"{x:.2f}") for x in pv])
-A(table(rows, [3.0, 1.2, 1.3, 1.0, 1.0, 1.0] + [1.25] * 6))
+        rows.append([SCN.get(rw.scenario, rw.scenario), "n.a.", "", "", "", "", "", ""]); continue
+    mp = lambda pc: max(PW, key=lambda k: getattr(rw, f"p{pc}_{k}"))
+    rows.append([SCN.get(rw.scenario, rw.scenario), f"{rw.Q:,.0f}", rw.best_0, rw.best_25, rw.best_50, rw.best_100,
+                 f"{mp(50)} ({getattr(rw, f'p50_{mp(50)}'):.2f})", f"{mp(100)} ({getattr(rw, f'p100_{mp(100)}'):.2f})"])
+A(table(rows, [3.4, 1.2, 1.9, 1.0, 1.0, 1.0, 3.2, 3.3]))
 A(P("Table 17: Scenarios for Kota Padang. Managed M1 is n.a. because Padang has no status-index value; M2 uses the "
     "TPA-delivery lower bound (71.8%).", "cap"))
-A(P(f"Interpretation for Padang. Landfill with flare and RDF + AD are statistically tied over the carbon range; the "
-    f"choice turns at about {pstar:.0f} USD/t CO<sub>2</sub>e at central values. A cement kiln {ctx['road']:.0f} km away "
-    f"makes RDF cheap to deliver, and the tonnage ({o['Q']:.0f} t/day) is below the Perpres 109 threshold, so the WtE "
-    "tariff does not apply. Separating food at source "
-    "makes AD alone the most probable option; with IPCC default moisture, RDF + AD becomes clearly preferred; with "
-    "GWP20, WtE becomes the cheapest at 50&ndash;100 USD/t at central values, though RDF + AD remains most probable over "
-    "the sampled range. The quantities to measure first are the as-received moisture of Padang's waste and the gas "
-    "collection that a new landfill would actually achieve."))
+scn = u["scen"].set_index("scenario")
+mpS = lambda s_, pc: max(PW, key=lambda k: scn.loc[s_, f"p{pc}_{k}"])
+A(P(f"Interpretation for Padang. At the carbon values that apply today the landfill with flare is the clear choice. RDF + "
+    f"AD overtakes it at about {pstar:.0f} USD/t CO<sub>2</sub>e at central values, so at 100 USD/t it is the most probable "
+    f"option, but not robustly: with the upper moisture bound the most probable option at 100 USD/t is "
+    f"{mpS('moisture_high_bound', 100)}, and with a 22% lower RDF heating value it is {mpS('rdf_ncv_stress', 100)}. A cement "
+    f"kiln {ctx['road']:.0f} km away makes RDF cheap to deliver, and the tonnage ({o['Q']:.0f} t/day) is below the Perpres 109 "
+    f"threshold, so the WtE tariff does not apply. Separating food at source makes {mpS('food_separated_at_source', 50)} the "
+    f"most probable option at 50 USD/t; optimistic AD feed alone leaves {mpS('AD_feed_optimistic', 50)} in front."))
+A(P("10 What Padang would need: break-even targets and the value of information", "h1"))
+th = u["thr"]
+rows = [["Option", "Input", "Central", "Better if", "Break-even at 25", "at 50", "at 100"]]
+for (opt, key), g in th.groupby(["option", "input"], sort=False):
+    g = g.set_index("carbon_value")
+    f_ = lambda v: f"{float(v):.3g}" if v not in ("never", "always") else ("never" if v == "never" else "already")
+    rows.append([NAMES[opt], key, f"{g.central_value.iloc[0]:.3g}", g.better_if.iloc[0]] + [f_(g.loc[pc, "break_even"]) for pc in (25, 50, 100)])
+A(table(rows, [3.0, 2.2, 2.0, 1.7, 2.6, 2.6, 2.6]))
+A(P("Table 18: Break-even values for Kota Padang: the value of one input (others central) at which the option's "
+    "carbon-inclusive cost equals the landfill's. 'never': no value in the tested range suffices; 'already': the option is "
+    "cheaper over the whole range. Units as in the register (K_wte in USD).", "cap"))
+vg = u["voi"]
+rows = [["Measurement group", "EVPPI at 25", "at 50", "at 100 (USD/t)", "at 100, USD/yr"]]
+for g_ in vg[vg.carbon_value == 100].sort_values("evppi_net", ascending=False).group:
+    q_ = vg[vg.group == g_].set_index("carbon_value")
+    rows.append([g_, f"{q_.loc[25, 'evppi_net']:.3f}", f"{q_.loc[50, 'evppi_net']:.3f}", f"{q_.loc[100, 'evppi_net']:.3f}",
+                 f"{q_.loc[100, 'usd_per_year']:,.0f}"])
+ev = vg.groupby("carbon_value").evpi.first()
+rows.append(["EVPI (all inputs)", f"{ev[25]:.3f}", f"{ev[50]:.3f}", f"{ev[100]:.3f}", f"{ev[100] * o['Q'] * 365:,.0f}"])
+A(table(rows, [7.0, 2.2, 2.0, 2.6, 3.2]))
+A(P("Table 19: Value of information for Kota Padang (USD per tonne and per year at the 2025 tonnage). Group values are "
+    "conservative and need not add up to the EVPI.", "cap"))
+A(P(f"For Padang this means: at 50 USD/t an RDF + AD project would have to secure an RDF processing cost of about "
+    f"{float(th[(th.option=='S5')&(th.input=='o_rdf')&(th.carbon_value==50)].break_even.iloc[0]):.1f} USD/t or an RDF price of about "
+    f"{float(th[(th.option=='S5')&(th.input=='p_rdf')&(th.carbon_value==50)].break_even.iloc[0]):.2f} USD/GJ to match the landfill. "
+    f"Perfect information would be worth about {ev[100] * o['Q'] * 365:,.0f} USD per year at 100 USD/t but only "
+    f"{ev[25] * o['Q'] * 365:,.0f} USD per year at 25 USD/t, so the case for a local waste characterisation and a "
+    "landfill-gas measurement grows with the carbon value the city or its funders intend to apply."))
 A(P("<b>Caveats.</b> Composition from 2023 used as a 2025 proxy; moisture as received, dry heating values and RDF "
     "transfer coefficients are assumptions; costs are class-5 estimates; the Padang managed share (93.7%) is provisional; "
     "land-use and several CED factors are assumptions.", "small"))

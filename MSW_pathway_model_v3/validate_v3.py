@@ -49,7 +49,7 @@ check("blank vs zero", "Glass blank (not reported) distinguished from glass fold
       and inp.loc[inp.city_id == "kota_padang", "glass_status"].iloc[0] == "not_reported_blank")
 
 # Parser behaviour on a synthetic row: blank glass must not change shares; zero glass is a reported zero.
-from mswpath import MSWModel, read_input
+from mswpath import MSWModel, read_input, PW
 M = MSWModel(D)
 raw0 = read_input(D / "input_kota_2025_updated.csv")
 row = raw0.iloc[[0]].copy()
@@ -236,10 +236,84 @@ grow = ex.copy(); grow["tonnage_year"] = 2022; grow["tonnage_is_2025"] = "no"; g
 rg, _ = from_template(grow, M)
 check("template", "Template tonnage projected once: Q2025 = Qt (1.02)^3", np.allclose(rg.Q2025_tpd, ex.tonnage_tpd * 1.02 ** 3))
 
+# ---- 11. v3.2: secondary-data corrections, realism parameters, decision outputs ------------------
+ver = pd.read_csv(D / "secondary_data_verification.csv")
+check("v3.2 data", "Every secondary-data item has a verification result, evidence and method",
+      ver[["result", "evidence", "method"]].notna().all().all(), f"{len(ver)} items")
+rk = reg.set_index("key")
+check("v3.2 data", "Corrected register values are the ones used (o_rdf 18.4, p_rdf 1.15, cap low 0.20, c_sl low 9)",
+      np.isclose(rk.central.o_rdf, 18.4) and np.isclose(rk.central.p_rdf, 1.15) and np.isclose(rk.low["cap"], 0.20)
+      and np.isclose(rk.low.c_sl, 9))
+gv = pd.read_csv(D / "grid_emission_factors.csv").set_index("grid_region").ef_kgCO2_per_kWh
+check("v3.2 data", "Grid factors from ESDM 2018 (Jamali 0.877, Sumatera 0.832, Mahakam 1.128)",
+      np.allclose(gv.reindex(["Jamali", "Sumatera", "Mahakam"]), [0.877, 0.832, 1.128]), gv.round(3).to_dict())
+check("v3.2 data", "Status V kept only for values confirmed in the 2026-10 check (y_ch4, K_wte, o_wte, p_el)",
+      set(reg[reg.status == "V"].key) <= {"y_ch4", "K_wte", "o_wte", "p_el"}, ", ".join(reg[reg.status == "V"].key))
+check("v3.2 data", "Every register row records its v3.1 status and the 2026-10 verification outcome",
+      reg[["status_v3_1", "verification_2026_10"]].notna().all().all())
+sp = pd.read_csv(D / "scenario_parameters.csv").set_index("key")
+check("v3.2 data", "Scenario/realism parameters have source, status and use (main case or scenario)",
+      sp[["source", "status", "use"]].notna().all().all() and sp.use.isin(["main case", "scenario", "stress"]).all())
+check("v3.2 data", "Main case: no glass imputation, no pseudocount, RDF NCV multiplier 1",
+      sp.central.glass_imp == 0 and sp.central.pseudo == 0 and sp.central.rdf_ncv_k == 1)
+
+M.load_cities(raw0)
+d_main, _, _ = M.run_central({"market": {}})
+d_opt, _, _ = M.run_central({"market": dict(fix={"y_pen_mech": 1.0, "pre_ofmsw": 0.0})})
+km_ = ["city", "baseline", "pathway"]
+a_, b_ = d_main.set_index(km_)[["G", "C"]], d_opt.set_index(km_)[["G", "C"]].loc[d_main.set_index(km_).index]
+oth = a_.index.get_level_values("pathway").isin(["SL", "S1", "S2", "S4"])
+check("v3.2 model", "AD-feed penalty changes only S3 and S5 (SL, S1, S2, S4 identical)",
+      np.allclose(a_[oth], b_[oth]) and (np.abs(a_[~oth] - b_[~oth]).to_numpy().max() > 1))
+check("v3.2 model", "AD-feed penalty makes S3 and S5 dearer and less climate-beneficial",
+      (a_[~oth].C >= b_[~oth].C - 1e-9).all() and (a_[~oth].G >= b_[~oth].G - 1e-9).all())
+i_rep = [k for k, v in enumerate(M.H.glass) if v != "not_reported_blank"][0]
+i_nr = [k for k, v in enumerate(M.H.glass) if v == "not_reported_blank"]
+c_, P_, s_, Q_, _ = M.setup(i_rep, 1, True, glass_impute=True)
+check("v3.2 model", "Glass imputation leaves locations that report glass unchanged", np.allclose(s_[0], M.SB[i_rep]))
+if i_nr:
+    c_, P_, s_, Q_, _ = M.setup(i_nr[0], 1, True, glass_impute=True)
+    check("v3.2 model", "Glass imputation adds glass only where glass is not reported, shares still sum to 1",
+          s_[0, M.FR.index("glass")] > M.SB[i_nr[0]][M.FR.index("glass")] and abs(s_[0].sum() - 1) < 1e-12,
+          f"{len(i_nr)} locations without glass")
+c_, P_, s_, Q_, kw_ = M.setup(0, 1, True); X0 = M.model(s_, P_, c_, Q_)["X"]
+c_, P_, s_, Q_, kw_ = M.setup(0, 1, True, rdf_stress=True); X1 = M.model(s_, P_, c_, Q_)["X"]
+check("v3.2 model", "RDF NCV stress lowers delivered RDF energy by the multiplier (0.78)",
+      np.isclose(X1["rdf_ncv_S2"][0] / X0["rdf_ncv_S2"][0], sp.central.rdf_ncv_k_scen),
+      f"{X0['rdf_ncv_S2'][0]:.1f} -> {X1['rdf_ncv_S2'][0]:.1f} MJ/kg")
+mc_, smp_ = M.run_mc("market", N=1000, keep=True)
+sums = mc_.groupby("city")[[f"p_best_at_{pc}" for pc in (0, 2, 25, 50, 100)]].sum()
+check("v3.2 decision", "P(best | carbon value) sums to 1 over options in every location", np.allclose(sums, 1.0),
+      f"range {sums.min().min():.3f} to {sums.max().max():.3f}")
+check("v3.2 decision", "Monte Carlo standard error of P(best) is at most 0.5/sqrt(N)",
+      (mc_[[c for c in mc_.columns if c.endswith("_se")]] <= 0.5 / np.sqrt(1000) + 1e-12).all().all())
+from mswpath.voi import voi_location, voi_groups
+P0, s0, R0 = smp_[M.H.index[0]]
+g0, evpi0 = voi_groups(P0, s0, R0, M.FR, pc=100)
+v0, meta0 = voi_location(P0, s0, R0, M.FR, pc=100)
+check("v3.2 decision", "EVPI >= 0 and every (net) EVPPI <= EVPI",
+      evpi0 >= 0 and (g0.evppi_net <= evpi0 + 1e-6).all() and (v0.evppi_net <= evpi0 + 1e-6).all(), f"EVPI {evpi0:.2f} USD/t")
+from mswpath.thresholds import break_even
+be = break_even(M, 0, "S2", "p_rdf", 0.0, 6.0, 50)
+if isinstance(be["break_even"], float):
+    c_, P_, s_, Q_, kw_ = M.setup(0, 1, True); P_["p_rdf"] = np.array([be["break_even"]]); Rb = M.model(s_, P_, c_, Q_)
+    gap = (Rb["C"] + 50 * Rb["G"] / 1e3)[0]; gap = gap[PW.index("S2")] - gap[PW.index("SL")]
+    check("v3.2 decision", "Break-even value makes the option's carbon-inclusive cost equal SL's", abs(gap) < 0.05,
+          f"S2 p_rdf* = {be['break_even']:.3f} USD/GJ, gap {gap:.3f} USD/t")
+sys.path.insert(0, str(ROOT / "docs"))
+try:
+    import padang_calc; padang_calc.calc(D); ok_ = True; msg = ""
+except AssertionError as e:
+    ok_, msg = False, str(e)
+check("v3.2 decision", "Explicit hand recalculation (Kota Padang) reproduces every model output", ok_, msg)
+txt = "".join((ROOT / f).read_text() for f in ("mswpath/report.py", "mswpath/core.py", "make_colab_notebook.py", "run_discovery.py"))
+check("v3.2 wording", "No 'statistical tie' and no 'social cost' used as the decision metric in code or tool",
+      "statistical tie" not in txt.lower() and "lowest social cost" not in txt.lower() and "Social-cost" not in txt)
+
 rep = pd.DataFrame(R)
 rep.to_csv(OUT / "validation_report.csv", index=False)
 with open(OUT / "validation_report.md", "w") as fh:
-    fh.write(f"# Validation report (v3)\n\n{(rep.result == 'PASS').sum()} of {len(rep)} checks passed.\n\n")
+    fh.write(f"# Validation report (v3.2)\n\n{(rep.result == 'PASS').sum()} of {len(rep)} checks passed.\n\n")
     fh.write("| Group | Check | Result | Detail |\n|---|---|---|---|\n")
     for r in rep.itertuples():
         fh.write(f"| {r.group} | {r.check} | {r.result} | {r.detail} |\n")

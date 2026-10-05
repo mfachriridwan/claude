@@ -1,5 +1,5 @@
 """
-Core of the MSW recovery-pathway screening model (v3.1).
+Core of the MSW recovery-pathway screening model (v3.2).
 
 Screening LCA + TEA of six options per tonne of mixed MSW as received at the facility gate in 2025:
 SL sanitary landfill + flare, S1 WtE, S2 RDF to cement kiln, S3 AD of food waste, S4 PHB from landfill gas,
@@ -32,16 +32,26 @@ REQUIRED = ["Q2025_tpd", "M_dom_tpd_2025", "M_nd_tpd_2025", "tonnage_source_valu
             "managed_share_status_index", "managed_share_local", "managed_share_local_lower", "grid_region",
             "lat_used", "lon_used", "composition_sampling_year"]
 
+# Decision metric: carbon-inclusive cost CIC_k = C_k + p * G_k / 1000 (USD per t MSW) for a carbon value p.
+# It is not a full social cost: health, local pollution and other external effects are not valued.
+CARBON_VALUES = (0, 2, 25, 50, 100)     # 2 USD/t = Indonesian carbon tax, Rp 30/kg CO2e (UU 7/2021)
+
 SCENARIOS = {"market": {},
              "perpres109": dict(policy="perpres109"),
-             "food_separated_at_source": dict(fix={"pre": 0.0}),
+             "food_separated_at_source": dict(fix={"pre": 0.0, "y_pen_mech": 1.0, "pre_ofmsw": 0.0}),
+             "AD_feed_optimistic": dict(fix={"y_pen_mech": 1.0, "pre_ofmsw": 0.0}),
              "residues_to_open_dump": dict(sink="OD"),
              "managed_M1_status_index": dict(managed="M1"),
              "managed_M2_local_first": dict(managed="M2"),
              "GWP20": dict(metric="GWP20"),
              "moisture_IPCC_default": dict(moisture="ipcc"),
              "tonnage_overview_projected": dict(trule="alt"),
-             "docf_rubber_0.5": dict(fix={"docf_rubber": 0.5})}
+             "docf_rubber_0.5": dict(fix={"docf_rubber": 0.5}),
+             "glass_imputed": dict(glass_impute=True),
+             "dirichlet_pseudocount": dict(pseudo=True),
+             "moisture_high_bound": dict(moisture="high"),
+             "rdf_ncv_stress": dict(rdf_stress=True),
+             "phb_large_scale_cost": dict(fix={"c_phb": 1.3, "e_phb": 0.0})}
 
 
 def km(a, b):
@@ -94,6 +104,8 @@ class MSWModel:
         self.REG = pd.read_csv(D / "assumption_register.csv").set_index("key")
         lp = D / "lcia_factors.csv"
         self.LCIA = pd.read_csv(lp).set_index("key") if lp.exists() else None
+        sp = D / "scenario_parameters.csv"
+        self.SP = pd.read_csv(sp).set_index("key") if sp.exists() else None
         self.GWP = {"GWP100": (K.GWP100_CH4, K.GWP100_N2O), "GWP20": (K.GWP20_CH4, K.GWP20_N2O)}
         self.LAM, self.RHO_CH4, self.LHV_CH4, self.AVAIL = K.LAM, K.RHO_CH4, K.LHV_CH4, K.AVAIL
         self.GATE = {k[5:]: v for k, v in K.items() if k.startswith("GATE_")}
@@ -160,6 +172,8 @@ class MSWModel:
              for k, v in self.REG.iterrows()}
         if moisture == "ipcc":
             P["w"] = np.repeat(self.W_IPCC[None, :], N, 0)
+        elif moisture == "high":                         # stress test: every fraction at its upper as-received bound
+            P["w"] = np.repeat(self.W_HI[None, :], N, 0)
         else:
             u = rng.random((N, 1)) if sample else np.full((N, 1), 0.5)
             P["w"] = tri(u, self.W_LO, self.W, self.W_HI) if sample else np.repeat(self.W[None, :], N, 0)
@@ -182,14 +196,39 @@ class MSWModel:
             if k in self.LCIA.index: P[k] = np.full(N, float(v))
         return P
 
+    def draw_extra(self, P, glass_impute=False, pseudo=False, rdf_stress=False):
+        """Realism and scenario parameters (scenario_parameters.csv), drawn after the CED/LU factors."""
+        N = len(P["F"])
+        if self.SP is None:
+            return P
+        main = self.SP[self.SP.use == "main case"]
+        for k, v in main.iterrows():
+            P[k] = tri(self.rng.random(N), v.low, v.central, v.high) if P["_sample"] else np.full(N, v.central)
+        if glass_impute:
+            v = self.SP.loc["glass_imp_dist"]
+            P["glass_imp"] = tri(self.rng.random(N), v.low, v.central, v.high) if P["_sample"] else np.full(N, v.central)
+        if pseudo:
+            P["pseudo"] = np.full(N, self.SP.loc["pseudo_scen", "central"])
+        if rdf_stress:
+            P["rdf_ncv_k"] = np.full(N, self.SP.loc["rdf_ncv_k_scen", "central"])
+        for k, v in P["_fix"].items():
+            if k in self.SP.index: P[k] = np.full(N, float(v))
+        return P
+
     def composition(self, i, P):
+        """Harmonisation priors (rules W/L), optional glass imputation where glass is not reported, then Dirichlet
+        noise. A category that is not reported has zero share unless the glass_imputed scenario is run."""
         c = self.H.iloc[i]; N = len(P["F"]); s = np.repeat(self.SB[i][None, :], N, 0)
         if c.woody:
             mv = s[:, self.iW] * P["yard"]; s[:, self.iG] += mv; s[:, self.iW] -= mv
         elif c.lumped:
             mv = s[:, self.iF] * P["gamma"]; s[:, self.iG] += mv; s[:, self.iF] -= mv
+        gi = P.get("glass_imp")
+        if gi is not None and c.glass == "not_reported_blank" and np.any(gi > 0):
+            s = s * (1 - gi)[:, None]; s[:, self.FR.index("glass")] += gi
         if not P["_comp"]: return s
-        g = self.rng.gamma(np.maximum(c.alpha0 * s, 1e-12)); return g / g.sum(1, keepdims=True)
+        pc = P.get("pseudo", np.zeros(N))[:, None]
+        g = self.rng.gamma(np.maximum(c.alpha0 * s + pc, 1e-12)); return g / g.sum(1, keepdims=True)
 
     def tonnage(self, i, P, rule="central"):
         c = self.H.iloc[i]; N = len(P["F"])
@@ -201,13 +240,15 @@ class MSWModel:
         return c.Q_src * (1 + g) ** c.expo
 
     def setup(self, i, N, central, fix=None, managed=None, moisture="as_received", trule="central",
-              vary=("param", "comp"), **kw):
-        c = self.H.iloc[i]; P = self.draw(N, central, fix, moisture, vary); s = self.composition(i, P)
+              vary=("param", "comp"), glass_impute=False, pseudo=False, rdf_stress=False, **kw):
+        c = self.H.iloc[i]; P = self.draw(N, central, fix, moisture, vary)
+        P = self.draw_lcia(P)
+        P = self.draw_extra(P, glass_impute, pseudo, rdf_stress)
+        s = self.composition(i, P)
         Q = self.tonnage(i, P, trule)
         if managed:
             share = c.m_M1 if managed == "M1" else c.m_M2
             Q = Q * (share if pd.notna(share) else np.nan)
-        P = self.draw_lcia(P)
         return c, P, s, Q, kw
 
     # ------------------------------------------------------------------ the model
@@ -253,7 +294,7 @@ class MSWModel:
             r = m * np.minimum(TAU * col("tau_k"), 1.0); rej = m - r
             m_in, water = r.sum(1), (r * w).sum(1); dry = m_in - water
             m_out = np.minimum(m_in, dry / (1 - P["omega"]))
-            e = (r * dm * h).sum(1) - LAM * (m_out - dry)
+            e = ((r * dm * h).sum(1) - LAM * (m_out - dry)) * P.get("rdf_ncv_k", 1.0)
             e_net = e - (m_in - m_out) * P["q_dry"]
             m_del = m_out * e_net / e
             g = fossil(r) + t * (P["e_rdf"] * efg + P["anc_rdf"]) + m_del * dkm * P["ef_truck"] - P["psi"] * e_net * P["ef_coal"]
@@ -266,11 +307,14 @@ class MSWModel:
                 ced = lu = Z
             return g, cst, rej, dict(rdf_t=m_del, rdf_ncv=e / m_out, rdf_gj=e_net, rdf_in=m_in, rdf_water=m_in - m_out), ced, lu
 
+        ypen = P.get("y_pen_mech", 1.0); pre_of = P.get("pre_ofmsw", 0.0)
+
         def ad(a):
-            ch4 = a * 1e3 * dm[:, iF] * P["vs_ts"] * P["y_ch4"]
+            # food separated from mixed waste yields less methane and needs extra pre-treatment (realism parameters)
+            ch4 = a * 1e3 * dm[:, iF] * P["vs_ts"] * P["y_ch4"] * ypen
             el = ch4 * (1 - P["fug_ad"]) * self.LHV_CH4 / 3.6 * P["eta_chp"] * (1 - P["par_ad"])
             g = ch4 * self.RHO_CH4 * P["fug_ad"] * gch4 + a * P["anc_ad"] - el * efg
-            cst = a * (capex(P["K_ad"], QREF["ad"], Q * a) + P["o_ad"]) - el * P["p_el"]
+            cst = a * (capex(P["K_ad"], QREF["ad"], Q * a) + P["o_ad"] + pre_of) - el * P["p_el"]
             ced = (a * P["anc_ad"] * mj_diesel - el * pef) if lc_on else Z
             lu = a * plant_lu(P["fp_ad"]) if lc_on else Z
             return g, cst, dict(ad_kwh=el, ad_ch4_m3=ch4), ced, lu
@@ -329,6 +373,7 @@ class MSWModel:
 
     @staticmethod
     def decide(R, pc):
+        """Best feasible option by carbon-inclusive cost C + pc*G/1000, and Pareto membership on (G, C)."""
         G, C, ok = R["G"], R["C"], R["ok"]
         score = np.where(ok, C + pc[:, None] * G / 1e3, np.inf)
         dom = (G[:, None, :] <= G[:, :, None]) & (C[:, None, :] <= C[:, :, None]) & \
@@ -394,7 +439,13 @@ class MSWModel:
             if np.isnan(Q).any(): continue
             R = self.model(s, P, c, Q, **kw); pick, front = self.decide(R, P["pc"])
             dd = {f"{ind}_{bg}": self.delta(R, bg, ind) for ind in INDICATORS for bg in ("OD", "SL")}
+            fixed = {pc: self.decide(R, np.full(N, float(pc)))[0] for pc in CARBON_VALUES}
             for j, k in enumerate(PW):
+                pfix = {}
+                for pc, pk in fixed.items():
+                    pb = (pk == j).mean()
+                    pfix[f"p_best_at_{pc}"] = pb
+                    pfix[f"p_best_at_{pc}_se"] = np.sqrt(pb * (1 - pb) / N)
                 stats = {f"{nm}_{p}": v for nm, a in (("G", R["G"]), ("C", R["C"]), ("dG_OD", dd["G_OD"]),
                                                        ("dC_OD", dd["C_OD"]), ("dG_SL", dd["G_SL"]), ("dC_SL", dd["C_SL"]),
                                                        ("CED", R["CED"]), ("LU", R["LU"]))
@@ -402,7 +453,7 @@ class MSWModel:
                 out.append(dict(city=c.city, scenario=name, pathway=k, p_feasible=R["ok"][:, j].mean(),
                                 p_front=front[:, j].mean(), p_best=(pick == j).mean(),
                                 **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
-                                   for lo, hi in ((0, 10), (10, 50), (50, 100))}, **stats))
+                                   for lo, hi in ((0, 10), (10, 50), (50, 100))}, **pfix, **stats))
             if keep: samples[cid] = (P, s, R)
         return pd.DataFrame(out), samples
 

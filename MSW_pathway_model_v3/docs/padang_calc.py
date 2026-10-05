@@ -83,7 +83,7 @@ def calc(data_dir, city_id="kota_padang"):
         rj = m * np.minimum(M.TAU * v("tau_k"), 1.0); rej = m - rj
         m_in = rj.sum(); water = (rj * w).sum(); dry = m_in - water
         m_out = min(m_in, dry / (1 - v("omega")))
-        e = (rj * dm * h).sum() - LAM * (m_out - dry)
+        e = ((rj * dm * h).sum() - LAM * (m_out - dry)) * v("rdf_ncv_k")   # rdf_ncv_k = 1 in the main case
         e_net = e - (m_in - m_out) * v("q_dry")
         m_del = m_out * e_net / e
         fos = 1e3 * (rj * dm * M.CARB * M.PHI).sum() * 44 / 12
@@ -97,10 +97,10 @@ def calc(data_dir, city_id="kota_padang"):
                     LU=v("fp_rdf") / (M.AVAIL * 365 * nn))
 
     def ad(a):
-        V = a * 1e3 * dm[M.iF] * v("vs_ts") * v("y_ch4")
+        V = a * 1e3 * dm[M.iF] * v("vs_ts") * v("y_ch4") * v("y_pen_mech")   # yield penalty for food sorted from mixed MSW
         el = V * (1 - v("fug_ad")) * M.LHV_CH4 / 3.6 * v("eta_chp") * (1 - v("par_ad"))
         parts = dict(fugitive=V * M.RHO_CH4 * v("fug_ad") * g27, diesel=a * v("anc_ad"), electricity_credit=-el * efg)
-        cost = dict(capex=a * capex(v("K_ad"), M.QREF["ad"], Qd * a), om=a * v("o_ad"), revenue=-el * v("p_el"))
+        cost = dict(capex=a * capex(v("K_ad"), M.QREF["ad"], Qd * a), om=a * v("o_ad"), pretreatment=a * v("pre_ofmsw"), revenue=-el * v("p_el"))
         return dict(a=a, V=V, el=el, parts=parts, G=sum(parts.values()), cost=cost, C=sum(cost.values()),
                     CED=a * v("anc_ad") * mjd - el * pef, LU=a * v("fp_ad") / (M.AVAIL * 365 * nn))
 

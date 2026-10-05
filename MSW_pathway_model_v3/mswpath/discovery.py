@@ -3,7 +3,7 @@ Scenario discovery: under what city and waste-system conditions does each option
 
 The model is run over a space of conditions that a planner can observe or choose (carbon value, tonnage, distance to a
 cement kiln, grid, WtE tariff, source separation of food, composition, moisture, landfill gas collection, landfill
-cost), with all other parameters sampled from the register. For every draw the best feasible option (lowest social
+cost), with all other parameters sampled from the register. For every draw the best feasible option (lowest carbon-inclusive
 cost) is recorded. Interpretable rules are then extracted with a classification tree (CART) and PRIM boxes.
 
 Composition is sampled from a Dirichlet distribution centred on the mean of the 21 harmonised RIPS compositions with a
@@ -46,6 +46,7 @@ def sample_conditions(M, N=40000, seed=7, q_range=(50, 3000), km_range=(10, 400)
     M.rng = rng
     P = M.draw(N, central=False)
     P = M.draw_lcia(P)
+    P = M.draw_extra(P)
     m, a0 = dirichlet_fit(M.SB)
     s = rng.dirichlet(np.maximum(m * a0, 1e-6), N)
     Q = np.exp(rng.uniform(np.log(q_range[0]), np.log(q_range[1]), N))
@@ -55,6 +56,8 @@ def sample_conditions(M, N=40000, seed=7, q_range=(50, 3000), km_range=(10, 400)
     tariff = rng.random(N) < 0.5
     foodsep = rng.random(N) < 0.5
     P["pre"] = np.where(foodsep, 0.0, P["pre"])
+    if "y_pen_mech" in P:                      # source-separated food: no mechanical-separation penalty
+        P["y_pen_mech"] = np.where(foodsep, 1.0, P["y_pen_mech"]); P["pre_ofmsw"] = np.where(foodsep, 0.0, P["pre_ofmsw"])
     c = SimpleNamespace(ef_grid=ef, d_line=road / P["tort"])
     policy = np.where(tariff, "perpres109", "market")
     R = M.model(s, P, c, Q, policy=policy)
@@ -183,21 +186,25 @@ def condition_map(X, y, fx, fy, bins=(12, 12), logx=False, logy=False, min_n=30)
 
 
 def sobol_indices(M, i, N=512, pc=50.0, seed=11):
-    """Sobol first-order and total indices of register parameters (plus the common wetness draw) for one location,
-    composition fixed at its central value. Outputs: G and C of every option and the social-cost gap S5 - SL."""
+    """Sobol first-order and total indices of register and realism parameters (plus the common wetness draw) for one
+    location, composition fixed at its central value. Outputs: G and C of every option and the carbon-inclusive-cost
+    gap S5 - SL at carbon value pc."""
     from SALib.sample import sobol as sobol_sample
     from SALib.analyze import sobol as sobol_analyze
     REG = M.REG
-    names = [k for k, v in REG.iterrows() if v.high > v.low and k not in ("alpha_hi", "alpha_lo")] + ["wetness"]
+    SPm = M.SP[(M.SP.use == "main case") & (M.SP.high > M.SP.low)] if M.SP is not None else None
+    extra = list(SPm.index) if SPm is not None else []
+    names = [k for k, v in REG.iterrows() if v.high > v.low and k not in ("alpha_hi", "alpha_lo")] + extra + ["wetness"]
     prob = dict(num_vars=len(names), names=names, bounds=[[0, 1]] * len(names))
     U = sobol_sample.sample(prob, N, calc_second_order=False, seed=seed)
     n = len(U)
     M.rng = np.random.default_rng(seed)
     P = M.draw(n, central=True)
-    for j, k in enumerate(names[:-1]):
-        v = REG.loc[k]; P[k] = tri(U[:, j], v.low, v.central, v.high)
-    P["w"] = tri(U[:, [-1]], M.W_LO, M.W, M.W_HI)
     P = M.draw_lcia(P)
+    P = M.draw_extra(P)
+    for j, k in enumerate(names[:-1]):
+        v = REG.loc[k] if k in REG.index else SPm.loc[k]; P[k] = tri(U[:, j], v.low, v.central, v.high)
+    P["w"] = tri(U[:, [-1]], M.W_LO, M.W, M.W_HI)
     c = M.H.iloc[i]
     s = np.repeat(M.SB[i][None, :], n, 0)
     if c.woody:
@@ -209,7 +216,7 @@ def sobol_indices(M, i, N=512, pc=50.0, seed=11):
     outs = {f"G_{k}": R["G"][:, j] for j, k in enumerate(PW)}
     outs.update({f"C_{k}": R["C"][:, j] for j, k in enumerate(PW)})
     sc = R["C"] + pc * R["G"] / 1e3
-    outs["SCgap_S5_SL"] = sc[:, 5] - sc[:, 0]
+    outs["CICgap_S5_SL"] = sc[:, 5] - sc[:, 0]
     rows = []
     for nm, y in outs.items():
         r = sobol_analyze.analyze(prob, y, calc_second_order=False, print_to_console=False, seed=seed)

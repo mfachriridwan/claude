@@ -154,7 +154,14 @@ def load():
         bench=pd.read_csv(OUT / "09_validation_benchmarks.csv", index_col=0),
         usplit=pd.read_csv(OUT / "10_uncertainty_split.csv", header=[0, 1], index_col=0),
         cover=pd.read_csv(OUT / "11_parameter_coverage_L2L3.csv"),
-        rob=pd.read_csv(OUT / "12_most_probable_by_scenario.csv", index_col=0),
+        pbest=pd.read_csv(OUT / "15_p_best_fixed_carbon_value.csv"),
+        stress=pd.read_csv(OUT / "16_stress_tests_ranking_changes.csv"),
+        thr=pd.read_csv(OUT / "17_break_even_thresholds_vs_SL.csv"),
+        sp=pd.read_csv(DATA / "scenario_parameters.csv"),
+        ver=pd.read_csv(DATA / "secondary_data_verification.csv"),
+        voi=pd.read_csv(OUT / "voi_evpi_by_location.csv"),
+        voig=pd.read_csv(OUT / "voi_groups_by_location.csv"),
+        voigr=pd.read_csv(OUT / "voi_groups_ranking.csv"),
         val=pd.read_csv(OUT / "validation_report.csv"),
         lcia=pd.read_csv(DATA / "lcia_factors.csv"),
         rules=pd.read_csv(OUT / "discovery_cart_rules.csv"),
@@ -173,7 +180,10 @@ NAMES = {"SL": "SL landfill + flare", "S1": "S1 WtE", "S2": "S2 RDF", "S3": "S3 
 SCN = {"market": "Market", "perpres109": "Perpres 109", "food_separated_at_source": "Food sep.",
        "residues_to_open_dump": "Residues to OD", "managed_M1_status_index": "Managed M1",
        "managed_M2_local_first": "Managed M2", "GWP20": "GWP20", "moisture_IPCC_default": "IPCC moisture",
-       "tonnage_overview_projected": "Overview projected", "docf_rubber_0.5": "Rubber DOCf 0.5"}
+       "tonnage_overview_projected": "Overview projected", "docf_rubber_0.5": "Rubber DOCf 0.5",
+       "AD_feed_optimistic": "AD feed optimistic", "glass_imputed": "Glass imputed",
+       "dirichlet_pseudocount": "Pseudocount 0.5", "moisture_high_bound": "Moisture high", "rdf_ncv_stress": "RDF NCV -22%",
+       "phb_large_scale_cost": "PHB large-scale (what-if)"}
 
 
 def fmt(v, f=".0f"):
@@ -209,20 +219,35 @@ def pathway_table(d, scen="market"):
     return rows
 
 
+def most_probable(d, pc, scen=None):
+    """Most probable option and its probability per location (and scenario) at a fixed carbon value."""
+    q = d["pbest"][d["pbest"].carbon_value == pc]
+    if scen is not None: q = q[q.scenario == scen]
+    q = q.sort_values("p_best", ascending=False).groupby(["scenario", "city"], sort=False).head(1)
+    return q.set_index(["scenario", "city"])
+
+
 def stats(d):
-    det, best, mc, rob = d["det"], d["best"], d["mc"], d["rob"]
+    det, best, mc = d["det"], d["best"], d["mc"]
     N = {}
     b = best[best.scenario == "market"]
     for pc in (0, 25, 50, 100):
         N[f"best{pc}"] = b[f"best_at_{pc}"].value_counts().to_dict()
-    w = mc[mc.scenario == "market"].pivot(index="city", columns="pathway", values="p_best")
-    srt = np.sort(w[PW].to_numpy(), axis=1)
-    N["n_ties"] = int((srt[:, -1] - srt[:, -2] < 0.05).sum())
-    N["mp"] = rob.market.value_counts().to_dict()
-    N["mp_all"] = {c: rob[c].value_counts().to_dict() for c in rob.columns}
-    m = mc[mc.scenario == "market"].groupby("pathway")[["p_feasible", "p_front", "p_best_pc0_10", "p_best_pc10_50",
-                                                       "p_best_pc50_100"]].mean()
+    for pc in (0, 2, 25, 50, 100):
+        mpq = most_probable(d, pc)
+        N[f"mp{pc}"] = {s: g.pathway.value_counts().to_dict() for s, g in mpq.groupby(level=0)}
+        N[f"mpp{pc}"] = mpq.xs("market").p_best
+    pb = d["pbest"][d["pbest"].scenario == "market"]
+    N["se_max"] = pb.se.max()
+    for pc in (50, 100):
+        for k in ("SL", "S5"):
+            q = pb[(pb.carbon_value == pc) & (pb.pathway == k)].p_best
+            N[f"p_{k}_{pc}"] = (q.median(), q.min(), q.max())
+    N["mp"] = N["mp50"]["market"]
+    m = mc[mc.scenario == "market"].groupby("pathway")[["p_feasible", "p_front"]].mean()
     N["avg"] = m
+    st = d["stress"]
+    N["stress"] = st.pivot(index="scenario", columns="carbon_value", values="n_changed")
     ch = d["char"]
     N["lhv"] = (ch.LHV.min(), ch.LHV.max(), ch.LHV.median())
     N["g1"] = int(ch.gate_LHV.sum()); N["g12"] = int((ch.gate_LHV & ch.gate_WtE_scale).sum())
@@ -237,12 +262,34 @@ def stats(d):
     N["disc_share"] = ds.best.value_counts(normalize=True).to_dict()
     N["disc_mix"] = ds[mix].best.value_counts(normalize=True).to_dict()
     sb = d["sobol"]
-    N["sobol_gap"] = sb[sb.output == "SCgap_S5_SL"].sort_values("ST", ascending=False).head(6)
+    N["sobol_gap"] = sb[sb.output == "CICgap_S5_SL"].sort_values("ST", ascending=False).head(6)
     N["sobol_gsl"] = sb[sb.output == "G_SL"].sort_values("ST", ascending=False).head(4)
     N["sobol_gs1"] = sb[sb.output == "G_S1"].sort_values("ST", ascending=False).head(4)
     x = det[(det.scenario == "market") & (det.baseline == "OD")]
     N["ced_med"] = x.groupby("pathway").CED.median().to_dict(); N["lu_med"] = x.groupby("pathway").LU.median().to_dict()
+    v = d["voi"]
+    N["evpi"] = v.groupby("carbon_value").evpi.median().to_dict()
+    N["evpi_yr"] = v.groupby("carbon_value").evpi_usd_per_year.median().to_dict()
+    N["evpi_yr_max"] = v.groupby("carbon_value").evpi_usd_per_year.max().to_dict()
+    N["voi_top"] = {pc: g.sort_values("median_evppi", ascending=False) for pc, g in d["voigr"].groupby("carbon_value")}
+    th = d["thr"]
+    N["thr"] = th
+    ver = d["ver"]
+    N["ver_counts"] = ver.result.value_counts().to_dict()
+    N["n_corrected"] = int(ver.result.str.startswith("corrected").sum())
     return N
+
+
+def thr_summary(d, option, pc):
+    """Median (and range) of break-even values over the 21 locations; counts of 'never'/'always'."""
+    th = d["thr"]; q = th[(th.option == option) & (th.carbon_value == pc)]
+    rows = []
+    for key, g in q.groupby("input", sort=False):
+        num_ = pd.to_numeric(g.break_even, errors="coerce")
+        nv, al = int((g.break_even == "never").sum()), int((g.break_even == "always").sum())
+        rng_ = f"{num_.median():.3g} ({num_.min():.3g} to {num_.max():.3g})" if num_.notna().any() else "-"
+        rows.append([key, f"{g.central_value.iloc[0]:.3g}", g.better_if.iloc[0], rng_, str(int(num_.notna().sum())), str(nv), str(al)])
+    return rows
 
 
 # ---------------------------------------------------------------------------------------------
@@ -365,30 +412,29 @@ def fig_qmanaged(d):
     return path
 
 
-def fig_robust(d):
-    path = FIG / "fig_robust.png"
-    rob = d["rob"].rename(columns=SCN)
-    mc = d["mc"]
-    pmax = {}
-    for s, lab in SCN.items():
-        w = mc[mc.scenario == s].pivot(index="city", columns="pathway", values="p_best")
-        pmax[lab] = w.max(axis=1)
-    pm = pd.DataFrame(pmax).reindex(rob.index)
+def fig_robust(d, pc=50):
+    path = FIG / f"fig_robust_{pc}.png"
+    mpq = most_probable(d, pc)
+    cities = list(dict.fromkeys(d["char"].city))
+    scen = [s for s in SCN if s in mpq.index.get_level_values(0)]
+    rob = pd.DataFrame({SCN[s]: mpq.xs(s).pathway.reindex(cities) for s in scen})
+    pm = pd.DataFrame({SCN[s]: mpq.xs(s).p_best.reindex(cities) for s in scen})
     code = {"SL": 0, "S1": 1, "S2": 2, "S3": 3, "S4": 4, "S5": 5}
     cols = ["#8c8c8c", "#d62728", "#ff7f0e", "#2ca02c", "#9467bd", "#1f77b4"]
     from matplotlib.colors import ListedColormap
     M = rob.apply(lambda c: c.map(code)).to_numpy(float)
-    fig, ax = plt.subplots(figsize=(9.5, 6.4))
+    fig, ax = plt.subplots(figsize=(11, 6.6))
     ax.imshow(np.ma.masked_invalid(M), cmap=ListedColormap(cols), vmin=-0.5, vmax=5.5, aspect="auto")
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             v = pm.iloc[i, j]
             if pd.notna(v):
-                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=6.3, color="white" if M[i, j] in (1, 5) else "black")
+                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=6, color="white" if M[i, j] in (1, 5) else "black")
             else:
-                ax.text(j, i, "n.a.", ha="center", va="center", fontsize=6.3)
+                ax.text(j, i, "n.a.", ha="center", va="center", fontsize=6)
     ax.set_xticks(range(M.shape[1])); ax.set_xticklabels(rob.columns, rotation=40, ha="right", fontsize=7.5)
     ax.set_yticks(range(M.shape[0])); ax.set_yticklabels(rob.index, fontsize=7.5)
+    ax.set_title(f"Carbon value {pc} USD/t CO2e", fontsize=9)
     from matplotlib.patches import Patch
     ax.legend(handles=[Patch(color=c, label=NAMES[k]) for k, c in zip(PW, cols)], fontsize=7, frameon=False,
               loc="upper left", bbox_to_anchor=(1.01, 1))

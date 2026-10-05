@@ -7,19 +7,19 @@ from doccommon import *
 
 d = load(); N = stats(d)
 inp, t2, t5, ch, mc, det = d["inp"], d["t2"], d["t5"], d["char"], d["mc"], d["det"]
-mpa = N["mp_all"]
+mpa = N["mp50"]; mp100 = N["mp100"]; st = N["stress"]
 x = det[(det.scenario == "market")]
 med = lambda bg, k, c: x[(x.baseline == bg) & (x.pathway == k)][c]
 rng3 = lambda s, f=".0f": f"{s.median():{f}} ({s.min():{f}}&ndash;{s.max():{f}})"
 ov = inp[inp.tonnage_year_status == "overview_index_year_unverified"]
 cov = d["cover"]; us = d["usplit"]
 story = []; A = story.append
-RUN = "Provenance-aware screening of MSW recovery pathways in Indonesia"
+RUN = "Ex-ante screening of MSW recovery pathways in Indonesia"
 
 A(P("Draft manuscript for submission to a Q1 waste-management journal &mdash; not peer reviewed &mdash; October 2026", "subtitle"))
 A(Spacer(1, 4))
-A(P("When does resource recovery beat a sanitary landfill? A provenance-aware screening LCA and TEA of six "
-    "municipal solid waste pathways for 21 Indonesian cities and regencies", "title"))
+A(P("Deciding before building: ex-ante screening of municipal solid waste recovery pathways for 21 Indonesian "
+    "cities and regencies, with decision rules, break-even targets and the value of information", "title"))
 A(P("Muhammad Fachri Ridwan<super>a,*</super>, Anthony Halog<super>a</super>", "subtitle"))
 A(P("<super>a</super> The University of Queensland, Brisbane, Australia (affiliation details to be completed)<br/>"
     "<super>*</super> Corresponding author. E-mail: mfachri0411@gmail.com<br/>"
@@ -27,40 +27,36 @@ A(P("<super>a</super> The University of Queensland, Brisbane, Australia (affilia
 A(Spacer(1, 6))
 
 abstract = (
-    "Indonesian local governments must choose between sanitary landfilling and recovery pathways with waste data that are "
-    "sparse, of different years and of uneven definition. We present an open, provenance-aware screening model that compares "
-    "six options per tonne of mixed municipal solid waste (MSW) at the facility gate in 2025: sanitary landfill with flare, "
-    "waste-to-energy (WtE), refuse-derived fuel (RDF) for cement kilns, anaerobic digestion (AD) of food waste, "
-    "polyhydroxybutyrate (PHB) from landfill gas, and integrated RDF + AD. All pathways share one LCA and TEA boundary, "
-    "including residue disposal. Composition data from local master plans (RIPS) of 21 cities and regencies were harmonised to "
-    "a 2025 baseline with a single, audited projection of tonnage, and every value was labelled as local measurement, "
-    "literature default, proxy, assumption, scenario or gap. Feasibility gates, Pareto screening and the probability of being "
-    "best over a sampled carbon value (0&ndash;100 USD/t CO<sub>2</sub>e) were combined with Monte Carlo simulation. At central "
-    f"values sanitary landfill with flare had the lowest social cost in all locations up to 25 USD/t CO<sub>2</sub>e, whereas "
-    f"RDF + AD was best in {N['best50'].get('S5',0)} locations at 50 USD/t and {N['best100'].get('S5',0)} at 100 USD/t, with an "
-    f"abatement cost of {N['s5_mac'][0]:.0f} ({N['s5_mac'][1]:.0f}&ndash;{N['s5_mac'][2]:.0f}) USD/t CO<sub>2</sub>e against "
-    "landfill. WtE was preferred only with the Perpres 109/2025 tariff in three large locations, AD only for source-separated "
-    "food waste, and PHB nowhere. Scenario discovery over 40,000 combinations of conditions condensed these results into "
-    "decision rules: for mixed waste, landfill with flare is preferred below about 40 USD/t CO<sub>2</sub>e and wherever no "
-    "cement kiln lies within about 300 km, RDF + AD above about 55 USD/t with a kiln in reach, WtE only with the tariff, "
-    "at least 1,000 t/day and an LHV of at least 7 MJ/kg, and AD where food is separated at source. RDF + AD and WtE also "
-    "saved the most fossil energy (about 4 GJ/t), and every recovery option reduced land take relative to landfilling. "
-    "The ranking between landfill and RDF + AD was robust to the tonnage-year and data-gap "
-    "scenarios but not to the moisture assumption: with IPCC default moisture instead of as-received values, RDF + AD became "
-    f"most probable in {mpa['moisture_IPCC_default'].get('S5',0)} of 21 locations. Measured as-received moisture and heating "
-    "value, and a common definition of managed waste, are therefore the data that would most improve such decisions. "
-    "The model is released as a Google Colab tool that researchers and planners can run for their own cities.")
+    "Indonesian local governments must decide on waste-to-energy (WtE), refuse-derived fuel (RDF), anaerobic digestion (AD) "
+    "or improved landfilling before any such facility exists locally, with waste data that are sparse, of different years and "
+    "of uneven definition. We present an open, provenance-aware ex-ante screening model that tells these stakeholders under "
+    "which city and waste-system conditions each option becomes preferable, which performance it must reach, and which data "
+    "are worth collecting first. Six options are compared per tonne of mixed municipal solid waste at the facility gate in "
+    "2025 within one LCA and TEA boundary: sanitary landfill with flare, WtE, RDF for cement kilns, AD of food waste, "
+    "polyhydroxybutyrate (PHB) from landfill gas and integrated RDF + AD. Data from the waste master plans of 21 cities and "
+    "regencies were harmonised to 2025 with a single audited tonnage projection; every value is labelled by evidence type, "
+    "and 23 secondary values were re-verified against their sources. Options are ranked by a carbon-inclusive cost at fixed "
+    "carbon values with Monte Carlo uncertainty. At central values the sanitary landfill had the lowest carbon-inclusive cost "
+    f"in all locations up to 50 USD/t CO<sub>2</sub>e; at 100 USD/t RDF + AD was best in {N['best100'].get('S5',0)} locations "
+    f"(abatement cost {N['s5_mac'][0]:.0f}, range {N['s5_mac'][1]:.0f}&ndash;{N['s5_mac'][2]:.0f} USD/t CO<sub>2</sub>e) and WtE "
+    "in one. Scenario discovery over 40,000 combinations of conditions gave decision rules: AD is preferable only where food "
+    "is separated at source and carbon is valued above about 30&ndash;45 USD/t; WtE only with the Perpres 109/2025 tariff, at "
+    "least 1,000 t/day and a heating value of at least 7 MJ/kg; RDF + AD only at high carbon values with a cement kiln within "
+    "about 300 km; and the landfill elsewhere. The RDF + AD result at 100 USD/t is fragile: the upper moisture bound or a 22% "
+    f"lower RDF heating value returned {int(st.loc['moisture_high_bound',100])} of 21 locations to the landfill. The expected "
+    f"value of perfect information rose from {N['evpi'][25]:.2f} to {N['evpi'][100]:.2f} USD/t between 25 and 100 USD/t "
+    "CO<sub>2</sub>e and was dominated by waste characterisation and landfill-gas performance, which identifies the "
+    "measurements to fund before a technology is chosen. The model is released as a Google Colab decision tool.")
 A(P("<b>Abstract</b>", "h2")); A(P(abstract, "body"))
 A(P("<b>Highlights</b>", "h2"))
-for t in bullets(["Six MSW options compared per tonne within one LCA/TEA boundary for 21 Indonesian locations",
-                  "Every input labelled as measurement, default, proxy, assumption, scenario or gap",
-                  "Landfill with flare is cheapest below 25 USD/t CO2e; RDF + AD leads at 50-100 USD/t",
-                  "WtE needs the Perpres 109/2025 tariff and 1,000 t/day; PHB is not preferred anywhere",
-                  "Decision rules from scenario discovery state when each option wins",
-                  "The moisture assumption, not tonnage year or data gaps, can reverse the ranking"]):
+for t in bullets(["Ex-ante screening of six MSW options for 21 Indonesian locations before any facility exists",
+                  "Every input labelled by evidence type; 23 secondary values re-verified against sources",
+                  "Landfill with flare is preferred up to 50 USD/t CO2e; RDF + AD only near 100 USD/t",
+                  "AD needs source separation; WtE needs the Perpres 109/2025 tariff and 1,000 t/day",
+                  "Break-even targets and value of information tell cities what to require and measure"]):
     A(t)
 A(P("<b>Keywords:</b> municipal solid waste; life cycle assessment; techno-economic assessment; refuse-derived fuel; "
-    "anaerobic digestion; data provenance; scenario discovery; Indonesia", "body"))
+    "anaerobic digestion; scenario discovery; value of information; ex-ante assessment; Indonesia", "body"))
 
 # ------------------------------------------------------------------------------------------- 1
 A(P("1. Introduction", "h1"))
@@ -80,15 +76,21 @@ A(P("For Indonesian cities and regencies a fourth condition becomes critical: th
     "defaults (IPCC, 2006, 2019) or on values from other countries, for example the detailed Danish household-waste "
     "characterisation of Edjabou et al. (2015). When such values enter a model without a status label, a proxy can be "
     "mistaken for a measurement and an analyst's assumption for a city observation."))
-A(P("This study asks under what Indonesian city and waste-system conditions each recovery pathway becomes preferable, and "
-    "which data limitations could change the answer. Its contributions are: (i) a screening model in which six options manage "
-    "the whole tonne within one boundary, with sanitary landfill as both a baseline and an option; (ii) a reproducible data "
-    "layer that harmonises 21 RIPS records to a 2025 baseline with a single, audited tonnage projection and labels every value "
-    "by its evidence type; (iii) a three-level waste-fraction taxonomy with explicit parameter gaps, kept separate from the "
-    "computation so that unverified allocation priors cannot influence results; and (iv) a decision analysis that reports the "
-    "probability of each option being best over a range of carbon values, together with data scenarios that isolate the effect "
-    "of individual provenance decisions; and (v) scenario discovery that turns the model into explicit decision rules, "
-    "released with the model as a reproducible Google Colab tool for other cities."))
+A(P("A further feature of the Indonesian setting shapes what a model can contribute. Most recovery pathways do not yet "
+    "exist at the scale of a city or regency, so decisions must be taken <i>ex ante</i>, before any local performance data "
+    "exist. Indonesian techno-economic studies have typically assessed one technology at one scale or for one city, for "
+    "example WtE incineration at 1,000 t/day (Prabowo et al., 2019; Azis et al., 2021; Yuliani et al., 2022). What local "
+    "governments, planning agencies, offtakers and funders need before a feasibility study is different: a comparison of "
+    "all realistic options under their own conditions, the performance an option would have to reach to be worth pursuing, "
+    "and guidance on which local data would most reduce the risk of a wrong choice."))
+A(P("This study therefore asks: <i>under what Indonesian city and waste-system conditions does each recovery pathway become "
+    "preferable?</i> Its contribution is an ex-ante decision-support model with five elements: (i) six options that manage "
+    "the whole tonne within one LCA/TEA boundary, with the sanitary landfill as both baseline and option; (ii) a reproducible "
+    "data layer that harmonises 21 RIPS records to 2025 with a single audited projection, labels every value by evidence type "
+    "and records the verification of each secondary value; (iii) decision results at fixed, policy-relevant carbon values "
+    "with Monte Carlo standard errors; (iv) scenario discovery that states the answer as rules in observable conditions; and "
+    "(v) break-even targets and a value-of-information analysis that translate uncertainty into what a city should require "
+    "in a tender and what it should measure first. All of it is released as a Google Colab tool for other cities."))
 
 # ------------------------------------------------------------------------------------------- 2
 A(P("2. Materials and methods", "h1"))
@@ -142,9 +144,10 @@ A(P("Following the tiered approach of Edjabou et al. (2015), the database holds 
     "(DOC<sub>wet</sub> = DOC<sub>dry</sub>(1 &minus; w)). Rubber and leather have no verified DOCf; the gap is sampled between "
     "0 and the generic IPCC default of 0.5. Plastic uses the aggregate median LHV of 30.5 MJ/kg dry solids reported by "
     "G&ouml;tze et al. (2016); other dry-matter heating values and the RDF transfer coefficients are legacy assumptions. "
-    "Moisture as received (food 0.75, plastic 0.22, paper 0.35) is an assumption calibrated to bulk moisture measured at "
-    "Indonesian transfer points (Prabowo et al., 2019); IPCC moisture, which describes waste as generated, is run as a "
-    f"scenario. At Level II/III a DOC value is known for only {cov.has_DOC_dry_fraction.min():.0f}&ndash;"
+    "Moisture as received (food 0.75, plastic 0.22, paper 0.35) is an assumption that gives a bulk moisture of about 0.5, "
+    "close to the 0.55 measured for raw MSW at Cilacap before biodrying; IPCC moisture, which describes waste as generated, "
+    "and an upper moisture bound are run as a scenario and a stress test. "
+    f" At Level II/III a DOC value is known for only {cov.has_DOC_dry_fraction.min():.0f}&ndash;"
     f"{cov.has_DOC_dry_fraction.max():.0f}% and a DOCf for {cov.has_DOCf.min():.0f}&ndash;{cov.has_DOCf.max():.0f}% of the "
     "wet mass, which is why the computation remains at the ten model fractions (Fig. 2)."))
 A(figure(fig_metamodel(), 16, "Fig. 2. Metamodel of the data and computation. The upper chain produces results; the Level "
@@ -155,14 +158,20 @@ A(P("For a stream with fraction masses m<sub>j</sub> per tonne MSW, methane gene
 A(eqrow(r"\mathrm{CH_4}=10^3\,k_D\,\mathrm{MCF}\,F\,\frac{16}{12}\sum_j m_j(1-w_j)\mathrm{DOC}_j\mathrm{DOCf}_j,\quad "
         r"E_{fos}=10^3\frac{44}{12}\sum_j m_j(1-w_j)C_j\varphi_j,\quad H=\sum_j k_{h,j}s_jh_j(1-w_j)-\lambda\sum_j s_jw_j", "m_c", "3"))
 A(P("The landfill module applies MCF = 0.8 and no gas collection for the open dump, and MCF = 1, lifetime collection "
-    "efficiency &eta; = 0.5 (0.3&ndash;0.8) and 10% cover oxidation for the sanitary landfill. WtE uses a net electrical "
+    "efficiency &eta; = 0.5 (0.2&ndash;0.8; lower values are common where food waste dominates) and 10% cover oxidation for the sanitary landfill. WtE uses a net electrical "
     "efficiency of 0.18 (0.14&ndash;0.22). The RDF line sorts a fixed share of each fraction, dries the product to 20% moisture "
     "with its own fuel, hauls it to the nearest kiln and credits displaced coal at 0.9 GJ per GJ; rejects are landfilled. AD "
-    "captures 70% of food waste, converts it with a realised yield of 0.36 Nm<super>3</super> CH<sub>4</sub>/kg VS and 5% "
-    "fugitive loss, and charges a front-end separation step as 40% of the RDF-line cost. PHB is produced from captured gas at "
+    "captures 70% of food waste and converts it with a yield of 0.36 Nm<super>3</super> CH<sub>4</sub>/kg VS for "
+    "source-separated food (Zhang et al., 2007) and 5% fugitive loss. Because food separated mechanically from mixed waste "
+    "digests less well and carries plastics and grit, its yield is multiplied by 0.6 (0.35&ndash;0.85; Seruga et al., 2020; "
+    "Basinas et al., 2020, 2021) and 5 (0&ndash;10) USD per tonne of feed are added for pre-treatment; a front-end separation "
+    "step is charged as 40% of the RDF-line cost. PHB is produced from captured gas at "
     "2.3 t CH<sub>4</sub>/t PHB and credited against polypropylene. Costs combine annualised CAPEX scaled with capacity to the "
-    "power b = 0.7, O&amp;M, residue landfill cost that falls with landfill size, haulage and product revenue. All 61 "
-    "parameters, their ranges and their sources are listed in the assumption register (Supplementary Table S3)."))
+    f"power b = 0.7, O&amp;M, residue landfill cost that falls with landfill size, haulage and product revenue. All {len(d['reg'])} "
+    "parameters, their ranges and their sources are listed in the assumption register (Supplementary Table S3). Secondary "
+    "values were re-verified against their sources in October 2026 (Supplementary Table S4): RDF O&amp;M (18.4 USD/t) and the "
+    "RDF price at the kiln (1.15 USD/GJ) were corrected to Indonesian values, the Sumatera grid factor to 0.832 kg "
+    "CO<sub>2</sub>/kWh (ESDM, 2018), and benchmark values that could not be confirmed were removed."))
 A(P("Two further indicators reuse the same inventory. Fossil cumulative energy demand (CED) converts grid electricity "
     "with a primary-energy factor of 3.6/&eta; MJ/kWh (&eta; = 0.32, range 0.28&ndash;0.36, plus fuel supply), diesel-type "
     "ancillary burdens with the IPCC diesel factor, displaced kiln coal by its energy content plus supply, and displaced "
@@ -173,16 +182,26 @@ A(P("Two further indicators reuse the same inventory. Fossil cumulative energy d
 A(P("2.5 Decision analysis, uncertainty and scenarios", "h2"))
 A(P("An option is removed where it fails a gate: WtE requires LHV &ge; 7 MJ/kg and at least 150 t/day (Rand et al., 2000); "
     "RDF requires a net calorific value of at least 12.56 MJ/kg and a kiln within 300 km by road; PHB requires at least "
-    "500 t/yr. Among feasible options, the social cost SC<sub>k</sub> = C<sub>k</sub> + p G<sub>k</sub>/10<super>3</super> is "
-    "computed for a carbon value p sampled uniformly between 0 and 100 USD/t CO<sub>2</sub>e, following the logic of "
-    "stochastic multicriteria acceptability analysis (Lahdelma and Salminen, 2001). The probability of being best is the share "
-    "of 4,000 Monte Carlo draws per location in which an option has the lowest social cost. Composition is sampled from a "
-    "Dirichlet distribution S ~ Dir(&alpha;<sub>0</sub>s) with heuristic concentrations (&alpha;<sub>0</sub> = 80, or 40 for "
-    "flagged data) that are not statistically calibrated; parameters are sampled from triangular distributions. The two sources "
-    "were also sampled separately to show their contributions. Ten scenarios were run with common random numbers: the market "
-    "case, the Perpres 109/2025 tariff, food separated at source, residues to an open dump, the two managed-tonnage series, "
-    "GWP20, IPCC moisture, projected overview tonnage and rubber DOCf of 0.5. Sensitivity was measured by Spearman rank "
-    "correlation within the Monte Carlo sample and by Sobol indices (Saltelli et al., 2010) for every location."))
+    "500 t/yr. Among feasible options the decision criterion is the <i>carbon-inclusive cost</i> CIC<sub>k</sub> = C<sub>k</sub> "
+    "+ p G<sub>k</sub>/10<super>3</super> (USD/t). It is not a full social cost, because only greenhouse gases are valued. The "
+    "carbon value p is a policy choice rather than an uncertain quantity, so results are reported at fixed values: 0, 2 (the "
+    "Indonesian carbon tax of Rp 30/kg CO<sub>2</sub>e under UU 7/2021), 25, 50 and 100 USD/t CO<sub>2</sub>e. For each p, the "
+    "probability of being best is the share of 4,000 Monte Carlo draws per location in which an option has the lowest CIC; "
+    "its Monte Carlo standard error is at most 0.008, so differences between options reflect decision uncertainty, not "
+    "sampling noise. Composition is sampled from a Dirichlet distribution S ~ Dir(&alpha;<sub>0</sub>s) with heuristic "
+    "concentrations (&alpha;<sub>0</sub> = 80, or 40 for flagged data); parameters from triangular distributions. A category a "
+    "RIPS does not report is given zero share, a modelling assumption tested by imputing glass where it is missing and by a "
+    "Dirichlet pseudocount. Scenarios were run with common random numbers: the market case, the Perpres 109/2025 tariff, food "
+    "separated at source, optimistic AD feed, residues to an open dump, two managed-tonnage series, GWP20, IPCC moisture, "
+    "projected overview tonnage, rubber DOCf of 0.5, glass imputation, a pseudocount and an aspirational PHB cost; two stress "
+    "tests set moisture at its upper bound and lower the RDF heating value by 22% (to about 13&ndash;14 MJ/kg). Sensitivity was "
+    "measured by Spearman rank correlation and by Sobol indices (Saltelli et al., 2010)."))
+A(P("<b>Break-even targets and value of information.</b> For each location, option and key input, the input was swept "
+    "with all others central to find the value at which the option's CIC equals the landfill's. For a fixed p, the expected "
+    "value of perfect information is EVPI = E[max<sub>k</sub> NB<sub>k</sub>] &minus; max<sub>k</sub> E[NB<sub>k</sub>] with "
+    "NB = &minus;CIC, and the partial value EVPPI(X) for a group of inputs X resolved by one measurement campaign was estimated "
+    "by regressing NB on X (Strong et al., 2014), with the value obtained for random noise subtracted. Multiplied by the 2025 "
+    "tonnage, EVPPI is the most a city should pay per year to resolve X before choosing."))
 A(P("2.6 Scenario discovery", "h2"))
 A(P("To answer the research question in terms of conditions rather than cases, the model was run over 40,000 "
     "combinations of conditions a planner can observe or choose: carbon value (0&ndash;100 USD/t CO<sub>2</sub>e), waste to the "
@@ -193,27 +212,33 @@ A(P("To answer the research question in terms of conditions rather than cases, t
     "feasible option of each draw was explained with a classification tree of depth 4 (Breiman et al., 1984) and with PRIM "
     "boxes (Friedman and Fisher, 1999), following the scenario-discovery approach of decision making under deep "
     "uncertainty."))
-A(P("2.7 Verification", "h2"))
-A(P(f"An automated suite of {N['valid'][1]} checks (all passed) tests blank-versus-zero handling, uniqueness of taxonomy keys, "
-    "domestic plus non-domestic mass balance, parent-child sums at every level, the single projection to 2025, managed "
-    "tonnage not exceeding total tonnage, wet/dry consistency (the dry DOC and IPCC moisture reproduce the IPCC wet DOC within "
-    "0.005) and the presence of a source, locator and status for every value. Model outputs were compared with published "
-    "Indonesian measurements (Table 1)."))
+A(P("2.7 Verification and validation", "h2"))
+A(P("Because none of the facilities exists, the model cannot be validated against plant data; four layers were kept apart. "
+    f"(a) Verification: an automated suite of {N['valid'][1]} checks ({N['valid'][0]} passed) tests blank-versus-zero "
+    "handling, taxonomy keys, mass balances, the single projection, wet/dry consistency, provenance, the corrected secondary "
+    "values, the realism parameters, the decision outputs and an explicit hand recalculation of every result for one city. "
+    "(b) Benchmark validation: intermediate outputs that do not require a facility (moisture, heating value, RDF yield and "
+    "quality, WtE electricity per tonne) were compared with verified Indonesian values (Table 1). (c) Stress tests: "
+    "assumptions without local measurement were pushed to their bounds. (d) Field validation was framed as a protocol ordered "
+    "by the value of information (Section 4.3)."))
 
 # ------------------------------------------------------------------------------------------- 3
 A(P("3. Results", "h1"))
 A(P("3.1 Waste characteristics and feasibility", "h2"))
 b = d["bench"]
-rows = [["Quantity", "Model (21 locations)", "Reference"]] + [[i, r.iloc[0], r.iloc[1]] for i, r in b.iterrows()]
-A(table(rows, [3.4, 4.0, 9.6]))
-A(P("Table 1. Characteristics of the harmonised 2025 waste compared with published Indonesian values.", "cap"))
+rows = [["Quantity", "Model (21 locations)", "Reference (verified)", "Verdict"]] + \
+       [[i, r.model_21_locations, r.reference, r.verdict] for i, r in b.iterrows()]
+A(table(rows, [3.0, 3.2, 7.6, 2.8]))
+A(P("Table 1. Benchmark validation: characteristics of the harmonised 2025 waste against verified Indonesian values. The "
+    "verdict is computed from the model median and range.", "cap"))
 A(P(f"Bulk moisture as received ranged from {ch.moisture.min():.2f} to {ch.moisture.max():.2f} and LHV from "
-    f"{N['lhv'][0]:.1f} to {N['lhv'][1]:.1f} MJ/kg (median {N['lhv'][2]:.1f}), at the dry and energetic end of measured "
-    f"Indonesian values (Table 1). {N['g1']} of 21 locations passed the WtE heating-value gate and {N['g12']} passed both the "
+    f"{N['lhv'][0]:.1f} to {N['lhv'][1]:.1f} MJ/kg (median {N['lhv'][2]:.1f}), within the verified Indonesian range; the RDF "
+    f"heating value lies at the upper end of the Cilacap values and WtE electricity at the lower end of Indonesian design "
+    f"values (Table 1). {N['g1']} of 21 locations passed the WtE heating-value gate and {N['g12']} passed both the "
     f"heating-value and the supply gate. {N['psel_gen']} locations generate at least 1,000 t/day, but on managed waste none "
     f"does in series M1 and only Kab. Bogor does in series M2. Methane potential at MCF = 1 was {ch.L0_sl.min():.0f}&ndash;"
     f"{ch.L0_sl.max():.0f} kg CH<sub>4</sub>/t, and the RDF yield {ch.rdf_yield.min():.2f}&ndash;{ch.rdf_yield.max():.2f} "
-    "t/t, within the range reported for Indonesian RDF plants."))
+    "t/t."))
 A(P("3.2 Climate and cost performance", "h2"))
 rows = [["Option", "G", "&Delta;G vs open dump", "&Delta;G vs landfill", "C", "MAC vs OD", "MAC vs SL", "Pass"]] + pathway_table(d)
 A(table(rows, [2.8, 2.2, 2.4, 2.3, 1.9, 2.0, 2.4, 1.0]))
@@ -229,33 +254,57 @@ A(P(f"Against an open dump, WtE avoided {rng3(med('OD','S1','dG'))} kg CO<sub>2<
 A(figure(OUT / "fig_tradeoff.png", 15.5, "Fig. 3. GHG avoided against extra cost relative to the open dump (left) and the "
          "sanitary landfill (right); Monte Carlo medians, one point per location and option; point size increases with the "
          "probability of passing the gates."))
-A(P("3.3 Preferred options", "h2"))
-A(P(f"At central values the sanitary landfill had the lowest social cost in all 21 locations at carbon values of 0 and "
-    f"25 USD/t CO<sub>2</sub>e. RDF + AD was best in {N['best50'].get('S5',0)} locations at 50 USD/t and "
-    f"{N['best100'].get('S5',0)} at 100 USD/t, while WtE was best only in Kab. Kutai Kartanegara at 100 USD/t, where no kiln "
-    f"lies within reach for RDF. With the carbon value sampled, the landfill was the most probable choice in "
-    f"{N['mp'].get('SL',0)} locations and RDF + AD in {N['mp'].get('S5',0)}, but in {N['n_ties']} locations the lead was below "
-    "0.05 and both options are statistically close (Fig. 4). Averaged over locations, RDF + AD was on the Pareto front in "
-    f"{100*N['avg'].loc['S5','p_front']:.0f}% of draws and the landfill in {100*N['avg'].loc['SL','p_front']:.0f}%; RDF + AD "
-    f"was best in {100*N['avg'].loc['S5','p_best_pc50_100']:.0f}% of draws with carbon values of 50&ndash;100 USD/t."))
-A(figure(OUT / "fig_probability_best.png", 16.5, "Fig. 4. Probability of being the best feasible option in the market "
-         "case, with the Perpres 109/2025 WtE tariff, and with food waste separated at source."))
-A(P(f"With the Perpres 109/2025 tariff, WtE became the most probable option in {mpa['perpres109'].get('S1',0)} locations "
-    "(Kab. Serang, Kota Semarang and Kab. Brebes). Brebes qualifies on generated waste only, of which 2.3% is managed "
-    "according to the status index, and Semarang's tonnage is an overview total of unverified year. If food waste arrived "
-    f"separated, AD alone became most probable in {mpa['food_separated_at_source'].get('S3',0)} locations; for mixed waste the "
-    "cost of separating food removes its advantage. On managed tonnage the landfill was the most probable option in "
-    f"{mpa['managed_M1_status_index'].get('SL',0)} of 19 locations (M1) and {mpa['managed_M2_local_first'].get('SL',0)} of 21 "
-    "(M2): at the tonnages managed today every recovery plant is small and expensive."))
-A(P("3.4 Robustness to data provenance", "h2"))
-A(P("Projecting the eight overview totals from their composition year and raising rubber DOCf to 0.5 changed no "
-    "most-probable option (Fig. 5). The moisture assumption did: with IPCC default moisture, RDF + AD became the most probable "
-    f"option in {mpa['moisture_IPCC_default'].get('S5',0)} locations, because drier waste carries more degradable carbon into "
-    "the landfill and more energy into the RDF. A 20-year horizon for methane had a similar effect "
-    f"({mpa['GWP20'].get('S5',0)} locations for RDF + AD and {mpa['GWP20'].get('S1',0)} for WtE). Sending residues to an open dump, "
-    "which is illegal, made AD and RDF + AD cheaper in several locations because dumping residues is cheap."))
-A(figure(fig_robust(d), 14.5, "Fig. 5. Most probable option per location in each scenario (colour) and its probability of "
-         "being best (number). n.a.: no status-index value for the managed-tonnage series M1."))
+A(P("3.3 Preferred options at fixed carbon values", "h2"))
+pbm = d["pbest"]; pbm = pbm[pbm.scenario == "market"]
+rows = [["Carbon value (USD/t CO<sub>2</sub>e)", "Best at central values (locations)", "Most probable (locations)",
+         "Median P(most probable)", "Median P(SL)", "Median P(S5)"]]
+for pc in (0, 2, 25, 50, 100):
+    q = pbm[pbm.carbon_value == pc]
+    cb = N.get(f"best{pc}", None)
+    rows.append([str(pc), ", ".join(f"{k} {v}" for k, v in cb.items()) if cb else "as at 0",
+                 ", ".join(f"{k} {v}" for k, v in N[f"mp{pc}"]["market"].items()), f"{N[f'mpp{pc}'].median():.2f}",
+                 f"{q[q.pathway == 'SL'].p_best.median():.2f}", f"{q[q.pathway == 'S5'].p_best.median():.2f}"])
+A(table(rows, [2.6, 3.4, 3.4, 2.5, 2.2, 2.2]))
+A(P("Table 2a. Decision results at fixed carbon values, market case (21 locations, 4,000 draws each; Monte Carlo standard "
+    "error of every probability at most 0.008). Per-location values in Supplementary Table S1.", "cap"))
+A(P(f"At central values the sanitary landfill had the lowest carbon-inclusive cost in all 21 locations at 0, 25 and 50 USD/t "
+    f"CO<sub>2</sub>e, and it was the most probable option everywhere up to 50 USD/t (Table 2a). At the current carbon tax "
+    f"(about 2 USD/t) no recovery option was preferred anywhere. At 100 USD/t RDF + AD was best at central values in "
+    f"{N['best100'].get('S5',0)} locations and the most probable option in {mp100['market'].get('S5',0)} (median probability "
+    f"{N['p_S5_100'][0]:.2f}, range {N['p_S5_100'][1]:.2f}&ndash;{N['p_S5_100'][2]:.2f}); WtE was best only in Kab. Kutai "
+    "Kartanegara, where the Mahakam grid is the most carbon-intensive and no kiln lies within reach for RDF. Averaged over "
+    f"locations, RDF + AD was on the Pareto front in {100*N['avg'].loc['S5','p_front']:.0f}% of draws and the landfill in "
+    f"{100*N['avg'].loc['SL','p_front']:.0f}%: the two are the efficient options, and the carbon value decides between them."))
+A(figure(OUT / "fig_probability_best.png", 16.5, "Fig. 4. Probability of being the best feasible option at fixed carbon "
+         "values (top) and, at 50 USD/t CO<sub>2</sub>e, with the Perpres 109/2025 WtE tariff, with optimistic AD feed and with "
+         "food waste separated at source (bottom)."))
+A(P(f"With the Perpres 109/2025 tariff, WtE became the most probable option at 50 USD/t in {mpa['perpres109'].get('S1',0)} "
+    "locations, all of them generating at least 1,000 t/day; whether they collect that much is a separate question, since "
+    "managed tonnage is far lower. If food waste arrived separated at source, AD alone became most probable in "
+    f"{mpa['food_separated_at_source'].get('S3',0)} locations at 50 USD/t. For mixed waste it did not, even when the "
+    f"mixed-waste penalty was removed (landfill most probable in {mpa['AD_feed_optimistic'].get('SL',0)} locations): source "
+    "separation, not digester performance, is the condition for AD. On managed tonnage the landfill was most probable at "
+    f"50 USD/t in {mpa['managed_M1_status_index'].get('SL',0)} of 19 locations (M1) and "
+    f"{mpa['managed_M2_local_first'].get('SL',0)} of 21 (M2). PHB was preferred nowhere at first-plant cost; only an "
+    f"aspirational large-scale cost of 1.3 USD/kg made it most probable in {mpa['phb_large_scale_cost'].get('S4',0)} locations, "
+    "a research target rather than a planning value."))
+A(P("3.4 Robustness: data scenarios and stress tests", "h2"))
+rows = [["Scenario or stress test"] + [f"{pc}" for pc in st.columns]]
+for s_, r in st.iterrows():
+    rows.append([SCN.get(s_, s_)] + [str(int(x)) for x in r.values])
+A(table(rows, [5.5] + [2.0] * len(st.columns)))
+A(P("Table 2b. Number of the 21 locations whose most probable option changes relative to the market case, by carbon value "
+    "(USD/t CO<sub>2</sub>e).", "cap"))
+A(P("Projecting the eight overview totals, raising rubber DOCf to 0.5, imputing glass where it is not reported and adding a "
+    "Dirichlet pseudocount changed the most probable option in at most two locations, and only at 100 USD/t. Moisture was "
+    f"decisive. With the drier IPCC moisture, {int(st.loc['moisture_IPCC_default',50])} locations left the landfill at 50 USD/t; "
+    f"with the upper moisture bound, {int(st.loc['moisture_high_bound',100])} of the RDF + AD locations returned to the "
+    f"landfill at 100 USD/t, and a 22% lower RDF heating value did the same in {int(st.loc['rdf_ncv_stress',100])}. A 20-year "
+    f"horizon for methane moved every location away from the landfill at 50 USD/t (RDF + AD {mpa['GWP20'].get('S5',0)}, WtE "
+    f"{mpa['GWP20'].get('S1',0)}). The low-carbon-value result (landfill first) is robust; the high-carbon-value result "
+    "(RDF + AD) depends on the moisture and RDF quality of the local waste (Fig. 5)."))
+A(figure(fig_robust(d, 100), 15, "Fig. 5. Most probable option per location in each scenario at 100 USD/t CO<sub>2</sub>e "
+         "(colour) and its probability (number). n.a.: no status-index value for the managed-tonnage series M1."))
 A(P("3.5 Drivers of uncertainty", "h2"))
 A(P("For climate results, the lifetime landfill-gas collection efficiency dominated every option that landfills residues, "
     "followed by the plastic share (fossil CO<sub>2</sub> in WtE), the garden share and moisture; for cost, the landfill cost, "
@@ -265,8 +314,9 @@ A(P("For climate results, the lifetime landfill-gas collection efficiency domina
     f"landfill parameters dominated ({us.loc['SL', ('G_w90','parameters only')]:.0f} against "
     f"{us.loc['SL', ('G_w90','composition only')]:.0f}). Composition hardly affected cost."))
 
-A(P(f"Sobol indices give the same picture: moisture as received (total index {N['sobol_gap'].iloc[0].ST:.2f}) and "
-    f"landfill-gas collection ({N['sobol_gap'].iloc[1].ST:.2f}) explain about half of the variance of the social-cost gap "
+_sg = N["sobol_gap"].set_index("input").ST
+A(P(f"Sobol indices give the same picture: landfill-gas collection (total index {_sg.get('cap', float('nan')):.2f}) and "
+    f"moisture as received ({_sg.get('wetness', float('nan')):.2f}) explain about half of the variance of the carbon-inclusive cost gap "
     "between RDF + AD and the landfill at 50 USD/t CO<sub>2</sub>e, followed by RDF operating cost and price."))
 A(P("3.6 Fossil energy and land take", "h2"))
 rows = [["Option", "CED, GJ/t: median (range)", "Saving vs open dump", "Land take, m2/t: median (range)", "Saved vs open dump"]] + lcia_table(d)
@@ -283,40 +333,77 @@ A(table([["Rule (conditions)", "Best option", "Purity", "Share"]] + rules_table(
 A(P(f"Table 4. Leaves of the decision tree covering at least 4% of the 40,000 draws. The tree reproduces the best "
     f"option in {100*d['cart_acc']['acc_test']:.0f}% of held-out draws (majority-class baseline "
     f"{100*d['cart_acc']['baseline']:.0f}%). Purity: share of draws in the leaf where the predicted option is best.", "cap"))
-A(P(f"Carbon value, source separation of food, scale and kiln distance carried the decision (tree importances "
-    f"{d['imp']['carbon_value']:.2f}, {d['imp']['food_separated']:.2f}, {d['imp']['Q_tpd']:.2f} and {d['imp']['kiln_km']:.2f}). "
+_pr = d["prim"].set_index("option")
+A(P(f"Carbon value, source separation of food, scale and heating value carried the decision (tree importances "
+    f"{d['imp']['carbon_value']:.2f}, {d['imp']['food_separated']:.2f}, {d['imp']['Q_tpd']:.2f} and {d['imp'].get('LHV', 0):.2f}). "
     f"For mixed waste without the WtE tariff the landfill was best in {100*N['disc_mix'].get('SL',0):.0f}% of draws and "
-    f"RDF + AD in {100*N['disc_mix'].get('S5',0):.0f}%. The landfill was preferred below about 40 USD/t CO<sub>2</sub>e (purity "
-    "0.95) and, at any carbon value, where no kiln lay within about 300 km. RDF + AD was preferred above about 55 USD/t with "
-    "a kiln in reach; PRIM located its box at carbon values above 51 USD/t, kiln distances below 296 km and gas collection "
-    "below 0.68. WtE won almost only in the box defined by the tariff, at least 1,000 t/day and an LHV of at least 7 MJ/kg "
-    "(density 0.97). AD alone won where food arrived separated and carbon was valued above about 30 USD/t. RDF alone and "
-    "PHB were best in fewer than 3% of draws (Table 4; Fig. 6)."))
+    f"RDF + AD in {100*N['disc_mix'].get('S5',0):.0f}%. Every tree leaf for mixed waste without the tariff predicts the "
+    "landfill. RDF + AD formed no leaf; PRIM located its best box at "
+    f"{str(_pr.loc['S5','box']).replace('_', ' ')} with a density of only {_pr.loc['S5','density']:.2f}, i.e. it is preferable "
+    "in a narrow region at high carbon values with a kiln in reach. WtE won in the box defined by the tariff, at least "
+    f"1,000 t/day and an LHV of at least 7 MJ/kg (density {_pr.loc['S1','density']:.2f}). AD alone won where food arrived "
+    "separated and carbon was valued above about 30&ndash;45 USD/t. RDF alone and PHB were best in fewer than 3% of draws "
+    "(Table 4; Fig. 6)."))
 A(figure(OUT / "fig_condition_maps.png", 15.5, "Fig. 6. Condition maps: most frequent best option and its frequency (%) on "
          "grids of two conditions, for mixed waste without tariff, mixed waste with the Perpres 109/2025 tariff, and food "
          "separated at source."))
+A(P("3.8 Break-even targets and the value of information", "h2"))
+A(table([["Input", "Central", "Better if", "Break-even: median (range)", "n crossing", "never", "already"]] +
+        thr_summary(d, "S5", 50), [3.0, 1.6, 1.6, 4.4, 1.9, 1.6, 1.9]))
+A(P("Table 5. Break-even values for RDF + AD against the landfill at 50 USD/t CO<sub>2</sub>e over 21 locations: the value "
+    "of one input (others central) at which the two carbon-inclusive costs are equal. y_pen_mech: relative methane yield of "
+    "mechanically separated food; pre_ofmsw: pre-treatment cost (USD/t feed); p_rdf: RDF price (USD/GJ); o_rdf: RDF O&amp;M "
+    "(USD/t); cap: landfill-gas collection efficiency. 'never': no value in the tested range suffices.", "cap"))
+A(P("At 50 USD/t RDF + AD would match the landfill if RDF O&amp;M fell from 18.4 to about 9 USD/t, if kilns paid about "
+    "three times today's RDF price, or if the landfill alternative collected less than about a quarter of its gas; no "
+    "plausible improvement of the AD feed alone is enough. These are the conditions a city would have to secure, through a "
+    "processing contract, an offtake agreement or a realistic appraisal of its landfill, before RDF + AD is worth tendering."))
+vg = N["voi_top"]
+rows = [["Measurement group", "25", "50", "100", "Max at 100, USD/yr"]]
+for g_ in vg[100].group:
+    rows.append([g_] + [f"{vg[pc].set_index('group').loc[g_].median_evppi:.3f}" for pc in (25, 50, 100)] +
+                [f"{vg[100].set_index('group').loc[g_].max_usd_per_year:,.0f}"])
+rows.append(["EVPI (all inputs)"] + [f"{N['evpi'][pc]:.2f}" for pc in (25, 50, 100)] + [f"{N['evpi_yr_max'][100]:,.0f}"])
+A(table(rows, [7.0, 1.8, 1.8, 1.8, 3.6]))
+A(P("Table 6. Value of information: median EVPPI over 21 locations (USD per tonne MSW) at carbon values of 25, 50 and "
+    "100 USD/t CO<sub>2</sub>e, and the maximum over locations in USD per year at 100 USD/t.", "cap"))
+A(P(f"The value of information was small at 25 USD/t (median EVPI {N['evpi'][25]:.2f} USD/t) because the landfill wins "
+    f"almost regardless, and grew to {N['evpi'][100]:.2f} USD/t at 100 USD/t, about {N['evpi_yr'][100]:,.0f} USD per year for "
+    "the median location. Waste characterisation (as-received moisture and composition) and landfill-gas performance carried "
+    "most of it, followed by WtE performance and cost; the RDF line, AD and finance parameters mattered little (Table 6; "
+    "Fig. 7). Group values are conservative: the regression is additive within a group and the noise floor is subtracted, "
+    "so the groups need not add up to the EVPI."))
+A(figure(OUT / "fig_voi.png", 16, "Fig. 7. Value of information by measurement group: median over 21 locations (bar) and "
+         "maximum (dot), at carbon values of 25, 50 and 100 USD/t CO<sub>2</sub>e."))
 
 # ------------------------------------------------------------------------------------------- 4
 A(P("4. Discussion", "h1"))
 A(P("4.1 Conditions under which each pathway becomes preferable", "h2"))
-A(P("The scenario discovery of Section 3.7 states the answer to the research question compactly; the 21 locations "
-    "illustrate it. "
-    "The screening identifies conditions rather than a single winner. A well-operated sanitary landfill with flaring is the "
-    "least-cost compliant option wherever carbon is valued below about 25 USD/t CO<sub>2</sub>e, which includes Indonesia's "
-    "current carbon tax of about 2 USD/t (UU 7/2021). Integrated RDF + AD becomes preferable once carbon is valued at roughly "
-    f"{N['s5_mac'][0]:.0f} USD/t, provided a cement kiln is within reach and the plant receives enough waste; it is the fair "
-    "counterpart of WtE because both treat the whole tonne, yet it costs less and passes the RDF quality gate in most locations. "
-    "WtE requires the conjunction of a heating value above 7 MJ/kg, a supply of at least 1,000 t/day and the Perpres 109/2025 "
-    "tariff; without the tariff it is preferred only where no kiln is accessible. AD alone is a pathway for source-separated "
-    "food and market waste, not for mixed waste. PHB from landfill gas adds little climate benefit over flaring and does not "
-    "cover its production cost at current prices, consistent with techno-economic assessments of methane-based PHB "
-    "(Levett et al., 2016)."))
-A(P("4.2 Why provenance matters", "h2"))
+A(P("The answer to the research question is a set of conditions rather than a single winner. A well-operated sanitary "
+    "landfill with gas collection and flaring is the least-cost option wherever carbon is valued at 50 USD/t CO<sub>2</sub>e "
+    "or less, which includes Indonesia's current carbon tax of about 2 USD/t. Integrated RDF + AD becomes preferable only "
+    f"when carbon is valued near its abatement cost of about {N['s5_mac'][0]:.0f} USD/t, a cement kiln is within reach and the "
+    "waste is not too wet; it treats the whole tonne, like WtE, at a lower cost in most locations. WtE requires the "
+    "conjunction of a heating value of at least 7 MJ/kg, at least 1,000 t/day and the Perpres 109/2025 tariff. AD alone is a "
+    "pathway for source-separated food and market waste, not for mixed waste, even with optimistic assumptions on the "
+    "mixed-waste feed. PHB from landfill gas adds little climate benefit over flaring and does not cover its production cost "
+    "at first-plant scale, consistent with techno-economic assessments of methane-based PHB (Levett et al., 2016)."))
+A(P("4.2 Contribution: decision support before facilities exist", "h2"))
+A(P("Because none of these facilities exists in the study locations, the model cannot tell a city how a plant <i>will</i> "
+    "perform; it can tell the city which plants are worth studying, what they would have to achieve and what to measure "
+    "first. This changes the role of uncertainty analysis from a robustness appendix to the main product. The fixed-carbon-"
+    "value results show stakeholders where the decision is clear (landfill first at today's carbon prices) and where it "
+    "depends on policy (above about 70 USD/t). The break-even targets convert model parameters into contract terms that a "
+    "city, an RDF offtaker or a funder can negotiate. The value-of-information analysis prices local data in USD per year, "
+    "so that a city can compare the cost of a waste-characterisation campaign or a landfill-gas pumping test with the "
+    "expected cost of choosing wrongly. To our knowledge, combining provenance labels, fixed-carbon-value decisions, "
+    "scenario discovery, break-even targets and the value of information in one open tool for Indonesian cities has not "
+    "been reported; we offer it as a template for ex-ante waste-infrastructure appraisal where local data are scarce."))
+A(P("4.3 Why provenance matters", "h2"))
 A(P("The data scenarios show which provenance decisions are consequential. The year assigned to overview tonnage totals "
     "changes plant scale by up to a fifth but no decision, and the unresolved DOCf of rubber and leather is immaterial because "
     "the fraction is small. Moisture, in contrast, is decisive. IPCC moisture values describe waste as generated; waste "
-    "arriving at a facility in a humid climate is wetter, and the as-received values used here bring bulk moisture into the "
-    "measured range (Prabowo et al., 2019). Because DOC, fossil carbon and heating value all multiply the same dry mass, moisture "
+    "arriving at a facility in a humid climate is wetter; the raw MSW at Cilacap had 55% moisture before biodrying. Because DOC, fossil carbon and heating value all multiply the same dry mass, moisture "
     "moves the landfill baseline and the recovery options in opposite directions. Managed-waste indicators are equally "
     "consequential for policy: the same location may report 11% or 97% depending on whether a status index or a "
     "reduction-plus-handling indicator is used, so the eligibility of a location for a 1,000 t/day WtE plant on managed waste "
@@ -328,38 +415,42 @@ A(P("The separation between the computation and the Level II/III hierarchy is a 
     "Allowing such priors to drive results would add apparent resolution without information. The database therefore records "
     "where the gaps lie, for example the material composition of coated cartons, composite films, batteries and WEEE, and the "
     "share of wet mass for which a parameter is known, so that future measurements can be added without changing the model."))
-A(P("4.3 Implications for local planning", "h2"))
-A(P("Three practical implications follow. First, upgrading open dumps to sanitary landfills with gas collection is the "
-    "largest and cheapest single step in climate terms (about 425 kg CO<sub>2</sub>e/t at about 18 USD/t), and the quality of gas "
-    "collection is the parameter that most influences every comparison. Second, recovery investment decisions should be "
-    "conditioned on an explicit carbon value and on access to a cement kiln, rather than on technology preference. Third, "
-    "before committing to WtE under Perpres 109/2025, local governments should verify heating value by proximate analysis "
-    "of waste as received and confirm the tonnage that is actually collected, because both gates are close to their thresholds "
-    "in several locations."))
-A(P("4.4 Limitations", "h2"))
-A(P("The study is a screening assessment. Compositions sampled between 2014 and 2025 represent 2025 without a trend, and "
-    "eight tonnage totals have an unverified year. Fraction-level moisture and heating values have not been measured for the "
-    "study locations; several heating values and the RDF transfer coefficients are legacy assumptions, and some literature "
-    "values remain to be checked against their originals. Only climate change is assessed; landfill gas is assigned without "
-    "time dynamics; costs are class-5 estimates without escalation; coordinates are provisional; inputs are treated as "
-    "independent; and 12 of the 21 locations are in Central Java. The Dirichlet concentrations are heuristics, and the Danish "
-    "benchmarks describe residual household waste, not Indonesian mixed MSW. Land-use factors and several CED factors "
-    "are assumptions, and the decision rules approximate the model (70% accuracy) within the range of observed "
-    "compositions. The next steps are local proximate analysis, a "
-    "common managed-waste definition across RIPS documents, and full inventories in a dedicated LCA software to extend the "
-    "assessment to other impact categories."))
+A(P("4.4 Implications for stakeholders", "h2"))
+_od_sl = x[(x.baseline == "OD") & (x.pathway == "SL")]
+A(P("For <b>city and regency governments</b>, upgrading open dumps to sanitary landfills with gas collection is the largest "
+    f"and cheapest single climate step (about {_od_sl.dG.median():.0f} kg CO<sub>2</sub>e/t at about {_od_sl.C.median():.0f} "
+    "USD/t), and it keeps later options open. Before tendering a recovery plant they should fund, in this order, a waste "
+    "characterisation with proximate analysis of waste as received and a measurement of landfill-gas collection, because "
+    "these carry most of the value of information. For <b>national agencies</b>, the results show that the carbon value and "
+    "the WtE tariff, not technology, decide which recovery option is preferable; a common definition of managed waste would "
+    "make the 1,000 t/day eligibility of Perpres 109/2025 verifiable. For <b>cement companies and PLN</b> as offtakers, the "
+    "break-even RDF price and the WtE tariff define the terms under which recovery becomes viable. For <b>funders</b>, the "
+    "fragility of the RDF + AD result at high carbon values argues for staged investment conditioned on measured waste "
+    "properties. Source separation of food is the precondition for AD and should be planned as a programme, not assumed."))
+A(P("4.5 Limitations", "h2"))
+A(P("The study is an ex-ante screening assessment, not an evaluation of plants. Compositions sampled between 2014 and "
+    "2025 represent 2025 without a trend, and eight tonnage totals have an unverified year. Fraction-level moisture and "
+    "heating values have not been measured for the study locations; several heating values and the RDF transfer coefficients "
+    "are legacy assumptions. The secondary-data verification relied on abstracts, indexed records and search extracts because "
+    "full texts could not be retrieved; values marked L remain to be checked against the full texts. The decision criterion "
+    "values only greenhouse gases; health, air pollution, leachate and employment are not valued, and CED and land take are "
+    "reported but not monetised. Landfill gas is assigned without time dynamics; costs are class-5 estimates; coordinates are "
+    "provisional; inputs are treated as independent; and 12 of the 21 locations are in Central Java. The Dirichlet "
+    "concentrations are heuristics, a non-reported category is set to zero (tested by imputation), and the decision rules "
+    f"approximate the model ({100*d['cart_acc']['acc_test']:.0f}% accuracy) within the range of observed compositions. The "
+    "value-of-information estimates use a regression approximation and depend on the assumed input ranges."))
 
 # ------------------------------------------------------------------------------------------- 5
 A(P("5. Conclusions", "h1"))
-A(P("A provenance-aware screening of six MSW options for 21 Indonesian cities and regencies shows that, with equal system "
-    "boundaries, a sanitary landfill with flaring is the least-cost option at low carbon values, integrated RDF + AD becomes "
-    "preferable at carbon values of about 40&ndash;50 USD/t CO<sub>2</sub>e where a cement kiln is accessible, WtE depends on "
-    "the Perpres 109/2025 tariff and large generated tonnage, AD alone suits source-separated food waste, and PHB from landfill "
-    "gas is not competitive. Scenario discovery condenses these findings into rules that planners can check against their "
-    "own carbon value, scale, kiln access, tariff and source separation. Labelling every input by its evidence type, projecting tonnage once and keeping managed-waste "
-    "definitions apart did not overturn these conditions, but it revealed that the moisture of waste as received can. Measured "
-    "as-received moisture and heating value, and a harmonised definition of managed waste, are the data investments that would "
-    "most improve waste-infrastructure decisions in Indonesian cities."))
+A(P("An ex-ante, provenance-aware screening of six MSW options for 21 Indonesian cities and regencies, made before any of "
+    "the facilities exists, shows that with equal system boundaries a sanitary landfill with flaring is the least-cost option "
+    "up to about 50 USD/t CO<sub>2</sub>e, integrated RDF + AD becomes preferable only near 100 USD/t where a cement kiln is "
+    "accessible and the waste is not too wet, WtE depends on the Perpres 109/2025 tariff and at least 1,000 t/day, AD alone "
+    "requires source-separated food, and PHB from landfill gas is not competitive. Scenario discovery states these "
+    "conditions as rules, break-even analysis turns them into targets for tenders and offtake contracts, and the value of "
+    "information shows that measured as-received waste properties and landfill-gas collection are the data to fund first. "
+    "Released as an open Colab tool, the model gives local governments, national agencies, offtakers and funders a common, "
+    "auditable basis for deciding which recovery pathway to pursue before they build."))
 
 A(P("Data and code availability", "h2"))
 A(P("The database, model, notebook, validation suite and the scripts that generate this manuscript are provided in the "
@@ -399,6 +490,13 @@ REFS = [
  "Rand, T., Haukohl, J., Marxen, U., 2000. Municipal Solid Waste Incineration: Requirements for a Successful Project. World Bank Technical Paper 462, Washington, DC.",
  "Republic of Indonesia, 2021. Undang-Undang No. 7/2021 (carbon tax). Republic of Indonesia, 2025. Peraturan Presiden No. 109/2025 (waste-to-energy).",
  "Saltelli, A., Annoni, P., Azzini, I., Campolongo, F., Ratto, M., Tarantola, S., 2010. Variance based sensitivity analysis of model output. Design and estimator for the total sensitivity index. Comput. Phys. Commun. 181, 259&ndash;270.",
+ "Basinas, P., et al., 2020. Assessment of high-solid mesophilic and thermophilic anaerobic digestion of mechanically-separated municipal solid waste. Environ. Res.",
+ "Basinas, P., et al., 2021. Dry anaerobic digestion of the fine particle fraction of mechanically-sorted organic fraction of municipal solid waste in laboratory and pilot reactor. Waste Manag.",
+ "ESDM (Ministry of Energy and Mineral Resources), 2018. Grid emission factors of the Indonesian electricity systems (as listed for the Joint Crediting Mechanism, GEC).",
+ "Seruga, P., et al., 2020. Anaerobic digestion performance: separate collected vs. mechanical segregated organic fractions of municipal solid waste as feedstock. Energies 13.",
+ "Strong, M., Oakley, J.E., Brennan, A., 2014. Estimating multiparameter partial expected value of perfect information from a probabilistic sensitivity analysis sample: a nonparametric regression approach. Med. Decis. Making 34, 311&ndash;326.",
+ "Yuliani, M., et al., 2022. Kajian tekno-ekonomi penerapan insinerator waste-to-energy di Indonesia (kasus pada Kota X). J. Teknol. Lingkung.",
+ "Zhang, R., El-Mashad, H.M., Hartman, K., et al., 2007. Characterization of food waste as feedstock for anaerobic digestion. Bioresour. Technol. 98, 929&ndash;935.",
  "Breiman, L., Friedman, J.H., Olshen, R.A., Stone, C.J., 1984. Classification and Regression Trees. Wadsworth, Belmont, CA.",
  "Friedman, J.H., Fisher, N.I., 1999. Bump hunting in high-dimensional data. Stat. Comput. 9, 123&ndash;143.",
  "Frischknecht, R., Wyss, F., B&uuml;sser Kn&ouml;pfel, S., L&uuml;tzkendorf, T., Balouktsi, M., 2015. Cumulative energy demand in LCA: the energy harvested approach. Int. J. Life Cycle Assess. 20, 957&ndash;969.",
@@ -409,8 +507,8 @@ for r in REFS:
 A(PageBreak())
 A(P("Supplementary material", "h1"))
 A(P("Table S1. Harmonised 2025 inputs and gates by location (central values).", "h2"))
-rows = [["Location", "t<sub>c</sub>", "Flags", "Q2025 t/d", "M", "LHV", "L0 SL", "RDF NCV", "km", "G1", "G3", "Most probable (p)"]]
-w = mc[mc.scenario == "market"].pivot(index="city", columns="pathway", values="p_best")
+rows = [["Location", "t<sub>c</sub>", "Flags", "Q2025 t/d", "M", "LHV", "L0 SL", "RDF NCV", "km", "G1", "G3", "Most probable at 100 (p)"]]
+w = pbm[pbm.carbon_value == 100].pivot(index="city", columns="pathway", values="p_best")
 for r in ch.itertuples():
     p = w.loc[r.city]
     rows.append([r.city, str(r.comp_year), r.flags if isinstance(r.flags, str) else "", f"{r.Q_2025:,.0f}", f"{r.moisture:.2f}",
@@ -421,7 +519,9 @@ A(P("Flags: L lumped organics, W wood as garden, R rounded percentages, G glass 
     "year unverified. M bulk moisture; LHV in MJ/kg; L0 in kg CH<sub>4</sub>/t at MCF = 1; km road distance to kiln; G1 WtE "
     "heating-value gate; G3 PSEL scale on generated waste.", "cap"))
 A(P("Table S2. Managed waste by indicator family: see Table 5 of the methodology (MSW_Methodology_v3_EN.pdf). "
-    "Table S3. Assumption register: data/assumption_register.csv and Table 3 of the methodology.", "body"))
+    "Table S3. Assumption register: data/assumption_register.csv and Table 3 of the methodology. Table S4. Secondary-data "
+    "verification: data/secondary_data_verification.csv and Table 3a of the methodology. Per-location probabilities at every "
+    "carbon value with standard errors: outputs/15_p_best_fixed_carbon_value.csv.", "body"))
 A(figure(OUT / "fig_sensitivity.png", 15.5, "Fig. S1. Mean absolute Spearman rank correlation between inputs and results "
          "over the 21 locations."))
 

@@ -196,7 +196,7 @@ The notebook was executed end to end without errors.
   - WtE only with the tariff, at least 1,000 t/day and LHV ≥ 7 MJ/kg (PRIM density 0.97).
   - AD alone where food is separated at source and carbon is valued above about 30 USD/t.
   - RDF alone and PHB are best in fewer than 3% of draws.
-- **Sobol, social-cost gap between RDF + AD and the landfill at 50 USD/t:** moisture as received (ST 0.28) and landfill-gas collection (0.23) dominate, followed by RDF O&M (0.10). This confirms the v3 moisture scenario.
+- **Sobol, carbon-inclusive cost gap between RDF + AD and the landfill at 50 USD/t:** moisture as received (ST 0.28) and landfill-gas collection (0.23) dominate, followed by RDF O&M (0.10). This confirms the v3 moisture scenario.
 
 ## Limits specific to v3.1
 - The decision rules approximate the model: 70% accuracy on held-out draws.
@@ -204,3 +204,74 @@ The notebook was executed end to end without errors.
 - Land-use and several CED factors are assumptions.
 - No license file has been added; the authors must choose one before public release.
 - If the GitHub repository is private, the Colab "clone" step fails. The notebook then asks for the ZIP to be uploaded instead.
+
+---
+
+# v3.2 (5 October 2026): verified secondary data, carbon-inclusive cost, ex-ante decision support
+
+## Purpose restated
+None of the options (WtE, RDF, AD, PHB, RDF + AD) exists as a facility in the 21 locations. The model is **ex-ante decision support**: it tells local governments, planning agencies, offtakers (PLN, cement companies) and funders, *before* a feasibility study or tender, under which conditions each option becomes preferable (the research question), what performance it must reach, and which data to collect first. This is the stated novelty in the methodology (Section 1) and the manuscript (Introduction, Section 4.2).
+
+## Secondary data re-verified (`data/secondary_data_verification.csv`, 23 items)
+Full texts could not be downloaded (web fetch blocked), so the check used abstracts, indexed records and search extracts. The method is recorded per item. Unverified benchmark values were removed rather than kept.
+
+| Item | v3.1 | v3.2 | Basis |
+|---|---|---|---|
+| RDF O&M `o_rdf` | 12 (8–21) USD/t | **18.4 (12–24.5)** | Rp 300–400k/t processed (Indonesian cost study) |
+| RDF price at kiln `p_rdf` | 1.6 (1.0–2.6) USD/GJ | **1.15 (0.58–1.34)** | Rp 150–350k/t RDF (Bantargebang, news) |
+| Landfill-gas collection `cap` | 0.50 (0.30–0.80) | **0.50 (0.20–0.80)**, status A | Lower in high-food-waste landfills |
+| Landfill cost `c_sl` | 20 (12–30) | **20 (9–30)** | Rp 145k/t controlled landfill (BPK) |
+| Grid Sumatera | 0.94 | **0.832** kg CO₂/kWh | ESDM 2018 via JCM/GEC |
+| Grid Jamali / Mahakam | 0.87 / 1.14 | 0.877 / 1.128 | same source, unrounded |
+| WtE benchmark | 632 kWh/t (Azis 2021) | **385–473 kWh/t** | 632 is not in the source; Yuliani 2022 and the Azis abstract |
+| RDF NCV benchmark | 12.6–13.8 MJ/kg (GIZ) | **15–16.7 MJ/kg** | Cilacap RDF |
+| Moisture benchmark | 0.53–0.56 (Prabowo), 0.64–0.66 (Fiki) | **0.554** (Cilacap raw MSW) | the old values could not be confirmed |
+| Confirmed (status V) | many | **only `y_ch4`, `K_wte`, `o_wte`, `p_el`** | the others are now L; the old status is kept in `status_v3_1` |
+
+The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are not available in this session).
+
+## Model changes
+- **Carbon-inclusive cost** replaces "social cost": CIC = C + pG/1000. It values only greenhouse gases.
+- **Fixed carbon values** replace the sampled carbon value as the main result: 0, 2 (UU 7/2021 carbon tax), 25, 50 and 100 USD/t CO₂e.
+  - Each result is reported as P(best) with its Monte Carlo standard error (≤ 0.008) and a 95% interval.
+  - The "statistical tie" wording is removed. A small lead is decision uncertainty, not sampling noise.
+- **AD on mixed waste made realistic** (`data/scenario_parameters.csv`):
+  - methane yield × `y_pen_mech` = 0.6 (0.35–0.85) (Seruga 2020; Basinas 2020, 2021);
+  - pre-treatment `pre_ofmsw` = 5 (0–10) USD/t feed;
+  - the scenario `AD_feed_optimistic` removes both.
+- **Missing categories.** A non-reported category is zero in the main case; this is a modelling assumption. The scenarios `glass_imputed` (glass share drawn from the 15 locations that report it) and `dirichlet_pseudocount` (0.5) test it.
+- **Stress tests:**
+  - `moisture_high_bound`: every moisture at its upper bound.
+  - `rdf_ncv_stress`: RDF energy × 0.78.
+  - `phb_large_scale_cost`: an aspirational what-if, not a planning value.
+- **Break-even targets** (`mswpath/thresholds.py`, `outputs/17_*`).
+- **Value of information**: EVPI and EVPPI by measurement group (`mswpath/voi.py`, `run_voi.py`, `outputs/voi_*`).
+- **Benchmarks** now carry computed verdicts (`outputs/09_validation_benchmarks.csv`).
+- **New outputs:** `15_p_best_fixed_carbon_value.csv`, `16_stress_tests_ranking_changes.csv`, `17_break_even_thresholds_vs_SL.csv`, `18_scenario_parameters_used.csv`.
+- **Validation:** 78 checks, all passing. They include 18 new v3.2 checks and an explicit hand recalculation of every Padang result.
+- **v3.2 does not reproduce v3.1.** This is intended: the corrected data and the AD realism change the results.
+
+## Main results (market case)
+- **Central values:**
+  - The landfill with flare is best in all 21 locations at 0, 25 and 50 USD/t.
+  - At 100 USD/t, RDF + AD is best in 20 locations and WtE in 1 (Kutai Kartanegara).
+- **Most probable option:**
+  - The landfill is most probable everywhere up to 50 USD/t.
+  - At 100 USD/t, RDF + AD is most probable in 18 locations (median P = 0.60).
+- **Abatement cost** of RDF + AD vs the landfill: median 73 (range 53–99) USD/t CO₂e. In v3.1 it was about 42; the change comes from the corrected RDF data and the AD penalty.
+- **Robustness:**
+  - The 100 USD/t result is fragile: `moisture_high_bound` and `rdf_ncv_stress` each return 17 of 21 locations to the landfill.
+  - IPCC moisture moves 7 locations away from the landfill at 50 USD/t.
+  - Glass imputation and the pseudocount change at most 2 locations, and only at 100 USD/t.
+- **Decision rules** (40,000 draws; tree accuracy 0.78 vs a 0.51 baseline):
+  - The landfill is preferred for mixed waste without the tariff in 79% of draws.
+  - RDF + AD forms no tree leaf. Its PRIM box needs a carbon value above about 64 USD/t and a kiln within about 300 km (density 0.42).
+  - AD is preferred only with source separation and a carbon value above about 30–45 USD/t.
+  - WtE is preferred only with the tariff, at least 1,000 t/day and LHV ≥ 7 MJ/kg.
+- **Value of information** (median EVPI):
+  - 0.24 USD/t at 25, 1.05 at 50 and 3.18 at 100 USD/t.
+  - At 100 USD/t, waste characterisation and landfill-gas performance dominate.
+
+## Limits specific to v3.2
+- **Verification depth.** The secondary-data check is at abstract/snippet level. Status L values should be checked against the full texts before submission.
+- **VOI method.** The EVPPI uses a regression approximation, and group values are conservative.

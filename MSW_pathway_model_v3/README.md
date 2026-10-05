@@ -1,6 +1,8 @@
-# MSW Pathway Model v3.1 (2025 baseline)
+# MSW Pathway Model v3.2 (2025 baseline)
 
 Screening LCA + TEA of six municipal solid waste management options for 21 Indonesian cities/regencies, updated with the October 2026 research package. The update adds a 2025 tonnage baseline, a Level I/II/III taxonomy and material parameters with auditable provenance.
+
+**Purpose (v3.2): ex-ante decision support.** None of the recovery facilities exists yet in the 21 locations. The model tells local governments, planners, offtakers and funders, before a feasibility study, under which conditions each option becomes preferable, which performance it must reach to beat a sanitary landfill (break-even targets), and which data are worth collecting first (value of information). Options are ranked by the carbon-inclusive cost C + pG/1000 at fixed carbon values (0, 2, 25, 50, 100 USD/t CO2e). Secondary data were re-verified in October 2026 (`data/secondary_data_verification.csv`).
 
 ## Run order
 ```bash
@@ -8,9 +10,10 @@ pip install numpy pandas matplotlib openpyxl      # reportlab, pillow and nbclie
 python build_database_v3.py     # sources/ -> data/*.csv
 python msw_pathway_model_v3.py  # data/ -> outputs/ (about 15 s)
 python run_discovery.py         # decision rules (CART/PRIM), condition maps, Sobol (about 1 min)
-python validate_v3.py           # 60 checks -> outputs/validation_report.md
+python run_voi.py               # value of information (EVPI/EVPPI) per location
+python validate_v3.py           # 78 checks -> outputs/validation_report.md
 python make_colab_notebook.py   # writes MSW_Decision_Tool_Colab.ipynb
-python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py
+python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py
 ```
 **For researchers and planners:** open `MSW_Decision_Tool_Colab.ipynb` in Google Colab. It installs itself, reproduces the 21 locations, accepts your own cities through `templates/city_input_template.xlsx`, shows the decision rules and writes Excel/HTML reports (English or Indonesian). If the repository is private, upload `MSW_v3_results.zip` when the notebook asks.
 
@@ -26,8 +29,12 @@ python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py
 | `run_discovery.py` | Scenario discovery and Sobol indices |
 | `MSW_Decision_Tool_Colab.ipynb`, `templates/` | User tool for new cities (executed once locally) |
 | `data/lcia_factors.csv` | CED and land-use factors with status |
+| `data/scenario_parameters.csv` | AD-feed realism parameters, glass imputation, pseudocount and stress-test values |
+| `data/secondary_data_verification.csv` | Verification of 23 secondary values (result, evidence, link, method) |
+| `mswpath/thresholds.py`, `mswpath/voi.py`, `run_voi.py` | Break-even targets and value of information |
+| `docs/Worked_Example_Kota_Padang_EN.pdf` | Step-by-step calculation for one city with uncertainty and sensitivity |
 | `validate_v3.py`, `outputs/validation_report.md` | Validation suite and its report |
-| `docs/MSW_Methodology_v3_EN.pdf` | Methodology v3 |
+| `docs/MSW_Methodology_v3_EN.pdf` | Methodology v3.2 |
 | `docs/MSW_Manuscript_v3_EN.pdf` | Draft journal article (authors still need to confirm the author list and declarations) |
 | `CHANGELOG_AND_SOURCE_DECISIONS.md` | Changes, source decisions, data gaps, remaining assumptions |
 | `sources/` | The update package files used (SHA-256 checked against its manifest) |
