@@ -310,6 +310,33 @@ txt = "".join((ROOT / f).read_text() for f in ("mswpath/report.py", "mswpath/cor
 check("v3.2 wording", "No 'statistical tie' and no 'social cost' used as the decision metric in code or tool",
       "statistical tie" not in txt.lower() and "lowest social cost" not in txt.lower() and "Social-cost" not in txt)
 
+# ---- 12. One-city tool (single-city template and notebook) ---------------------------------
+from mswpath import single as SC
+cdx, cpx, pax = SC.read_template(ROOT / "templates/single_city_example_kota_padang.xlsx")
+Ms = MSWModel(D); raws, es, ws = SC.to_input(cdx, cpx, Ms)
+Ms.load_cities(raws); ds, _, _ = Ms.run_central({"market": {}})
+Mp = MSWModel(D); Mp.load_cities(raw0); dp, _, _ = Mp.run_central({"market": {}})
+a_ = ds.set_index(["baseline", "pathway"])[["G", "C", "CED", "LU"]]
+b_ = dp[dp.city == "Kota Padang"].set_index(["baseline", "pathway"])[["G", "C", "CED", "LU"]].loc[a_.index]
+check("one-city tool", "Padang example template reproduces the 21-location results for Padang (G, C, CED, LU)",
+      np.allclose(a_, b_, rtol=1e-5, atol=1e-3), f"max |diff| {np.abs(a_.to_numpy() - b_.to_numpy()).max():.1e}")
+cdc, cpc, pac = SC.read_template(city_csv=ROOT / "templates/example_kota_padang_city_data.csv",
+                                 comp_csv=ROOT / "templates/example_kota_padang_composition.csv",
+                                 par_csv=ROOT / "templates/example_kota_padang_local_parameters.csv")
+rawc, _, _ = SC.to_input(cdc, cpc, MSWModel(D))
+check("one-city tool", "CSV and XLSX templates give the same input", np.isclose(rawc.Q2025_tpd.iloc[0], raws.Q2025_tpd.iloc[0])
+      and np.allclose(rawc.filter(like="dom_").astype(float).fillna(-1), raws.filter(like="dom_").astype(float).fillna(-1)))
+cdb, cpb, _ = SC.read_template(ROOT / "templates/single_city_template.xlsx")
+_, eb, _ = SC.to_input(cdb, cpb, MSWModel(D))
+check("one-city tool", "Blank template is rejected with the missing required fields listed", len(eb) >= 4, f"{len(eb)} errors")
+check("one-city tool", "Blank glass in the example is 'not reported', not zero",
+      raws.glass_status.iloc[0] == "not_reported_blank" and pd.isna(raws.dom_kaca.iloc[0]))
+pax2 = pax.copy(); pax2.loc[pax2.key == "c_sl", "your_central"] = 15
+Mo = MSWModel(D); SC.apply_local_parameters(Mo, pax2)
+check("one-city tool", "A local value replaces the default and keeps its relative range; a fresh model keeps the default",
+      np.isclose(Mo.REG.central["c_sl"], 15) and np.isclose(Mo.REG.low["c_sl"], 15 * 9 / 20)
+      and np.isclose(MSWModel(D).REG.central["c_sl"], 20))
+
 rep = pd.DataFrame(R)
 rep.to_csv(OUT / "validation_report.csv", index=False)
 with open(OUT / "validation_report.md", "w") as fh:

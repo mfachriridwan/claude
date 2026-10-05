@@ -458,7 +458,10 @@ A(P("The database, model, notebook, validation suite and the scripts that genera
     "Row-level RIPS source locators are given in input_kota_2025_updated.csv. The package mswpath and the notebook "
     "MSW_Decision_Tool_Colab.ipynb let other researchers and planners run the model in Google Colab for their own cities "
     "from a one-row-per-city template, re-run the scenario discovery and download Excel/HTML reports in English or "
-    "Indonesian."))
+    "Indonesian. A one-city notebook, MSW_Single_City_Colab.ipynb, with an input template in XLSX and CSV form "
+    "(templates/single_city_template.xlsx), lets readers enter the data of one city by hand, including their own measured "
+    "parameter values, and reproduces every result of this article for that city; with the example data it reproduces the "
+    "Kota Padang worked example."))
 A(P("CRediT authorship contribution statement (draft)", "h2"))
 A(P("Muhammad Fachri Ridwan: Conceptualization, Data curation, Methodology, Software, Formal analysis, Writing &ndash; original "
     "draft. Anthony Halog: Conceptualization, Supervision, Writing &ndash; review and editing. To be confirmed by the authors."))

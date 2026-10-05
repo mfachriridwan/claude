@@ -275,3 +275,24 @@ The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are 
 ## Limits specific to v3.2
 - **Verification depth.** The secondary-data check is at abstract/snippet level. Status L values should be checked against the full texts before submission.
 - **VOI method.** The EVPPI uses a regression approximation, and group values are conservative.
+
+## v3.2 addendum: one-city notebook and manual-input template
+- **`MSW_Single_City_Colab.ipynb`** (built by `make_single_city_colab.py`): the full analysis for one city, step by step.
+  - Input options: a template upload, values typed in the notebook, or the Kota Padang example.
+  - Steps: characterisation, central results, P(best) at fixed carbon values with standard errors, uncertainty and drivers, scenarios and stress tests, break-even targets, value of information.
+  - Output: an Excel report plus figures.
+- **Templates** (built by `make_single_city_template.py`):
+  - `templates/single_city_template.xlsx` with sheets `guide_panduan`, `city_data`, `composition` and `local_parameters`. Input cells are yellow, example cells grey, and there are drop-down lists and a composition TOTAL row.
+  - The same content as three CSV files.
+  - Filled Kota Padang examples in XLSX and CSV.
+- **Template contents.**
+  - Domestic and non-domestic composition and tonnage can be entered separately.
+  - Optional local values (moisture or dry LHV per fraction, landfill cost, prices, CAPEX/O&M, AD yield, ...) replace the defaults. If only a central value is given, the default relative range is kept.
+- **Module:** `mswpath/single.py`.
+- **Validation:** 5 new checks; 83 of 83 pass.
+  - The Padang template reproduces the database results.
+  - CSV and XLSX give the same input.
+  - A blank template is rejected.
+  - Blank glass is "not reported".
+  - Local values are applied, and a fresh model keeps the defaults.
+- **Known limitation:** the composition TOTAL formula is computed when the file is opened in Excel or Google Sheets. It could not be pre-calculated here because LibreOffice is unavailable in the build environment. The model ignores that row.

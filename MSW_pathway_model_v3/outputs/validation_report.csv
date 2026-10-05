@@ -4,7 +4,7 @@ blank vs zero,Rubber/leather DOCf blank in material tables; model value only in 
 blank vs zero,"Benchmark blanks are not zero (e.g. 4.3, 9.3, 9.4 remain blank)",PASS,
 blank vs zero,Glass blank (not reported) distinguished from glass folded or reported,PASS,
 blank vs zero,Parser: blank glass and reported-zero glass give the same shares (no imputation),PASS,
-blank vs zero,Parser rejects the old input file (no 2025 columns),PASS,"tmpkid7_gw2.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_"
+blank vs zero,Parser rejects the old input file (no 2025 columns),PASS,"tmp8741bhw4.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_"
 taxonomy,"(level, code) unique in crosswalk",PASS,102 rows
 taxonomy,"(level, code) unique in parameters",PASS,102 rows
 taxonomy,"(level, code) unique in benchmarks",PASS,92 rows
@@ -77,3 +77,8 @@ v3.2 decision,EVPI >= 0 and every (net) EVPPI <= EVPI,PASS,EVPI 2.86 USD/t
 v3.2 decision,Break-even value makes the option's carbon-inclusive cost equal SL's,PASS,"S2 p_rdf* = 3.172 USD/GJ, gap -0.000 USD/t"
 v3.2 decision,Explicit hand recalculation (Kota Padang) reproduces every model output,PASS,
 v3.2 wording,No 'statistical tie' and no 'social cost' used as the decision metric in code or tool,PASS,
+one-city tool,"Padang example template reproduces the 21-location results for Padang (G, C, CED, LU)",PASS,max |diff| 1.2e-04
+one-city tool,CSV and XLSX templates give the same input,PASS,
+one-city tool,Blank template is rejected with the missing required fields listed,PASS,11 errors
+one-city tool,"Blank glass in the example is 'not reported', not zero",PASS,
+one-city tool,A local value replaces the default and keeps its relative range; a fresh model keeps the default,PASS,

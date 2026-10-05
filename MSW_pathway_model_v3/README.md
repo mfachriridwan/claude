@@ -11,11 +11,14 @@ python build_database_v3.py     # sources/ -> data/*.csv
 python msw_pathway_model_v3.py  # data/ -> outputs/ (about 15 s)
 python run_discovery.py         # decision rules (CART/PRIM), condition maps, Sobol (about 1 min)
 python run_voi.py               # value of information (EVPI/EVPPI) per location
-python validate_v3.py           # 78 checks -> outputs/validation_report.md
-python make_colab_notebook.py   # writes MSW_Decision_Tool_Colab.ipynb
+python validate_v3.py           # 83 checks -> outputs/validation_report.md
+python make_colab_notebook.py   # writes MSW_Decision_Tool_Colab.ipynb (several cities)
+python make_single_city_template.py && python make_single_city_colab.py   # one-city template + notebook
 python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py
 ```
-**For researchers and planners:** open `MSW_Decision_Tool_Colab.ipynb` in Google Colab. It installs itself, reproduces the 21 locations, accepts your own cities through `templates/city_input_template.xlsx`, shows the decision rules and writes Excel/HTML reports (English or Indonesian). If the repository is private, upload `MSW_v3_results.zip` when the notebook asks.
+**One city (recommended for readers of the article):** open `MSW_Single_City_Colab.ipynb` in Google Colab. Fill in `templates/single_city_template.xlsx` (or the three CSV files `templates/single_city_city_data.csv`, `single_city_composition.csv`, `single_city_local_parameters.csv`) for your city, or type the values in the notebook, and run all cells. A filled example for Kota Padang is in `templates/single_city_example_kota_padang.xlsx`; it reproduces the worked example of the article.
+
+**Several cities:** open `MSW_Decision_Tool_Colab.ipynb` in Google Colab. It installs itself, reproduces the 21 locations, accepts your own cities through `templates/city_input_template.xlsx`, shows the decision rules and writes Excel/HTML reports (English or Indonesian). If the repository is private, upload `MSW_v3_results.zip` when the notebook asks.
 
 ## Contents
 | Path | What |
@@ -27,7 +30,9 @@ python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && pyt
 | `mswpath/` | Python package: model, template/validator, scenario discovery, reports, interactive form |
 | `msw_pathway_model_v3.py`, `MSW_pathway_model_v3.ipynb` | Full analysis of the 21 locations (script and executed notebook) |
 | `run_discovery.py` | Scenario discovery and Sobol indices |
-| `MSW_Decision_Tool_Colab.ipynb`, `templates/` | User tool for new cities (executed once locally) |
+| `MSW_Single_City_Colab.ipynb`, `mswpath/single.py` | One-city analysis from a manually filled template (XLSX/CSV) or typed input |
+| `templates/single_city_*` | One-city template (XLSX with guide, and CSV), plus the Kota Padang example |
+| `MSW_Decision_Tool_Colab.ipynb`, `templates/city_input_template.*` | Tool for several cities at once |
 | `data/lcia_factors.csv` | CED and land-use factors with status |
 | `data/scenario_parameters.csv` | AD-feed realism parameters, glass imputation, pseudocount and stress-test values |
 | `data/secondary_data_verification.csv` | Verification of 23 secondary values (result, evidence, link, method) |

@@ -406,7 +406,8 @@ ex = {"blank vs zero": "blank DOCf stays blank; parser treats blank and reported
       "v3.2 data": "corrected values in use; ESDM 2018 grid factors; status V only where confirmed; every item has evidence",
       "v3.2 model": "AD penalty changes only S3/S5; glass imputation only where not reported; RDF NCV stress applied",
       "v3.2 decision": "P(best) sums to 1; standard errors bounded; EVPPI <= EVPI; break-even closes the gap; Padang hand calculation",
-      "v3.2 wording": "no 'statistical tie' or 'social cost' as decision metric in code and tool"}
+      "v3.2 wording": "no 'statistical tie' or 'social cost' as decision metric in code and tool",
+      "one-city tool": "Padang template reproduces the database results; CSV = XLSX; blank template rejected; local values applied"}
 for g, q in v.groupby("group", sort=False):
     rows.append([g, f"{(q.result == 'PASS').sum()}/{len(q)}", ex.get(g, "")])
 A(table(rows, [2.6, 1.3, 13.1]))
@@ -677,6 +678,15 @@ A(P("The model is packaged as the Python package <i>mswpath</i> (core model, inp
     "and the data-quality warnings. A round-trip test confirms that two RIPS locations entered through the template "
     "reproduce the database results. Versions are pinned in <i>requirements.txt</i>, random seeds are fixed and "
     "<i>CITATION.cff</i> gives the citation."))
+A(P("<b>One-city notebook for researchers and readers.</b> <i>MSW_Single_City_Colab.ipynb</i> runs the complete analysis "
+    "for a single city whose data are entered by hand, either in <i>templates/single_city_template.xlsx</i> (sheets "
+    "<i>city_data</i>, <i>composition</i> and the optional <i>local_parameters</i>; the same content is provided as three CSV "
+    "files) or typed directly into the notebook. Domestic and non-domestic compositions and tonnages can be given "
+    "separately; local measured values (for example the moisture of food waste, the landfill cost or the RDF price) "
+    "replace the defaults and are listed in the report. The notebook shows each step (characterisation, central results, "
+    "decision at fixed carbon values, uncertainty, scenarios, break-even targets and value of information) and exports an "
+    "Excel report. With the Kota Padang example and the default seed it reproduces the worked example exactly; this is a "
+    "validation check."))
 
 # ---------------------------------------------------------------------------------------------- 9
 A(P("13 Limits of validity", "h1"))
