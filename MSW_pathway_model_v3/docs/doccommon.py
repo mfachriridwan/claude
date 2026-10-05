@@ -16,6 +16,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, Table, TableStyle, Image, Spacer, KeepTogether
 
 ROOT = Path(__file__).resolve().parents[1]
+import sys as _sys
+if str(ROOT) not in _sys.path: _sys.path.insert(0, str(ROOT))
 DATA, OUT, DOCS = ROOT / "data", ROOT / "outputs", ROOT / "docs"
 FIG = DOCS / "figures"
 FIG.mkdir(exist_ok=True)
