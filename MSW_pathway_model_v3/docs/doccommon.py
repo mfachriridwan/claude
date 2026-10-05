@@ -154,6 +154,14 @@ def load():
         cover=pd.read_csv(OUT / "11_parameter_coverage_L2L3.csv"),
         rob=pd.read_csv(OUT / "12_most_probable_by_scenario.csv", index_col=0),
         val=pd.read_csv(OUT / "validation_report.csv"),
+        lcia=pd.read_csv(DATA / "lcia_factors.csv"),
+        rules=pd.read_csv(OUT / "discovery_cart_rules.csv"),
+        imp=pd.read_csv(OUT / "discovery_cart_importance.csv", index_col=0).iloc[:, 0],
+        prim=pd.read_csv(OUT / "discovery_prim_boxes.csv"),
+        sobol=pd.read_csv(OUT / "discovery_sobol_mean.csv"),
+        cart_acc=__import__("json").load(open(OUT / "discovery_cart_accuracy.json")),
+        disc=pd.read_csv(OUT / "discovery_samples.csv.gz"),
+        meta=__import__("json").load(open(OUT / "discovery_meta.json")),
     )
     return d
 
@@ -168,6 +176,24 @@ SCN = {"market": "Market", "perpres109": "Perpres 109", "food_separated_at_sourc
 
 def fmt(v, f=".0f"):
     return "n.a." if pd.isna(v) else format(v, f)
+
+
+def lcia_table(d, scen="market"):
+    det = d["det"]; x = det[(det.scenario == scen) & (det.baseline == "OD")]
+    rows = []
+    for k in PW:
+        q = x[x.pathway == k]
+        rows.append([NAMES[k], f"{q.CED.median()/1e3:.2f} ({q.CED.min()/1e3:.2f} to {q.CED.max()/1e3:.2f})",
+                     f"{q.dCED.median()/1e3:.2f}", f"{q.LU.median():.3f} ({q.LU.min():.3f} to {q.LU.max():.3f})",
+                     f"{q.dLU.median():.3f}"])
+    return rows
+
+
+def rules_table(d, min_share=0.03):
+    r = d["rules"].sort_values("share_of_draws", ascending=False)
+    r = r[r.share_of_draws >= min_share]
+    return [[x.rule.replace(" AND ", " and ").replace("_", " "), NAMES[x.predicted], f"{x.purity:.2f}", f"{100*x.share_of_draws:.0f}%"]
+            for x in r.itertuples()]
 
 
 def pathway_table(d, scen="market"):
@@ -205,6 +231,15 @@ def stats(d):
     s5 = x[(x.baseline == "SL") & (x.pathway == "S5")].MAC
     N["s5_mac"] = (s5.median(), s5.min(), s5.max())
     N["valid"] = (int((d["val"].result == "PASS").sum()), len(d["val"]))
+    ds = d["disc"]; mix = (ds.food_separated == 0) & (ds.tariff == 0)
+    N["disc_share"] = ds.best.value_counts(normalize=True).to_dict()
+    N["disc_mix"] = ds[mix].best.value_counts(normalize=True).to_dict()
+    sb = d["sobol"]
+    N["sobol_gap"] = sb[sb.output == "SCgap_S5_SL"].sort_values("ST", ascending=False).head(6)
+    N["sobol_gsl"] = sb[sb.output == "G_SL"].sort_values("ST", ascending=False).head(4)
+    N["sobol_gs1"] = sb[sb.output == "G_S1"].sort_values("ST", ascending=False).head(4)
+    x = det[(det.scenario == "market") & (det.baseline == "OD")]
+    N["ced_med"] = x.groupby("pathway").CED.median().to_dict(); N["lu_med"] = x.groupby("pathway").LU.median().to_dict()
     return N
 
 

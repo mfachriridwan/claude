@@ -1,0 +1,100 @@
+{'N': 40000, 'seed': 7, 'dirichlet_alpha0': np.float64(45.54558934581961), 'comp_mean': {'food': np.float64(0.4599), 'garden': np.float64(0.0679), 'paper': np.float64(0.1089), 'wood': np.float64(0.0477), 'textile': np.float64(0.0205), 'rubber': np.float64(0.0074), 'plastic': np.float64(0.1805), 'metal': np.float64(0.0155), 'glass': np.float64(0.0168), 'other': np.float64(0.0749)}, 'q_range': (50, 3000), 'km_range': (10, 400)}
+best
+SL    0.435
+S3    0.276
+S5    0.180
+S1    0.085
+S4    0.019
+S2    0.006
+accuracy train 0.69, test 0.70, majority-class baseline 0.43
+|--- food_separated <= 0.50
+|   |--- carbon_value <= 55.62
+|   |   |--- Q_tpd <= 1000.21
+|   |   |   |--- carbon_value <= 39.56
+|   |   |   |   |--- class: SL
+|   |   |   |--- carbon_value >  39.56
+|   |   |   |   |--- class: SL
+|   |   |--- Q_tpd >  1000.21
+|   |   |   |--- tariff <= 0.50
+|   |   |   |   |--- class: SL
+|   |   |   |--- tariff >  0.50
+|   |   |   |   |--- class: S1
+|   |--- carbon_value >  55.62
+|   |   |--- kiln_km <= 299.43
+|   |   |   |--- Q_tpd <= 1016.02
+|   |   |   |   |--- class: S5
+|   |   |   |--- Q_tpd >  1016.02
+|   |   |   |   |--- class: S5
+|   |   |--- kiln_km >  299.43
+|   |   |   |--- Q_tpd <= 454.34
+|   |   |   |   |--- class: SL
+|   |   |   |--- Q_tpd >  454.34
+|   |   |   |   |--- class: SL
+|--- food_separated >  0.50
+|   |--- carbon_value <= 29.24
+|   |   |--- carbon_value <= 13.53
+|   |   |   |--- Q_tpd <= 933.43
+|   |   |   |   |--- class: SL
+|   |   |   |--- Q_tpd >  933.43
+|   |   |   |   |--- class: SL
+|   |   |--- carbon_value >  13.53
+|   |   |   |--- Q_tpd <= 979.28
+|   |   |   |   |--- class: SL
+|   |   |   |--- Q_tpd >  979.28
+|   |   |   |   |--- class: S3
+|   |--- carbon_value >  29.24
+|   |   |--- Q_tpd <= 1002.67
+|   |   |   |--- carbon_value <= 53.22
+|   |   |   |   |--- class: S3
+|   |   |   |--- carbon_value >  53.22
+|   |   |   |   |--- class: S3
+|   |   |--- Q_tpd >  1002.67
+|   |   |   |--- LHV <= 7.00
+|   |   |   |   |--- class: S3
+|   |   |   |--- LHV >  7.00
+|   |   |   |   |--- class: S1
+
+  option  base_rate  coverage   density      mass                                                                                                                                                                                        box                                    note
+0     SL   0.434575  0.306334  0.795607  0.167325                                                                                                                              carbon_value: 0.00119 to 65.7; tariff = 0; food_separated = 0                                     NaN
+1     S1   0.085025  0.418700  0.972678  0.036600                                                                                                                Q_tpd: 1.01e+03 to 3e+03; tariff = 1; food_separated = 0; LHV: 6.98 to 14.6                                     NaN
+2     S2   0.005525       NaN       NaN       NaN                                                                                                                                                                                        NaN  best in fewer than 3% of draws; no box
+3     S3   0.275600  0.310686  0.744565  0.115000  carbon_value: 33.1 to 100; kiln_km: 29.9 to 400; tariff = 0; food_separated = 1; food_share: 0.38 to 0.736; paper_garden_share: 0.0311 to 0.301; moisture: 0.409 to 0.68; LHV: 2.58 to 10                                     NaN
+4     S4   0.019350       NaN       NaN       NaN                                                                                                                                                                                        NaN  best in fewer than 3% of draws; no box
+5     S5   0.179925  0.306517  0.676480  0.081525                                                                                  carbon_value: 50.6 to 100; kiln_km: 10 to 296; tariff = 0; food_separated = 0; gas_capture: 0.303 to 0.68                                     NaN
+                       tree_best_at_0 tree_best_at_25 tree_best_at_50 tree_best_at_100
+city                                                                                  
+Kota Padang                        SL              SL              SL               S5
+Kab. Bogor                         SL              SL              SL               S5
+Kab. Serang                        SL              SL              SL               S5
+Kota Denpasar                      SL              SL              SL               S5
+Kab. Cianjur                       SL              SL              SL               S5
+Kab. Indramayu                     SL              SL              SL               S5
+Kota Semarang                      SL              SL              SL               S5
+Kab. Brebes                        SL              SL              SL               S5
+Kab. Nganjuk                       SL              SL              SL               S5
+Kab. Pati                          SL              SL              SL               S5
+Kab. Magelang                      SL              SL              SL               S5
+Kab. Pandeglang                    SL              SL              SL               S5
+Kab. Pemalang                      SL              SL              SL               S5
+Kab. Temanggung                    SL              SL              SL               S5
+Kab. Pekalongan                    SL              SL              SL               S5
+Kab. Sragen                        SL              SL              SL               S5
+Kab. Kutai Kartanegara             SL              SL              SL               SL
+Kab. Kendal                        SL              SL              SL               S5
+Kab. Wonogiri                      SL              SL              SL               S5
+Kota Pekalongan                    SL              SL              SL               S5
+Kota Magelang                      SL              SL              SL               S5
+          output    input        S1        ST
+764  SCgap_S5_SL  wetness  0.263727  0.282806
+723  SCgap_S5_SL      cap  0.220423  0.225566
+747  SCgap_S5_SL    o_rdf  0.093910  0.101987
+709  SCgap_S5_SL     K_ad  0.041615  0.055518
+753  SCgap_S5_SL    p_rdf  0.038881  0.038702
+721  SCgap_S5_SL     c_sl  0.028106  0.037767
+710  SCgap_S5_SL    K_rdf  0.028937  0.032455
+725  SCgap_S5_SL    doc_k  0.022268  0.028994
+761  SCgap_S5_SL    tau_k  0.019301  0.024831
+746  SCgap_S5_SL     o_ad  0.026475  0.024373
+758  SCgap_S5_SL        r  0.019544  0.020645
+718  SCgap_S5_SL        b  0.022271  0.019547
+Done.

@@ -11,15 +11,16 @@ for f in (fig_tonnage, fig_qmanaged, fig_robust, fig_hierarchy): f(d)
 inp, t2, t5, reg = d["inp"], d["t2"], d["t5"], d["reg"]
 story = []
 A = story.append
-TITLE = "MSW recovery pathways in Indonesia: methodology v3 (2025 baseline)"
+TITLE = "MSW recovery pathways in Indonesia: methodology v3.1 (2025 baseline)"
 
 # ---------------------------------------------------------------------------------------------- title
 A(P("Screening LCA and TEA of Municipal Solid Waste<br/>Recovery Pathways in Indonesia", "title"))
-A(P("Methodology v3: 2025 tonnage baseline, Level I/II/III taxonomy, auditable material parameters, "
-    "managed-waste candidates and updated results for 21 locations", "subtitle"))
+A(P("Methodology v3.1: 2025 tonnage baseline, Level I/II/III taxonomy, auditable material parameters, "
+    "managed-waste candidates, fossil energy and land use, decision rules from scenario discovery, and a reproducible "
+    "decision tool", "subtitle"))
 A(P("Muhammad Fachri Ridwan &mdash; Master of Environmental Management, The University of Queensland<br/>"
     "Supervisor: Prof. Anthony Halog &mdash; October 2026 &mdash; Companion code: msw_pathway_model_v3.py / "
-    "MSW_pathway_model_v3.ipynb", "subtitle"))
+    "MSW_pathway_model_v3.ipynb; user tool: MSW_Decision_Tool_Colab.ipynb", "subtitle"))
 A(Spacer(1, 6))
 mp = N["mp"]
 box = [P("<b>What changed in v3 and what it shows</b>", "box")] + bullets([
@@ -45,8 +46,13 @@ box = [P("<b>What changed in v3 and what it shows</b>", "box")] + bullets([
     f"{mp.get('SL', 0)} locations and RDF + AD in {mp.get('S5', 0)}, but {N['n_ties']} of the 21 leads are below 0.05. "
     "The ranking is sensitive to the moisture assumption: with IPCC default moisture RDF + AD becomes most probable in "
     f"{N['mp_all']['moisture_IPCC_default'].get('S5', 0)} locations.",
+    "<b>New in v3.1: conditions, energy, land, tool.</b> Scenario discovery over 40,000 combinations of city conditions "
+    "turns the model into decision rules (Section 11). Fossil cumulative energy demand and land take are added "
+    "(Section 10). Sobol indices confirm that as-received moisture and landfill-gas collection decide the landfill versus "
+    "RDF + AD comparison. A Colab notebook lets other researchers and planners run the model for their own cities "
+    "(Section 12).",
     "<b>Still provisional.</b> Composition proxies of different years, legacy heating values and RDF transfer coefficients, "
-    "status L literature values and class-5 costs. Section 9 states the limits of validity."], "box")
+    "status L literature values and class-5 costs. Section 13 states the limits of validity."], "box")
 A(boxed(box))
 
 # ---------------------------------------------------------------------------------------------- 1
@@ -326,7 +332,7 @@ for r in reg.itertuples():
     rng_ = num(r.central) + (f" ({num(r.low)} to {num(r.high)})" if r.low != r.high else "")
     rows.append([r.id, r.key, r.meaning, rng_, r.unit, r.source, r.status])
 A(table(rows, [0.9, 1.6, 6.0, 2.4, 1.6, 3.9, 0.6]))
-A(P("Table 3: Assumption register (61 entries). New or changed in v3: H14-H15 (heuristic Dirichlet concentrations made "
+A(P("Table 3: Assumption register (61 entries; CED/LU factors in Table 8). New or changed in v3: H14-H15 (heuristic Dirichlet concentrations made "
     "explicit), C10b (plastic LHV range), C12 (rubber DOCf gap scenario, previously a fixed 0.5).", "cap"))
 
 # ---------------------------------------------------------------------------------------------- 7
@@ -342,7 +348,9 @@ ex = {"blank vs zero": "blank DOCf stays blank; parser treats blank and reported
       "projection": "Q2025 = Qt(1+g)^expo once; exponent 0 when already 2025; overview year blank and flagged",
       "Qmanaged": "M1, M2 <= Q2025; Serang 7.45% not 14%; Padang provisional with lower bound",
       "wet/dry": "DOC_dry(1-w) = IPCC wet DOC; LHV dry basis, LHV not HHV; DOCf separate from AD yield; soil/wood separated",
-      "provenance": "every row has source, locator and status; proxies keep proxy status; heuristics labelled"}
+      "provenance": "every row has source, locator and status; proxies keep proxy status; heuristics labelled",
+      "CED/LU": "factors have source and status; land take non-negative; landfill area = 1/(rho H) x gross; G and C unchanged",
+      "template": "user-template round trip reproduces v3 results; invalid input rejected; blank glass not zero; single projection"}
 for g, q in v.groupby("group", sort=False):
     rows.append([g, f"{(q.result == 'PASS').sum()}/{len(q)}", ex.get(g, "")])
 A(table(rows, [2.6, 1.3, 13.1]))
@@ -416,8 +424,120 @@ A(P("For climate the landfill-gas collection efficiency dominates every option t
     "plastic share (fossil CO<sub>2</sub> from WtE), the garden share and moisture. For cost: landfill cost, WtE and AD "
     "CAPEX, RDF O&amp;M, the AD front-end share and PHB cost and price. These are the values to verify first."))
 
+
+# ---------------------------------------------------------------------------------------------- 10-12 (v3.1)
+A(PageBreak())
+A(P("10 Fossil energy (CED) and land take (v3.1)", "h1"))
+A(P("Two indicators are added to climate change and cost. Both reuse the inventory of the existing model, so they "
+    "add no new flows, only conversion factors (<i>data/lcia_factors.csv</i>, drawn after all v3 parameters so that G "
+    "and C are unchanged; validation check). <b>CED</b> is the non-renewable (fossil) cumulative energy demand in MJ "
+    "per tonne MSW; biogenic energy is not counted and a negative value is a net saving:"))
+A(eqrow(r"\mathrm{CED}_k=\sum \mathrm{kWh}_{in}\,\mathrm{PEF}+\sum \frac{a_i}{ef_{diesel}}(1+u_d)"
+        r"-E_{el}\,\mathrm{PEF}-\psi E_{net}(1+u_c)-P\,\sigma\,\mathrm{CED}_{PP},\qquad \mathrm{PEF}=\frac{3.6}{\eta_{fossil}}(1+u_f)\,k_{EF}", "ced", "12"))
+A(P("PEF is the primary fossil energy per kWh of grid electricity, scaled with the same multiplier k<sub>EF</sub> as the "
+    "grid emission factor so that a decarbonising grid lowers both. Diesel-type ancillary burdens a<sub>i</sub> (kg "
+    "CO<sub>2</sub>e) are converted with the IPCC diesel factor. <b>Land take</b> is the landfill area consumed "
+    "permanently plus plant footprints over their lifetime, in m<super>2</super> per tonne MSW:"))
+A(eqrow(r"LU_k=\left(\frac{m_{LF}}{\rho_{SL}H_{SL}}+\frac{m_{inert}}{\rho_{inert}H_{SL}}\right)f_{gross}"
+        r"+\sum_u \frac{fp_u\,m_u}{0.85\cdot 365\,n},\qquad LU_{OD}=\frac{m}{\rho_{OD}H_{OD}}", "lu", "13"))
+lc = d["lcia"]
+rows = [["Key", "Meaning", "Central (range)", "Unit", "Source", "St."]]
+for r in lc.itertuples():
+    rows.append([r.key, r.meaning, f"{r.central:g}" + (f" ({r.low:g} to {r.high:g})" if r.low != r.high else ""), r.unit, r.source, r.status])
+A(table(rows, [1.6, 5.6, 2.2, 1.5, 5.3, 0.6]))
+A(P("Table 8: CED and land-use factors. Most land-use factors are analyst engineering ranges; the thermal efficiency "
+    "and the polypropylene CED are literature values still to be verified against their originals (status L). An "
+    "Indonesian TPA design study (Talumelito, Gorontalo) implies about 0.045 m<super>2</super>/t, below the central "
+    "0.081 m<super>2</super>/t used here.", "cap"))
+rows = [["Option", "CED, GJ/t: median (range)", "Saving vs open dump, GJ/t", "Land take, m2/t: median (range)", "Saved vs open dump, m2/t"]] + lcia_table(d)
+A(table(rows, [3.0, 3.8, 3.0, 4.0, 3.2]))
+A(P("Table 9: Fossil CED and land take per tonne MSW, central values, market case, 21 locations.", "cap"))
+A(P(f"WtE, RDF and RDF + AD save {-N['ced_med']['S1']/1e3:.1f}, {-N['ced_med']['S2']/1e3:.1f} and "
+    f"{-N['ced_med']['S5']/1e3:.1f} GJ of fossil energy per tonne (displaced grid electricity and kiln coal), AD alone "
+    f"{-N['ced_med']['S3']/1e3:.1f} GJ and PHB {-N['ced_med']['S4']/1e3:.1f} GJ (displaced polypropylene); the sanitary "
+    f"landfill consumes {N['ced_med']['SL']:.0f} MJ for operation. Land take is dominated by landfilling: an open dump "
+    f"uses about 0.40 m<super>2</super>/t, a sanitary landfill {N['lu_med']['SL']:.3f}, RDF + AD {N['lu_med']['S5']:.3f} "
+    f"and WtE {N['lu_med']['S1']:.3f} m<super>2</super>/t, mostly for ash. The energy ranking follows the climate ranking; "
+    "land take adds a reason to divert waste from landfill where land is scarce, such as Java."))
+A(figure(OUT / "fig_ced_landuse.png", 15.5, "Figure 11: Fossil CED and land take of each option, Monte Carlo medians over the 21 locations."))
+
+A(P("11 Conditions under which each option becomes preferable: scenario discovery", "h1"))
+A(P("The research question asks for conditions, not for a ranking of 21 cases. The model was therefore run over 40,000 "
+    "combinations of conditions that a planner can observe or choose: carbon value (0 to 100 USD/t CO<sub>2</sub>e), "
+    "waste to the facility (50 to 3,000 t/day, log-uniform), road distance to a cement kiln (10 to 400 km), grid region, "
+    "availability of the Perpres 109/2025 tariff, source separation of food, composition, moisture, landfill-gas "
+    "collection and landfill cost; all other parameters were sampled from the register. Composition was drawn from a "
+    f"Dirichlet distribution centred on the mean of the 21 RIPS compositions with concentration {d['meta']['dirichlet_alpha0']:.0f} fitted to their "
+    "between-city spread (method of moments), so the rules describe compositions like those observed and are "
+    "extrapolations outside them. For each draw the best feasible option (lowest social cost) was recorded. A "
+    f"classification tree of depth 4 reproduces that choice in {100*d['cart_acc']['acc_test']:.0f}% of held-out draws "
+    f"(majority-class baseline {100*d['cart_acc']['baseline']:.0f}%); PRIM (Friedman and Fisher 1999) searched for boxes "
+    "of conditions in which one option is best with high density."))
+A(table([["Rule (conditions)", "Best option", "Purity", "Share of draws"]] + rules_table(d), [10.2, 2.8, 1.5, 2.5]))
+A(P("Table 10: Leaves of the decision tree covering at least 3% of draws (<i>outputs/discovery_cart_rules.csv</i>). "
+    "Purity: share of the draws in the leaf where the predicted option is indeed best. Q tpd: t/day to the facility; "
+    "kiln km: road distance.", "cap"))
+pr = d["prim"]
+rows = [["Option", "Base rate", "Coverage", "Density", "Box (conditions)"]]
+for r in pr.itertuples():
+    rows.append([NAMES[r.option], f"{r.base_rate:.3f}", fmt(r.coverage, ".2f"), fmt(r.density, ".2f"),
+                 r.box if isinstance(r.box, str) else r.note])
+A(table(rows, [2.6, 1.4, 1.4, 1.4, 10.2]))
+A(P("Table 11: PRIM boxes. Coverage: share of all draws where the option is best that fall in the box; density: "
+    "share of draws in the box where it is best. RDF alone and PHB are best in fewer than 3% of draws.", "cap"))
+im = d["imp"]
+A(P("<b>Reading the rules.</b> The carbon value (importance "
+    f"{im['carbon_value']:.2f}), source separation of food ({im['food_separated']:.2f}), plant scale "
+    f"({im['Q_tpd']:.2f}) and kiln distance ({im['kiln_km']:.2f}) carry the decision; heating value and the tariff matter "
+    "only for WtE. For <b>mixed waste without the WtE tariff</b>, the sanitary landfill with flare is best in "
+    f"{100*N['disc_mix'].get('SL',0):.0f}% of draws and RDF + AD in {100*N['disc_mix'].get('S5',0):.0f}%. The rules are:"))
+for t in bullets([
+    "<b>Sanitary landfill with flare</b> is preferred when the carbon value is below about 40 USD/t (purity 0.95), and "
+    "above that when no cement kiln lies within about 300 km.",
+    "<b>RDF + AD</b> is preferred for mixed waste when the carbon value exceeds about 55 USD/t and a kiln lies within "
+    "about 300 km, at any scale (PRIM: carbon value above 51 USD/t, kiln within 296 km, gas collection below 0.68).",
+    "<b>WtE</b> is preferred when the Perpres 109/2025 tariff applies, at least 1,000 t/day are delivered and the LHV is "
+    "at least 7 MJ/kg (PRIM density 0.97); without the tariff it is rarely best.",
+    "<b>AD alone</b> is preferred when food waste arrives separated at source and the carbon value exceeds about "
+    "30 USD/t, below 1,000 t/day.",
+    "<b>RDF alone and PHB</b> are best in fewer than 3% of all draws: they are dominated by RDF + AD and by flaring."]):
+    A(t)
+A(figure(OUT / "fig_condition_maps.png", 15.5, "Figure 12: Condition maps. Each cell shows the most frequent best "
+         "option and the share of draws in which it is best, separately for mixed waste without tariff, mixed waste "
+         "with the Perpres 109/2025 tariff and food separated at source."))
+A(P(f"<b>Sobol indices.</b> To complement the rank correlations, first-order and total Sobol indices (Saltelli sampling, "
+    f"N = 512 base samples, {d['sobol'].input.nunique() - 1} register inputs plus the common wetness draw; composition fixed at each location's value) "
+    "were computed for every location and averaged."))
+sg = N["sobol_gap"]
+rows = [["Output", "Most influential inputs: total index ST (first-order S1)"]]
+nm = {"wetness": "moisture (wetness)", "cap": "landfill-gas collection", "o_rdf": "RDF O&amp;M", "K_ad": "AD CAPEX",
+      "p_rdf": "RDF price", "c_sl": "landfill cost", "doc_k": "DOC x DOCf multiplier", "gamma": "garden share of organik",
+      "efg_k": "grid factor multiplier", "eta_wte": "WtE efficiency", "h_k": "LHV calibration", "ox": "cover oxidation"}
+for lab, t in (("Social-cost gap RDF + AD minus landfill at 50 USD/t", N["sobol_gap"]), ("GHG of the sanitary landfill", N["sobol_gsl"]),
+               ("GHG of WtE", N["sobol_gs1"])):
+    rows.append([lab, "; ".join(f"{nm.get(r.input, r.input)} {r.ST:.2f} ({r.S1:.2f})" for r in t.itertuples())])
+A(table(rows, [5.0, 12.0]))
+A(P("Table 12: Sobol indices, mean over the 21 locations (<i>outputs/discovery_sobol_mean.csv</i>).", "cap"))
+A(P("Moisture as received and landfill-gas collection efficiency together explain about half of the variance of the "
+    "social-cost gap between RDF + AD and the landfill, which is why the moisture scenario of Section 8 can reverse the "
+    "ranking. These two quantities, together with RDF operating cost and price, are the data to measure first."))
+A(figure(OUT / "fig_sobol.png", 15, "Figure 13: Sobol indices for the social-cost gap RDF + AD minus landfill and for "
+         "the GHG of the landfill, mean over 21 locations."))
+
+A(P("12 A reproducible decision tool for researchers and planners", "h1"))
+A(P("The model is packaged as the Python package <i>mswpath</i> (core model, input template and validator, scenario "
+    "discovery, reports and an interactive form) and exposed through <i>MSW_Decision_Tool_Colab.ipynb</i>, which runs in "
+    "Google Colab without installation. The notebook (i) reproduces the results for the 21 RIPS locations; (ii) accepts "
+    "a one-row-per-city template (<i>templates/city_input_template.xlsx</i>, with an English/Indonesian column guide), "
+    "validates it, applies the same single-projection and normalisation rules and reports every assumption it applies; "
+    "(iii) offers an interactive form for one city; (iv) re-runs scenario discovery and applies the decision tree to a "
+    "city described by the user; and (v) writes Excel and HTML reports in English or Indonesian that carry the caveats "
+    "and the data-quality warnings. A round-trip test confirms that two RIPS locations entered through the template "
+    "reproduce the database results. Versions are pinned in <i>requirements.txt</i>, random seeds are fixed and "
+    "<i>CITATION.cff</i> gives the citation."))
+
 # ---------------------------------------------------------------------------------------------- 9
-A(P("9 Limits of validity", "h1"))
+A(P("13 Limits of validity", "h1"))
 for t in bullets([
     "<b>Temporal proxy.</b> Compositions sampled 2014 to 2025 represent 2025 without a trend; eight tonnages have an unverified "
     "year. Results describe a 2025 baseline <i>conditional</i> on these proxies, not a measured 2025 state.",
@@ -435,7 +555,7 @@ for t in bullets([
     "<b>Coverage.</b> 21 locations, 12 in Central Java; conclusions about Indonesian conditions in general need more regions."]):
     A(t)
 
-A(P("10 Data gaps carried forward", "h1"))
+A(P("14 Data gaps carried forward", "h1"))
 A(P("Measured fraction-level moisture and LHV (local proximate analysis); DOCf for rubber and leather; material composition "
     "of coated board, composite film, batteries, HHW and WEEE; Level III food and miscellaneous-paper sorting data; the year "
     "of the overview tonnage index; the definition and denominator of the RIPS status index; whether Padang's 141.76 t/d is "
@@ -466,6 +586,10 @@ REFS = [
  "Republic of Indonesia. UU 18/2008; UU 7/2021; Perpres 109/2025; SNI 19-3964-1994; RIPS of the 21 cities/regencies (row-level locators in input_kota_2025_updated.csv).",
  "Tchobanoglous, G., Theisen, H., Vigil, S. (1993). Integrated Solid Waste Management. McGraw-Hill.",
  "Zhang, R., El-Mashad, H.M., Hartman, K., et al. (2007). Characterization of food waste as feedstock for anaerobic digestion. Bioresource Technology 98, 929-935.",
+ "Friedman, J.H., Fisher, N.I. (1999). Bump hunting in high-dimensional data. Statistics and Computing 9, 123-143.",
+ "Saltelli, A., Annoni, P., Azzini, I., Campolongo, F., Ratto, M., Tarantola, S. (2010). Variance based sensitivity analysis of model output: design and estimator for the total sensitivity index. Computer Physics Communications 181, 259-270.",
+ "Breiman, L., Friedman, J.H., Olshen, R.A., Stone, C.J. (1984). Classification and Regression Trees. Wadsworth.",
+ "Frischknecht, R., Wyss, F., B&uuml;sser Kn&ouml;pfel, S., L&uuml;tzkendorf, T., Balouktsi, M. (2015). Cumulative energy demand in LCA: the energy harvested approach. International Journal of Life Cycle Assessment 20, 957-969.",
  "Further references for register entries (Manfredi et al. 2009; Mayer et al. 2019; Rand et al. 2000; Silva et al. 2021; Tsilemou &amp; Panagiotakopoulos 2006; World Bank 2024; Levett et al. 2016; Rostkowski et al. 2012; Wei et al. 2024) are as listed in the v2 methodology.",
 ]
 for r in REFS:

@@ -1,0 +1,7 @@
+option,base_rate,coverage,density,mass,box,note
+SL,0.434575,0.30633377437726517,0.7956073509636934,0.167325,carbon_value: 0.00119 to 65.7; tariff = 0; food_separated = 0,
+S1,0.085025,0.4187003822405175,0.9726775956284153,0.0366,Q_tpd: 1.01e+03 to 3e+03; tariff = 1; food_separated = 0; LHV: 6.98 to 14.6,
+S2,0.005525,,,,,best in fewer than 3% of draws; no box
+S3,0.2756,0.31068577648766327,0.7445652173913043,0.115,carbon_value: 33.1 to 100; kiln_km: 29.9 to 400; tariff = 0; food_separated = 1; food_share: 0.38 to 0.736; paper_garden_share: 0.0311 to 0.301; moisture: 0.409 to 0.68; LHV: 2.58 to 10,
+S4,0.01935,,,,,best in fewer than 3% of draws; no box
+S5,0.179925,0.30651660414061416,0.6764796074823674,0.081525,carbon_value: 50.6 to 100; kiln_km: 10 to 296; tariff = 0; food_separated = 0; gas_capture: 0.303 to 0.68,

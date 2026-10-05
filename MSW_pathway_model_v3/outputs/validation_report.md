@@ -1,6 +1,6 @@
 # Validation report (v3)
 
-49 of 49 checks passed.
+60 of 60 checks passed.
 
 | Group | Check | Result | Detail |
 |---|---|---|---|
@@ -9,7 +9,7 @@
 | blank vs zero | Benchmark blanks are not zero (e.g. 4.3, 9.3, 9.4 remain blank) | PASS |  |
 | blank vs zero | Glass blank (not reported) distinguished from glass folded or reported | PASS |  |
 | blank vs zero | Parser: blank glass and reported-zero glass give the same shares (no imputation) | PASS |  |
-| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmpqm9hwbjx.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
+| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmph4epbkql.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
 | taxonomy | (level, code) unique in crosswalk | PASS | 102 rows |
 | taxonomy | (level, code) unique in parameters | PASS | 102 rows |
 | taxonomy | (level, code) unique in benchmarks | PASS | 92 rows |
@@ -53,3 +53,14 @@
 | provenance | Parent-category proxies keep their proxy status | PASS |  |
 | provenance | Benchmark values carry source table and geography | PASS |  |
 | provenance | Heuristic Dirichlet concentrations declared as heuristic, not calibrated | PASS |  |
+| CED/LU | Every CED/LU factor has unit, source, status and evidence type | PASS |  |
+| CED/LU | Ranges are ordered (low <= central <= high) | PASS |  |
+| CED/LU | Land take is non-negative for every option and location | PASS |  |
+| CED/LU | WtE takes less land than landfilling the same tonne (ash only) | PASS |  |
+| CED/LU | WtE and RDF are net fossil-energy savers; landfill is a small consumer | PASS |  |
+| CED/LU | Landfill land take reproduces 1/(rho H) x gross factor | PASS | 0.0813 m2/t |
+| CED/LU | Adding CED/LU leaves G and C unchanged | PASS |  |
+| template | Template round trip reproduces the v3 results (Pati, Kota Magelang) | PASS | max |diff| 6.6e-06 |
+| template | Validator rejects a composition far from 100% and an unknown grid | PASS | 2 errors |
+| template | Blank glass in the template is 'not reported', not zero | PASS |  |
+| template | Template tonnage projected once: Q2025 = Qt (1.02)^3 | PASS |  |

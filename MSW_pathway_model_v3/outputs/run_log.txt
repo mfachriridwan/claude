@@ -295,92 +295,92 @@ Kab. Kendal             0.54  0.01  0.00  0.03  0.03  0.38   SL  0.54
 Kab. Wonogiri           0.50  0.01  0.01  0.01  0.02  0.45   SL  0.50
 Kota Pekalongan         0.56  0.01  0.04  0.00  0.00  0.38   SL  0.56
 Kota Magelang           0.63  0.00  0.08  0.00  0.00  0.28   SL  0.63
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
-/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:380: RuntimeWarning: Mean of empty slice
+/home/user/claude/MSW_pathway_model_v3/mswpath/core.py:404: RuntimeWarning: Mean of empty slice
   **{f"p_best_pc{lo}_{hi}": (pick[(P["pc"] >= lo) & (P["pc"] < hi)] == j).mean()
 /usr/local/lib/python3.11/dist-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
   ret = ret.dtype.type(ret / rcount)
 
-Median 90% interval width over locations (G in kg CO2e/t, C in USD/t)
+Median 90% interval width over locations
           G_w90                                  C_w90                                 
 source    both composition only parameters only  both composition only parameters only
 pathway                                                                               
@@ -390,18 +390,14 @@ S3       453.5            253.7           386.0  15.2              0.4          
 S4       547.0            198.1           500.7  43.3              5.3            43.3
 S5       244.9            109.9           220.9  18.9              5.5            17.3
 SL       542.7            203.2           494.3  11.3              0.0            11.3
-SL G: {'cap': 0.75, 's_garden': 0.26, 'moisture': 0.26, 'doc_k': 0.26, 's_plastic': 0.21} 
-   C: {'c_sl': 0.98, 'e_sl': 0.12, 'c_truck': 0.02, 'psi': 0.02, 'anc_rdf': 0.02}
-S1 G: {'s_plastic': 0.8, 'eta_wte': 0.33, 'efg_k': 0.32, 's_paper': 0.24, 's_food': 0.2} 
-   C: {'K_wte': 0.68, 'moisture': 0.32, 'p_el': 0.28, 's_plastic': 0.27, 'r': 0.25}
-S2 G: {'cap': 0.76, 'doc_k': 0.27, 's_food': 0.2, 's_paper': 0.18, 'psi': 0.18} 
-   C: {'o_rdf': 0.53, 'c_sl': 0.51, 'p_rdf': 0.3, 's_plastic': 0.29, 'K_rdf': 0.27}
-S3 G: {'cap': 0.66, 's_garden': 0.42, 's_food': 0.28, 'moisture': 0.28, 's_paper': 0.28} 
-   C: {'c_sl': 0.61, 'pre': 0.39, 'K_ad': 0.37, 'o_ad': 0.25, 'o_rdf': 0.23}
-S4 G: {'cap': 0.77, 's_garden': 0.25, 'moisture': 0.25, 'doc_k': 0.25, 's_plastic': 0.2} 
-   C: {'c_phb': 0.66, 'p_phb': 0.56, 'c_sl': 0.26, 'cap': 0.19, 'e_phb': 0.15}
-S5 G: {'cap': 0.62, 's_garden': 0.4, 'kappa': 0.26, 'psi': 0.25, 'doc_k': 0.22} 
-   C: {'o_rdf': 0.46, 'c_sl': 0.34, 'K_ad': 0.3, 'moisture': 0.3, 's_plastic': 0.29}
+              CED     LU
+pathway                 
+SL         77.598  0.081
+S1      -4195.677  0.019
+S2      -3803.915  0.061
+S3       -466.096  0.067
+S4       -574.761  0.081
+S5      -4487.097  0.045
                                           model, 21 locations                                                                                             reference
 bulk moisture (-)                  0.39 to 0.60 (median 0.51)  0.53 to 0.56 at transfer points (Prabowo et al. 2019); 0.64 to 0.66 at a landfill (Fiki et al. 2022)
 LHV as received (MJ/kg)               5.0 to 9.5 (median 7.2)            about 5 to 7 (HHV 6.9 to 9.0 measured, Prabowo et al. 2019; 6.5 assumed, Azis et al. 2021)
@@ -411,17 +407,10 @@ RDF yield (t/t MSW)                0.17 to 0.38 (median 0.27)                   
 RDF heating value (MJ/kg)          15.0 to 19.8 (median 17.5)                      12.6 to 13.8 for biodried whole waste (GIZ 2023); sorted and dried SRF is higher
 WtE net electricity (kWh/t)           248 to 474 (median 360)                              632 kWh/t at 35% gross conversion (Azis et al. 2021); model uses 18% net
 carbon in biogas / carbon in food                        0.74                                                                                       must be below 1
-
-Percent of wet mass with a known Level II/III parameter (terminal partition)
-        has_moisture_wet_fraction  has_DOC_dry_fraction  has_DOCf  has_carbon_dry_fraction
-count                       42.0                  42.0      42.0                     42.0
-mean                        86.6                  91.0      69.1                     86.6
-std                          4.1                   2.6       7.7                      4.1
-min                         78.4                  83.0      52.4                     78.4
-25%                         84.5                  89.8      65.5                     84.5
-50%                         87.6                  90.9      69.8                     87.6
-75%                         89.5                  93.0      73.2                     89.5
-max                         93.1                  96.4      84.7                     93.1
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:156: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  a.boxplot(vals, vert=False); a.set_yticks(range(1, len(PW) + 1), [NAMES[k] for k in PW])
+/home/user/claude/MSW_pathway_model_v3/msw_pathway_model_v3.py:156: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  a.boxplot(vals, vert=False); a.set_yticks(range(1, len(PW) + 1), [NAMES[k] for k in PW])
 
 Most probable pathway by scenario
                         market perpres109 food_separated_at_source residues_to_open_dump managed_M1_status_index managed_M2_local_first GWP20 moisture_IPCC_default tonnage_overview_projected docf_rubber_0.5

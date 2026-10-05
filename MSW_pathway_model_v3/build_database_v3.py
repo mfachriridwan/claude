@@ -662,6 +662,42 @@ def build_compositions(inp, cross):
     return c1, c2, term
 
 
+# ---------------------------------------------------------------------------------------------
+# 8. CED and land-use factors (v3.1). Drawn by the model after every v3 draw.
+# ---------------------------------------------------------------------------------------------
+LCIA = [  # key, central, low, high, unit, indicator, meaning, source, status, evidence
+ ("pef_eta", 0.32, 0.28, 0.36, "-", "CED", "Net thermal efficiency of the fossil generation displaced or consumed (primary energy = 3.6 / eta MJ per kWh)", "PT PLN Indonesia Power fleet thermal efficiency 32.09% in 2022 (annual report, seen as a search-result quotation only); Indramayu CFPP net heat rate about 2,460 kcal/kWh (= 35%) at full load", "L", "literature (to verify against the original report)"),
+ ("up_fuel", 0.08, 0.03, 0.15, "-", "CED", "Upstream supply energy of power-plant fuel (mining, processing, transport) as a share of fuel energy", "Analyst assumption", "A", "assumption"),
+ ("ef_diesel", 0.0741, 0.0741, 0.0741, "kg CO2/MJ", "CED", "Converts diesel-type ancillary burdens (kg CO2e) to diesel energy; the ancillary terms also contain materials, so this is an approximation", "IPCC 2006 Vol. 2 Ch. 1 Table 1.4 (gas/diesel oil 74,100 kg CO2/TJ)", "L", "literature default"),
+ ("up_diesel", 0.15, 0.10, 0.25, "-", "CED", "Upstream (refinery, crude supply) energy of diesel as a share of its energy", "Analyst assumption", "A", "assumption"),
+ ("up_coal", 0.05, 0.02, 0.10, "-", "CED", "Upstream (mining, transport) energy of the kiln coal displaced by RDF", "Analyst assumption", "A", "assumption"),
+ ("ef_natgas", 0.0561, 0.0561, 0.0561, "kg CO2/MJ", "CED", "Converts the PHB nutrient/chemical burden (kg CO2e) to fossil MJ as if natural-gas based (proxy)", "IPCC 2006 Vol. 2 Ch. 1 Table 1.4 (natural gas 56,100 kg CO2/TJ); use as proxy is an assumption", "A", "proxy"),
+ ("ced_pp", 75.0, 65.0, 85.0, "MJ/kg", "CED", "Cradle-to-gate fossil CED of displaced polypropylene incl. feedstock energy", "Order of magnitude of PlasticsEurope PP eco-profile; value not verified in this session", "L", "literature (to verify)"),
+ ("rho_sl", 0.80, 0.60, 1.00, "t/m3", "LU", "In-place density of compacted MSW in a sanitary landfill", "Engineering range (analyst)", "A", "assumption"),
+ ("h_sl", 20.0, 10.0, 30.0, "m", "LU", "Effective fill height of a sanitary landfill", "Engineering range (analyst)", "A", "assumption"),
+ ("f_gross_sl", 1.30, 1.10, 1.50, "-", "LU", "Gross site area / fill area (roads, leachate ponds, buffer)", "Engineering range (analyst)", "A", "assumption"),
+ ("rho_inert", 1.30, 1.00, 1.60, "t/m3", "LU", "In-place density of ash, digestate cake and other inert residues", "Engineering range (analyst)", "A", "assumption"),
+ ("rho_od", 0.50, 0.35, 0.70, "t/m3", "LU", "Density of uncompacted waste in an open dump", "Engineering range (analyst)", "A", "assumption"),
+ ("h_od", 5.0, 3.0, 10.0, "m", "LU", "Average heap height of an open dump", "Engineering range (analyst)", "A", "assumption"),
+ ("fp_wte", 40.0, 20.0, 80.0, "m2 per t/d", "LU", "Site footprint of a WtE plant per t/d nameplate capacity", "Analyst assumption", "A", "assumption"),
+ ("fp_rdf", 50.0, 25.0, 100.0, "m2 per t/d", "LU", "Site footprint of an RDF plant (incl. drying and storage) per t/d", "Analyst assumption", "A", "assumption"),
+ ("fp_ad", 60.0, 30.0, 120.0, "m2 per t/d", "LU", "Site footprint of an AD plant (incl. digestate handling) per t/d feed", "Analyst assumption", "A", "assumption"),
+]
+
+
+def build_lcia():
+    df = pd.DataFrame(LCIA, columns=["key", "central", "low", "high", "unit", "indicator", "meaning", "source", "status",
+                                     "evidence_type"])
+    df["note"] = np.where(df.indicator == "LU",
+                          "Land take = landfill area consumed (permanent) + plant footprint over its lifetime, m2 per t MSW. "
+                          "Cross-check: an Indonesian TPA design study (Talumelito, Gorontalo) implies about 0.045 m2/t; "
+                          "central here 0.081 m2/t for MSW.",
+                          "CED = non-renewable (fossil) cumulative energy demand, MJ per t MSW; negative = net saving. "
+                          "Biogenic energy is not counted.")
+    write(df, "lcia_factors.csv")
+    return df
+
+
 if __name__ == "__main__":
     print("Building v3 database from sources/")
     inp = build_input()
@@ -671,4 +707,5 @@ if __name__ == "__main__":
     cross, _ = build_taxonomy_and_parameters()
     build_benchmarks(cross)
     build_compositions(inp, cross)
+    build_lcia()
     print("Done.")

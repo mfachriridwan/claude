@@ -49,23 +49,21 @@ check("blank vs zero", "Glass blank (not reported) distinguished from glass fold
       and inp.loc[inp.city_id == "kota_padang", "glass_status"].iloc[0] == "not_reported_blank")
 
 # Parser behaviour on a synthetic row: blank glass must not change shares; zero glass is a reported zero.
-import importlib.util
-code = (ROOT / "msw_pathway_model_v3.py").read_text()
-head = code.split("H = harmonise(raw)")[0]              # parser + harmonise definitions only, no model run
-ns = {"__file__": str(ROOT / "msw_pathway_model_v3.py")}
-exec(compile(head, "parser", "exec"), ns)
-row = ns["raw"].iloc[[0]].copy()
+from mswpath import MSWModel, read_input
+M = MSWModel(D)
+raw0 = read_input(D / "input_kota_2025_updated.csv")
+row = raw0.iloc[[0]].copy()
 row_blank, row_zero = row.copy(), row.copy()
 row_blank[["dom_kaca", "nd_kaca"]] = np.nan
 row_zero[["dom_kaca", "nd_kaca"]] = 0.0
-hb, hz = ns["harmonise"](row_blank), ns["harmonise"](row_zero)
+hb, hz = M.harmonise(row_blank), M.harmonise(row_zero)
 fr_cols = [c for c in hb.columns if c.startswith("s_")]
 check("blank vs zero", "Parser: blank glass and reported-zero glass give the same shares (no imputation)",
       np.allclose(hb[fr_cols].to_numpy(), hz[fr_cols].to_numpy()))
 try:
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as f:
         pd.read_csv(ROOT / "sources/input_kota_v2_original.csv").to_csv(f.name, index=False)
-        ns["read_input"](Path(f.name))
+        read_input(Path(f.name))
     check("blank vs zero", "Parser rejects the old input file (no 2025 columns)", False)
 except ValueError as e:
     check("blank vs zero", "Parser rejects the old input file (no 2025 columns)", True, str(e)[:90])
@@ -193,6 +191,50 @@ check("provenance", "Benchmark values carry source table and geography",
       bm.dropna(subset=["equal_housing_mean_pct_total_wet"])[["source_table", "geography"]].notna().all().all())
 check("provenance", "Heuristic Dirichlet concentrations declared as heuristic, not calibrated",
       reg.set_index("key").loc[["alpha_hi", "alpha_lo"], "evidence_type"].eq("heuristic").all())
+
+# ---- 9. CED and land use (v3.1) ------------------------------------------------------------
+lcia = pd.read_csv(D / "lcia_factors.csv")
+check("CED/LU", "Every CED/LU factor has unit, source, status and evidence type",
+      lcia[["unit", "source", "status", "evidence_type"]].notna().all().all() and lcia.status.isin(list("VLA")).all())
+check("CED/LU", "Ranges are ordered (low <= central <= high)", ((lcia.low <= lcia.central) & (lcia.central <= lcia.high)).all())
+M.load_cities(raw0)
+det, _, _ = M.run_central({"market": {}})
+m = det[det.baseline == "OD"]
+lu = m.pivot(index="city", columns="pathway", values="LU")
+check("CED/LU", "Land take is non-negative for every option and location", (lu >= 0).all().all())
+check("CED/LU", "WtE takes less land than landfilling the same tonne (ash only)", (lu.S1 < lu.SL).all())
+ced = m.pivot(index="city", columns="pathway", values="CED")
+check("CED/LU", "WtE and RDF are net fossil-energy savers; landfill is a small consumer",
+      (ced.S1 < 0).all() and (ced.S2 < 0).all() and (ced.SL > 0).all())
+lfac = lcia.set_index("key").central
+lu_hand = 1 / (lfac.rho_sl * lfac.h_sl) * lfac.f_gross_sl
+check("CED/LU", "Landfill land take reproduces 1/(rho H) x gross factor", np.allclose(lu.SL, lu_hand),
+      f"{lu_hand:.4f} m2/t")
+gc = det.set_index(["city", "baseline", "pathway"])[["G", "C"]]
+M2 = MSWModel(D); M2.LCIA = None; M2.load_cities(raw0)
+det2, _, _ = M2.run_central({"market": {}})
+check("CED/LU", "Adding CED/LU leaves G and C unchanged", np.allclose(gc.to_numpy(), det2.set_index(["city", "baseline", "pathway"])[["G", "C"]].to_numpy()))
+
+# ---- 10. User template round trip (v3.1) ---------------------------------------------------
+from mswpath.inputs import from_template, validate_template, example_from_v3
+ex = example_from_v3(raw0, ["kab_pati", "kota_magelang"])
+raw_t, _ = from_template(ex, M)
+M.load_cities(raw_t); dt, _, _ = M.run_central({"market": {}})
+M.load_cities(raw0); dr, _, _ = M.run_central({"market": {}})
+key = ["city", "baseline", "pathway"]
+a = dr[dr.city.isin(["Kab. Pati", "Kota Magelang"])].set_index(key)[["G", "C", "CED", "LU"]]
+b = dt.set_index(key)[["G", "C", "CED", "LU"]].loc[a.index]
+check("template", "Template round trip reproduces the v3 results (Pati, Kota Magelang)", np.allclose(a, b, atol=1e-3),
+      f"max |diff| {np.abs(a.to_numpy() - b.to_numpy()).max():.1e}")
+bad = ex.copy(); bad.loc[0, "pct_sisa_makanan"] = 300; bad.loc[1, "grid_region"] = "Java"
+errs, _ = validate_template(bad, M)
+check("template", "Validator rejects a composition far from 100% and an unknown grid", len(errs) >= 2, f"{len(errs)} errors")
+blank = ex.copy(); blank.loc[0, "pct_kaca"] = np.nan
+rb, _ = from_template(blank, M)
+check("template", "Blank glass in the template is 'not reported', not zero", rb.loc[0, "glass_status"] == "not_reported_blank")
+grow = ex.copy(); grow["tonnage_year"] = 2022; grow["tonnage_is_2025"] = "no"; grow["growth_rate"] = 0.02
+rg, _ = from_template(grow, M)
+check("template", "Template tonnage projected once: Q2025 = Qt (1.02)^3", np.allclose(rg.Q2025_tpd, ex.tonnage_tpd * 1.02 ** 3))
 
 rep = pd.DataFrame(R)
 rep.to_csv(OUT / "validation_report.csv", index=False)

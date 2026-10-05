@@ -156,3 +156,51 @@ In addition, the model asserts three things for every run:
 - that biogas carbon stays below food carbon.
 
 The notebook was executed end to end without errors.
+
+---
+
+# v3.1 (5 October 2026): conditions, energy, land, reproducible tool
+
+## What was added
+| Item | Files | Notes |
+|---|---|---|
+| Python package `mswpath` | `mswpath/core.py`, `inputs.py`, `discovery.py`, `report.py`, `ui.py` | The model is a class (`MSWModel`) that holds no parameter values. G and C reproduce v3 **exactly** (regression test against the v3 outputs: maximum difference 0.0). |
+| Fossil cumulative energy demand (CED) | `data/lcia_factors.csv`, `outputs/13_ced_landuse_central.csv` | Non-renewable (fossil) MJ per t MSW. Reuses the existing inventory with conversion factors: PEF = 3.6/η × (1 + fuel supply) × grid multiplier; IPCC diesel factor for ancillary burdens; coal energy plus supply; polypropylene cradle-to-gate CED. Biogenic energy is not counted. |
+| Land take | same | m² per t MSW: landfill area consumed, 1/(ρH) × gross factor, plus plant footprints over their lifetime. |
+| Scenario discovery | `run_discovery.py`, `outputs/discovery_*` | 40,000 combinations of city and system conditions. Rules come from a CART tree (depth 4; accuracy 0.70 vs a majority-class baseline of 0.43) and PRIM boxes, shown on condition maps. |
+| Sobol indices | `outputs/discovery_sobol_*` | Computed per location: N = 512 base samples, 58 register inputs plus the wetness draw, with composition fixed at each location's value. |
+| Colab decision tool | `MSW_Decision_Tool_Colab.ipynb`, `templates/`, `requirements.txt`, `CITATION.cff` | Reproduce the 21 locations, upload your own cities (template + validator), use an interactive form, see the decision rules, and download Excel/HTML reports in English or Indonesian. |
+| Validation | `validate_v3.py` | 60 checks, all passing (49 from v3, 7 new CED/LU checks, 4 new template checks). |
+
+## Source decisions for CED and land use
+- **Network limitation.** Fetching web pages was blocked by the network policy in this session. Only search-result snippets could be read, so no CED or land-use factor is marked as verified (status V).
+- **Thermal efficiency of displaced fossil generation:** 0.32 (range 0.28–0.36). Two values from search snippets support it, neither opened in full: PT PLN Indonesia Power's 2022 fleet thermal efficiency of 32.09% (annual report), and a net heat rate of about 2,460 kcal/kWh (≈ 35%) at the Indramayu plant. Status **L**: verify against the originals.
+- **IPCC 2006 fuel factors:** diesel 74.1 kg CO₂/GJ and natural gas 56.1 kg CO₂/GJ, status L. Converting ancillary kg CO₂e to diesel MJ is an approximation, because those terms also contain materials.
+- **Polypropylene CED:** 75 MJ/kg (range 65–85), the order of magnitude of the PlasticsEurope eco-profile. Status **L**, not verified in this session. It matters only for S4 PHB.
+- **Land-use factors:** density, fill height, gross-area factor and plant footprints are **analyst engineering ranges (A)**. As a cross-check, an Indonesian TPA design study (Talumelito, Gorontalo, from a search snippet) implies about 0.045 m²/t, against 0.081 m²/t central here.
+- **Effect on G and C:** the CED/LU factors are drawn after every v3 draw, so G and C are unchanged (verified by test).
+
+## Main new results
+- **CED (central, market case):**
+  - RDF + AD saves −4.5 GJ/t, WtE −4.2 GJ/t, RDF −3.8 GJ/t.
+  - PHB saves −0.6 GJ/t and AD −0.5 GJ/t.
+  - The sanitary landfill consumes +0.08 GJ/t.
+- **Land take:**
+  - Open dump 0.40 m²/t and sanitary landfill 0.081 m²/t.
+  - RDF + AD 0.045 m²/t and WtE 0.019 m²/t.
+- **Decision rules for mixed waste without the WtE tariff:**
+  - Landfill with flare is best in 62% of draws and RDF + AD in 27%.
+  - Landfill with flare is preferred below about 40 USD/t CO₂e (purity 0.95), and at any carbon value where no kiln lies within about 300 km.
+  - RDF + AD is preferred above about 55 USD/t when a kiln is within about 300 km.
+- **Other decision rules:**
+  - WtE only with the tariff, at least 1,000 t/day and LHV ≥ 7 MJ/kg (PRIM density 0.97).
+  - AD alone where food is separated at source and carbon is valued above about 30 USD/t.
+  - RDF alone and PHB are best in fewer than 3% of draws.
+- **Sobol, social-cost gap between RDF + AD and the landfill at 50 USD/t:** moisture as received (ST 0.28) and landfill-gas collection (0.23) dominate, followed by RDF O&M (0.10). This confirms the v3 moisture scenario.
+
+## Limits specific to v3.1
+- The decision rules approximate the model: 70% accuracy on held-out draws.
+- The rules hold for compositions like the 21 RIPS compositions; outside that range they are extrapolations.
+- Land-use and several CED factors are assumptions.
+- No license file has been added; the authors must choose one before public release.
+- If the GitHub repository is private, the Colab "clone" step fails. The notebook then asks for the ZIP to be uploaded instead.
