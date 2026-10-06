@@ -337,6 +337,30 @@ check("one-city tool", "A local value replaces the default and keeps its relativ
       np.isclose(Mo.REG.central["c_sl"], 15) and np.isclose(Mo.REG.low["c_sl"], 15 * 9 / 20)
       and np.isclose(MSWModel(D).REG.central["c_sl"], 20))
 
+# ---- 13. Projection to 2045 ----------------------------------------------------------------
+from mswpath.projection import model_for_year, read_parameters, grid_factor
+prj = read_parameters(D)
+check("projection 2045", "Grid factor follows the linear path to zero in 2060 (2045: 1 - 20/35 = 0.4286; 2060: 0)",
+      np.isclose(grid_factor(prj, 2045), 1 - 20 / 35) and grid_factor(prj, 2060) == 0 and grid_factor(prj, 2070) == 0)
+Mg, _ = model_for_year(D, raw0, 2045, ("grid",), pr=prj)
+dg, cg, _ = Mg.run_central({"market": {}}); M0p = MSWModel(D); M0p.load_cities(raw0); d0p, c0p, _ = M0p.run_central({"market": {}})
+kk = ["city", "baseline", "pathway"]; a1, a0 = dg.set_index(kk), d0p.set_index(kk)
+od = a0.index.get_level_values("baseline") == "OD"
+s1 = a0.index.get_level_values("pathway") == "S1"
+efg = M0p.H.set_index("city").ef_grid
+d_s1 = (a1.G - a0.G)[od & s1].droplevel([1, 2])
+hand = c0p.wte_kwh * efg.reindex(c0p.index) * (1 - grid_factor(prj, 2045))
+check("projection 2045", "Grid driver changes WtE GHG by exactly kWh x EF x (1 - grid factor); landfill and PHB unchanged",
+      np.allclose(d_s1, hand.loc[d_s1.index]) and np.allclose(a1.G[a0.index.get_level_values("pathway").isin(["SL", "S4"])],
+                                                                 a0.G[a0.index.get_level_values("pathway").isin(["SL", "S4"])]))
+Mc, _ = model_for_year(D, raw0, 2045, ("costs",), pr=prj)
+check("projection 2045", "Escalation changes costs only (G identical) and scales p_el, O&M and landfill cost by (1+e)^20",
+      np.allclose(Mc.run_central({"market": {}})[0].set_index(kk).G, a0.G) and np.isclose(Mc.REG.central["p_el"], 0.07 * 1.02 ** 20)
+      and np.isclose(Mc.REG.central["o_rdf"], 18.4 * 1.01 ** 20) and np.isclose(Mc.REG.central["c_sl"], 20 * 1.02 ** 20))
+Mt, _ = model_for_year(D, raw0, 2045, ("tonnage",), pr=prj)
+check("projection 2045", "Tonnage grows once from 2025 at each location's rate (single projection kept)",
+      np.allclose(Mt.H.Q2025.to_numpy(), (M0p.H.Q2025 * (1 + M0p.H.growth) ** 20).to_numpy()))
+
 rep = pd.DataFrame(R)
 rep.to_csv(OUT / "validation_report.csv", index=False)
 with open(OUT / "validation_report.md", "w") as fh:

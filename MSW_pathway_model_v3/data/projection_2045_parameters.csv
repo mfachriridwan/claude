@@ -1,0 +1,10 @@
+key,value,unit,applies_to,meaning,source,status
+base_year,2025,year,all,Year of the existing (baseline) condition,model baseline,A
+target_year,2045,year,all,Projection year,user-specified,A
+netzero_year,2060,year,grid,Year in which the grid emission factor reaches zero,user-specified (Indonesia net-zero target year),A
+delta_grid,0.028571428571428571,1/yr,efg_k,"Linear decline of the grid emission factor per year, delta = 1/35 (2025 to 2060): EF(t) = EF2025 x max(0, 1 - delta (t - 2025)); applied to GHG and fossil CED of grid electricity",user-specified,A
+esc_electricity,0.02,1/yr,p_el,Real escalation of the market value of electricity (revenue of WtE and AD),user-specified,A
+esc_labour,0.01,1/yr,"o_wte, o_rdf, o_ad",Real escalation of plant operation and maintenance cost (labour-driven O&M),user-specified,A
+esc_landfill,0.02,1/yr,"c_sl, c_od",Real escalation of landfill and open-dump cost (third rate of the 2/1/2% set; interpretation to be confirmed),user-specified; interpretation A,A
+capex_escalation,0,1/yr,"K_wte, K_rdf, K_ad",CAPEX held constant in real terms,modelling choice,A
+tonnage_growth,location,1/yr,Q,"Tonnage grows from 2025 to 2045 at each location's growth rate (RIPS rate or 1.73%/yr default); composition held constant (no defensible composition trend)",model register H11 / RIPS,A

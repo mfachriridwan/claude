@@ -296,3 +296,32 @@ The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are 
   - Blank glass is "not reported".
   - Local values are applied, and a fresh model keeps the defaults.
 - **Known limitation:** the composition TOTAL formula is computed when the file is opened in Excel or Google Sheets. It could not be pre-calculated here because LibreOffice is unavailable in the build environment. The model ignores that row.
+
+## v3.2 addendum: projection to 2045
+- **What it computes.** The six options in 2045 compared with the existing condition of 2025, for all 21 locations.
+  - Files: `run_projection_2045.py`, `mswpath/projection.py`, `data/projection_2045_parameters.csv` and `outputs/proj2045_*`.
+  - Reports: two separate documents, `docs/Projection_2045_Environmental_EN.pdf` and `docs/Projection_2045_Economic_EN.pdf`.
+- **Drivers (user-specified):**
+  - Grid emission factor declines linearly to zero in 2060, with δ = 1/35 per year. In 2045 it is 0.429 × the 2025 value.
+  - Real escalation of the electricity value: 2%/yr.
+  - Real escalation of labour-driven O&M: 1%/yr.
+  - Real escalation of landfill and open-dump cost: 2%/yr. This is the third rate of the "2, 1 and 2%" set; this interpretation is to be confirmed.
+  - Tonnage grows at each location's rate.
+- **Held constant:** CAPEX in real terms, composition, landfill-gas collection, coal displaced in kilns, and the Perpres tariff in real terms.
+- **Method:**
+  - Each driver is also run alone, to decompose the change.
+  - The Monte Carlo draws are paired between the two years.
+  - A year path from 2025 to 2060 is computed.
+- **Main results** (medians over 21 locations):
+  - **GHG per tonne:**
+    - WtE rises by 177 kg CO₂e/t, from 130 to 296.
+    - AD rises by 11.
+    - RDF falls by 20.
+    - RDF + AD changes by −1.
+    - Landfill and PHB are unchanged.
+  - **Net cost per tonne:**
+    - Landfill rises from 18.4 to 25.9 USD/t.
+    - WtE falls from 57.9 to 50.8 USD/t, because of higher electricity revenue and larger plants.
+    - RDF, AD and RDF + AD rise by 5–8 USD/t.
+  - **Preferred option:** landfill up to 50 USD/t in both years. At 100 USD/t, RDF + AD is most probable in 19 locations in 2045 (18 in 2025).
+- **Validation:** 4 new checks; 87 of 87 pass.

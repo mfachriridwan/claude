@@ -11,10 +11,11 @@ python build_database_v3.py     # sources/ -> data/*.csv
 python msw_pathway_model_v3.py  # data/ -> outputs/ (about 15 s)
 python run_discovery.py         # decision rules (CART/PRIM), condition maps, Sobol (about 1 min)
 python run_voi.py               # value of information (EVPI/EVPPI) per location
-python validate_v3.py           # 83 checks -> outputs/validation_report.md
+python run_projection_2045.py   # 2045 vs 2025 (grid to net zero in 2060, real cost escalation)
+python validate_v3.py           # 87 checks -> outputs/validation_report.md
 python make_colab_notebook.py   # writes MSW_Decision_Tool_Colab.ipynb (several cities)
 python make_single_city_template.py && python make_single_city_colab.py   # one-city template + notebook
-python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py
+python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py && python docs/make_projection_2045_pdfs.py
 ```
 **One city (recommended for readers of the article):** open `MSW_Single_City_Colab.ipynb` in Google Colab. Fill in `templates/single_city_template.xlsx` (or the three CSV files `templates/single_city_city_data.csv`, `single_city_composition.csv`, `single_city_local_parameters.csv`) for your city, or type the values in the notebook, and run all cells. A filled example for Kota Padang is in `templates/single_city_example_kota_padang.xlsx`; it reproduces the worked example of the article.
 
@@ -37,6 +38,7 @@ python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && pyt
 | `data/scenario_parameters.csv` | AD-feed realism parameters, glass imputation, pseudocount and stress-test values |
 | `data/secondary_data_verification.csv` | Verification of 23 secondary values (result, evidence, link, method) |
 | `mswpath/thresholds.py`, `mswpath/voi.py`, `run_voi.py` | Break-even targets and value of information |
+| `docs/Projection_2045_Environmental_EN.pdf`, `docs/Projection_2045_Economic_EN.pdf` | 2045 projection against 2025 (`run_projection_2045.py`, `mswpath/projection.py`, `data/projection_2045_parameters.csv`) |
 | `docs/Worked_Example_Kota_Padang_EN.pdf` | Step-by-step calculation for one city with uncertainty and sensitivity |
 | `validate_v3.py`, `outputs/validation_report.md` | Validation suite and its report |
 | `docs/MSW_Methodology_v3_EN.pdf` | Methodology v3.2 |
