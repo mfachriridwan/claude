@@ -325,3 +325,28 @@ The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are 
     - RDF, AD and RDF + AD rise by 5–8 USD/t.
   - **Preferred option:** landfill up to 50 USD/t in both years. At 100 USD/t, RDF + AD is most probable in 19 locations in 2045 (18 in 2025).
 - **Validation:** 4 new checks; 87 of 87 pass.
+
+## v3.2 addendum: combined projection report, projection in Colab, mathematical model
+- **One projection report.** The environmental and economic reports are merged into `docs/Projection_2045_EN.pdf`:
+  - shared key findings and method;
+  - Part A covers environmental performance and Part B economic performance;
+  - a joint reading for the decision closes the report.
+  - The two separate PDFs were removed.
+- **Projection in the one-city notebook.** Step 9 of `MSW_Single_City_Colab.ipynb` adds the 2045 projection, computed by `mswpath.single.project_city`. Its outputs:
+  - central results for 2025 and 2045;
+  - the change by driver;
+  - the uncertainty of the change (paired draws);
+  - P(best) at fixed carbon values;
+  - the year path from 2025 to 2060;
+  - an Excel report.
+  - Local parameter values are read as 2025 values and escalated. `mswpath.projection.apply_year` makes this possible.
+- **`docs/MSW_Mathematical_Model_EN.pdf`** (built by `docs/make_math_model_pdf.py`) contains all 45 equations as implemented. It covers:
+  - harmonisation, characterisation and the landfill module;
+  - the TEA building blocks and the six options;
+  - CED and land take, and the feasibility gates;
+  - decision analysis and uncertainty;
+  - Spearman and Sobol sensitivity, and scenario discovery (CART, PRIM);
+  - EVPI/EVPPI and break-even targets;
+  - the 2045 projection;
+  - symbol and value tables generated from `data/*.csv`, with a map from symbols to data keys.
+- **Validation:** 1 new check (the one-city projection reproduces the 21-location projection for Padang).

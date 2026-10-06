@@ -1,6 +1,6 @@
 # Validation report (v3.2)
 
-87 of 87 checks passed.
+88 of 88 checks passed.
 
 | Group | Check | Result | Detail |
 |---|---|---|---|
@@ -9,7 +9,7 @@
 | blank vs zero | Benchmark blanks are not zero (e.g. 4.3, 9.3, 9.4 remain blank) | PASS |  |
 | blank vs zero | Glass blank (not reported) distinguished from glass folded or reported | PASS |  |
 | blank vs zero | Parser: blank glass and reported-zero glass give the same shares (no imputation) | PASS |  |
-| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmp42zi9ttw.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
+| blank vs zero | Parser rejects the old input file (no 2025 columns) | PASS | tmpz6pxlp5t.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_ |
 | taxonomy | (level, code) unique in crosswalk | PASS | 102 rows |
 | taxonomy | (level, code) unique in parameters | PASS | 102 rows |
 | taxonomy | (level, code) unique in benchmarks | PASS | 92 rows |
@@ -91,3 +91,4 @@
 | projection 2045 | Grid driver changes WtE GHG by exactly kWh x EF x (1 - grid factor); landfill and PHB unchanged | PASS |  |
 | projection 2045 | Escalation changes costs only (G identical) and scales p_el, O&M and landfill cost by (1+e)^20 | PASS |  |
 | projection 2045 | Tonnage grows once from 2025 at each location's rate (single projection kept) | PASS |  |
+| projection 2045 | One-city projection (notebook) reproduces the 21-location projection for Padang | PASS |  |

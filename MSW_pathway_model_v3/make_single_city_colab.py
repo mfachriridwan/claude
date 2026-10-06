@@ -61,7 +61,8 @@ under your conditions, what they must achieve to beat a landfill, and which loca
 | 6 | Scenarios and stress tests |
 | 7 | Break-even targets against the landfill |
 | 8 | Value of information: what to measure first |
-| 9 | Download the report (Excel + figures) |
+| 9 | Projection to 2045 against 2025 (grid to net zero in 2060, real cost escalation) |
+| 10 | Download the reports (Excel + figures) |
 """)
 
 md("## Step 0. Setup / Persiapan")
@@ -256,14 +257,42 @@ print("EVPI (USD/t and USD/yr):"); display(vg.groupby("carbon_value")[["evpi", "
 display(Image(str(FIGS["voi"])))
 """)
 
-md("## Step 9. Download the report / Unduh laporan")
+md("""
+## Step 9. Projection to 2045 / Proyeksi 2045 terhadap kondisi 2025
+The same city in 2045, compared with the existing condition of 2025. Drivers (edit `data/projection_2045_parameters.csv`
+or the cell below):
+
+* **Grid**: $EF_{grid}(t) = EF_{grid}(2025)\,\max[0,\,1-\delta (t-2025)]$ with $\delta = 1/35$ per year (linear path to
+  a net-zero grid in 2060), so $EF_{grid}(2045) = 0.429\,EF_{grid}(2025)$;
+* **Real escalation** $x(t) = x(2025)(1+e)^{t-2025}$: electricity value 2%/yr, labour-driven O&M 1%/yr,
+  landfill cost 2%/yr; CAPEX constant in real terms;
+* **Tonnage**: $Q(t) = Q(2025)(1+g)^{t-2025}$; composition held constant.
+
+Your local parameter values are read as 2025 values and escalated like the defaults. Each driver is also run alone
+(decomposition), and the Monte Carlo draws are paired between the two years.
+""")
+code("""
+from mswpath.projection import read_parameters
+PROJ_YEAR = 2045
+pr = read_parameters("data"); print({k: pr[k] for k in ("delta_grid", "esc_electricity", "esc_labour", "esc_landfill", "netzero_year")})
+PJ = S.project_city("data", raw, par, seed=SEED, N=N, year=PROJ_YEAR)
+print("Factors 2025 ->", PROJ_YEAR); display(PJ["factors"].round(3))
+print("Central results per tonne, 2025 vs", PROJ_YEAR); display(PJ["central"].round(2))
+print("Change by driver (each applied alone):"); display(PJ["decomposition"].round(2))
+print("Uncertainty of the change (paired Monte Carlo, p5 / p50 / p95):"); display(PJ["change_uncertainty"].round(1))
+print("Preferred option at fixed carbon values:"); display(PJ["p_best"].round(3))
+FIGS["projection"] = S.projection_figure(PJ, OUT); display(Image(str(FIGS["projection"])))
+""")
+
+md("## Step 10. Download the reports / Unduh laporan")
 code("""
 safe = "".join(ch if ch.isalnum() else "_" for ch in A["city"]).strip("_")
 rep = S.write_report(A, OUT / f"report_{safe}.xlsx", inputs=raw, warnings=warnings, overrides=changed)
+rep2 = S.write_projection_report(PJ, OUT / f"projection_{PROJ_YEAR}_{safe}.xlsx")
 import shutil; z = shutil.make_archive(str(OUT / f"results_{safe}"), "zip", OUT)
-print("Written:", rep, "and", z)
+print("Written:", rep, rep2, "and", z)
 if IN_COLAB:
-    from google.colab import files; files.download(str(rep)); files.download(z)
+    from google.colab import files; files.download(str(rep)); files.download(str(rep2)); files.download(z)
 """)
 
 md("""

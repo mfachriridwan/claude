@@ -361,6 +361,14 @@ Mt, _ = model_for_year(D, raw0, 2045, ("tonnage",), pr=prj)
 check("projection 2045", "Tonnage grows once from 2025 at each location's rate (single projection kept)",
       np.allclose(Mt.H.Q2025.to_numpy(), (M0p.H.Q2025 * (1 + M0p.H.growth) ** 20).to_numpy()))
 
+pjc = SC.project_city(D, raws, pax, N=200)
+c45 = pd.read_csv(OUT / "proj2045_comparison_central.csv") if (OUT / "proj2045_comparison_central.csv").exists() else None
+if c45 is not None:
+    x45 = c45[(c45.city == "Kota Padang") & (c45.baseline == "OD")].set_index("pathway")
+    check("projection 2045", "One-city projection (notebook) reproduces the 21-location projection for Padang",
+          np.allclose(pjc["central"]["G_2045"], x45.G_2045.reindex(PW), atol=1e-3)
+          and np.allclose(pjc["central"]["C_2045"], x45.C_2045.reindex(PW), atol=1e-3))
+
 rep = pd.DataFrame(R)
 rep.to_csv(OUT / "validation_report.csv", index=False)
 with open(OUT / "validation_report.md", "w") as fh:

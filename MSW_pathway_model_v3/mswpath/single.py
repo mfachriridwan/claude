@@ -378,3 +378,81 @@ def write_report(A, path, inputs=None, warnings=None, overrides=None):
         A["voi_inputs"].to_excel(w, sheet_name="voi_single_inputs", index=False)
         A["spearman"].to_excel(w, sheet_name="spearman_drivers", index=False)
     return path
+
+
+# --------------------------------------------------------------------------------------------- projection to 2045
+def project_city(data_dir, raw, par=None, seed=None, N=4000, year=2045):
+    """2025 versus `year` for the one city, with the user's local values (read as 2025 values) escalated like the
+    defaults. Returns a dict of tables; Monte Carlo draws are paired between the two years."""
+    from .projection import apply_year, read_parameters, grid_factor, COMPONENTS
+    pr = read_parameters(data_dir)
+
+    def build(yr, comp=COMPONENTS):
+        M = MSWModel(data_dir, seed=seed)
+        apply_local_parameters(M, par)
+        info = apply_year(M, raw, yr, comp if yr != int(pr["base_year"]) else (), pr=pr)
+        return M, info
+
+    M25, _ = build(int(pr["base_year"])); M45, info = build(year)
+    out = dict(year=year, factors=pd.Series(info), parameters=pd.Series(pr))
+    k = ["baseline", "pathway"]
+    d25 = M25.run_central({"market": {}})[0].set_index(k); d45 = M45.run_central({"market": {}})[0].set_index(k)
+    od = lambda d: d.xs("OD")
+    t = pd.DataFrame({"G_2025": od(d25).G, f"G_{year}": od(d45).G, "C_2025": od(d25).C, f"C_{year}": od(d45).C,
+                      "CED_2025": od(d25).CED, f"CED_{year}": od(d45).CED,
+                      "avoided_vs_SL_2025": d25.xs("SL").dG, f"avoided_vs_SL_{year}": d45.xs("SL").dG,
+                      "MAC_vs_SL_2025": d25.xs("SL").MAC, f"MAC_vs_SL_{year}": d45.xs("SL").MAC}).reindex(PW)
+    t["G_change"] = t[f"G_{year}"] - t.G_2025; t["C_change"] = t[f"C_{year}"] - t.C_2025
+    out["central"] = t
+    dec = {}
+    for lab, comp in (("grid only", ("grid",)), ("costs only", ("costs",)), ("tonnage only", ("tonnage",))):
+        Mx, _ = build(year, comp); dx = od(Mx.run_central({"market": {}})[0].set_index(k))
+        dec[("G", lab)] = dx.G - od(d25).G; dec[("C", lab)] = dx.C - od(d25).C
+    dec = pd.DataFrame(dec).reindex(PW)
+    dec[("G", "total")] = t.G_change; dec[("C", "total")] = t.C_change
+    out["decomposition"] = dec.sort_index(axis=1)
+    mc25, s25 = M25.run_mc("market", N=N, keep=True); mc45, s45 = M45.run_mc("market", N=N, keep=True)
+    cid = raw.city_id.iloc[0]; R0, R1 = s25[cid][2], s45[cid][2]
+    q = lambda a: np.percentile(a, [5, 50, 95])
+    out["change_uncertainty"] = pd.DataFrame([dict(option=kk, indicator=ind, **dict(zip(("p5", "p50", "p95"), q(R1[ind][:, j] - R0[ind][:, j]))))
+                                              for j, kk in enumerate(PW) for ind in ("G", "C")])
+    rows = []
+    for yr, mc in (("2025", mc25), (str(year), mc45)):
+        for pc in CARBON_VALUES:
+            s = mc.set_index("pathway")[f"p_best_at_{pc}"]
+            rows.append(dict(year=yr, carbon_value=pc, most_probable=s.idxmax(), p=s.max(), **{f"P({x})": s[x] for x in PW}))
+    out["p_best"] = pd.DataFrame(rows)
+    path = []
+    for yr in range(int(pr["base_year"]), int(pr["netzero_year"]) + 1, 5):
+        Mx, _ = build(yr); dx = od(Mx.run_central({"market": {}})[0].set_index(k))
+        for kk in PW:
+            path.append(dict(year=yr, option=kk, grid_factor=grid_factor(pr, yr), G=dx.G[kk], C=dx.C[kk],
+                             CIC50=dx.C[kk] + 50 * dx.G[kk] / 1e3, CIC100=dx.C[kk] + 100 * dx.G[kk] / 1e3))
+    out["path"] = pd.DataFrame(path)
+    return out
+
+
+def projection_figure(PJ, outdir):
+    import matplotlib.pyplot as plt
+    p = Path(outdir) / "fig6_projection.png"; Y = PJ["year"]; t = PJ["central"]
+    fig, ax = plt.subplots(1, 3, figsize=(14, 3.8)); x = np.arange(len(PW))
+    for a, ind, lab in ((ax[0], "G", "GHG, kg CO2e/t"), (ax[1], "C", "Net cost, USD/t")):
+        a.bar(x - 0.2, t[f"{ind}_2025"], 0.38, color=[COL[k] for k in PW], alpha=0.5, label="2025")
+        a.bar(x + 0.2, t[f"{ind}_{Y}"], 0.38, color=[COL[k] for k in PW], label=str(Y), edgecolor="k", linewidth=0.3)
+        a.set_xticks(x, PW); a.axhline(0, c="k", lw=0.5); a.set_title(f"{lab}: light 2025, dark {Y}", fontsize=9)
+    for kk in PW:
+        v = PJ["path"][PJ["path"].option == kk]; ax[2].plot(v.year, v.CIC100, "-o", ms=3, color=COL[kk], label=NAMES[kk])
+    ax[2].axvline(Y, c="k", lw=0.6, ls=":"); ax[2].set_title("Carbon-inclusive cost at 100 USD/t CO2e, 2025-2060", fontsize=9)
+    ax[2].legend(fontsize=7, frameon=False); fig.tight_layout(); fig.savefig(p, dpi=160); plt.close(fig)
+    return p
+
+
+def write_projection_report(PJ, path):
+    with pd.ExcelWriter(path, engine="openpyxl") as w:
+        pd.concat([PJ["parameters"].rename("value"), PJ["factors"].rename("value")]).to_frame().to_excel(w, sheet_name="drivers")
+        PJ["central"].to_excel(w, sheet_name="central_2025_vs_target")
+        PJ["decomposition"].to_excel(w, sheet_name="decomposition")
+        PJ["change_uncertainty"].to_excel(w, sheet_name="change_uncertainty", index=False)
+        PJ["p_best"].to_excel(w, sheet_name="p_best_fixed_carbon", index=False)
+        PJ["path"].to_excel(w, sheet_name="year_path_2025_2060", index=False)
+    return path

@@ -407,7 +407,8 @@ ex = {"blank vs zero": "blank DOCf stays blank; parser treats blank and reported
       "v3.2 model": "AD penalty changes only S3/S5; glass imputation only where not reported; RDF NCV stress applied",
       "v3.2 decision": "P(best) sums to 1; standard errors bounded; EVPPI <= EVPI; break-even closes the gap; Padang hand calculation",
       "v3.2 wording": "no 'statistical tie' or 'social cost' as decision metric in code and tool",
-      "one-city tool": "Padang template reproduces the database results; CSV = XLSX; blank template rejected; local values applied"}
+      "one-city tool": "Padang template reproduces the database results; CSV = XLSX; blank template rejected; local values applied",
+      "projection 2045": "grid path; WtE change = kWh x EF x (1 - factor); escalation changes costs only; single tonnage projection; notebook = full run"}
 for g, q in v.groupby("group", sort=False):
     rows.append([g, f"{(q.result == 'PASS').sum()}/{len(q)}", ex.get(g, "")])
 A(table(rows, [2.6, 1.3, 13.1]))

@@ -37,10 +37,10 @@ def scale_raw(raw, years):
     return r, f
 
 
-def model_for_year(data_dir, raw, year, components=COMPONENTS, seed=None, pr=None):
-    """An MSWModel whose parameters and tonnage describe `year`. Returns (model, info)."""
+def apply_year(M, raw, year, components=COMPONENTS, pr=None, data_dir=None):
+    """Turn a 2025 model (possibly with local parameter values) into `year` in place, then load the cities.
+    Local values are read as 2025 values and escalated like the defaults. Returns info."""
     pr = pr or read_parameters(data_dir)
-    M = MSWModel(data_dir, seed=seed)
     t = year - int(pr["base_year"]); info = dict(year=year, years=t)
     cols = ["central", "low", "high"]
     if "grid" in components:
@@ -56,4 +56,11 @@ def model_for_year(data_dir, raw, year, components=COMPONENTS, seed=None, pr=Non
         r, f = scale_raw(raw, t); info["tonnage_factor_median"] = float(np.median(f))
     M.load_cities(r)
     M.check_single_projection()
+    return info
+
+
+def model_for_year(data_dir, raw, year, components=COMPONENTS, seed=None, pr=None):
+    """An MSWModel whose parameters and tonnage describe `year`. Returns (model, info)."""
+    M = MSWModel(data_dir, seed=seed)
+    info = apply_year(M, raw, year, components, pr=pr, data_dir=data_dir)
     return M, info
