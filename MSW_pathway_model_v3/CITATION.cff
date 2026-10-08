@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "mswpath: provenance-aware screening of MSW recovery pathways for Indonesian cities (MSW Pathway Model v3.2)"
+message: "If you use this model, please cite it as below. Author list to be confirmed by the authors."
+type: software
+authors:
+  - family-names: Ridwan
+    given-names: Muhammad Fachri
+    affiliation: The University of Queensland
+  - family-names: Halog
+    given-names: Anthony
+    affiliation: The University of Queensland
+version: 3.2.0
+date-released: 2026-10-05
+repository-code: "https://github.com/mfachriridwan/claude"

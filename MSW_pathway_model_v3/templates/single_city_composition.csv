@@ -1,0 +1,14 @@
+category,label_en,label_id,model_fraction,domestic_pct,nondomestic_pct,example_domestic_pct,example_nondomestic_pct
+sisa_makanan,food waste,sisa makanan,food,,,43.95,51.56
+daun_kering,garden/leaves,daun/ranting,garden,,,15.68,25.78
+kertas_kardus,paper and cardboard,kertas dan kardus,paper,,,8.85,6.34
+kayu,wood,kayu,wood,,,0.42,0.26
+plastik,plastics,plastik,plastic,,,19.84,9.61
+logam,metals,logam,metal,,,1.3,1.36
+kain,textiles,kain/tekstil,textile,,,1.8,0.93
+karet_kulit,rubber and leather,karet dan kulit,rubber,,,0.27,0.26
+sterofoam,styrofoam,sterofoam,plastic,,,0.22,0.54
+b3,household hazardous,B3 rumah tangga,other,,,0.18,0.33
+elektronik,e-waste,elektronik,other,,,1.09,0.17
+lain_lain,other/inert,lain-lain,other,,,6.41,2.85
+kaca,glass,kaca,glass,,,,

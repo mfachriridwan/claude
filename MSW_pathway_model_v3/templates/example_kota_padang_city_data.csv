@@ -1,0 +1,18 @@
+field,value,unit,required,example_kota_padang,description_en,description_id
+city_name,Kota Padang,-,yes,Kota Padang,Name of the city or regency,Nama kota/kabupaten
+province,Sumatera Barat,-,no,Sumatera Barat,Province,Provinsi
+grid_region,Sumatera,-,yes,Sumatera,"Electricity grid: Jamali, Sumatera or Mahakam","Sistem listrik: Jamali, Sumatera, atau Mahakam"
+tonnage_total_tpd,647.57,t/day,yes,647.57,"Waste generated or delivered, wet weight (domestic + non-domestic)","Timbulan/sampah yang diterima, berat basah (domestik + non-domestik)"
+tonnage_nondomestic_tpd,26.84,t/day,no,26.84,Part of the total that is non-domestic (blank = 0 or not separated),Bagian non-domestik dari total (kosong = 0 atau tidak dipisah)
+tonnage_year,2023,year,yes,2023,Year the tonnage refers to,Tahun data tonase
+growth_rate,0.0065,1/yr,no,0.0065,Annual growth of tonnage as a fraction (0.017 = 1.7%/yr); blank = 1.73%/yr default,"Laju pertumbuhan tonase per tahun, pecahan (0,017 = 1,7%/th); kosong = 1,73%/th"
+composition_year,2023,year,yes,2023,Year the composition was sampled,Tahun sampling komposisi
+organik_lumped,no,yes/no,no,no,yes if food and garden waste are reported together in sisa_makanan,yes bila sampah makanan dan daun dilaporkan gabung di sisa_makanan
+lat,-0.9492,deg,no,-0.9492,"Latitude of the planned facility (decimal degrees, south negative)","Lintang lokasi fasilitas (desimal, selatan negatif)"
+lon,100.3543,deg,no,100.3543,Longitude of the planned facility,Bujur lokasi fasilitas
+kiln_road_km,,km,no,,Road distance to the nearest cement kiln (overrides lat/lon),Jarak jalan ke pabrik semen terdekat (menggantikan lat/lon)
+managed_share,0.7182,0-1,no,0.7182,Share of the waste collected or managed today,Porsi sampah yang terkelola saat ini
+managed_share_definition,waste delivered to the TPA / generation (lower bound; provisional),-,no,waste delivered to the TPA / generation (lower bound; provisional),What the managed share measures,Definisi indikator terkelola
+source,RIPS Kota Padang (domestic and non-domestic composition),-,no,RIPS Kota Padang (domestic and non-domestic composition),Source document and page of these data,Dokumen sumber dan halaman
+monte_carlo_draws,4000,-,no,4000,Number of Monte Carlo draws (blank = 4000),Jumlah iterasi Monte Carlo (kosong = 4000)
+random_seed,20251,-,no,20251,Random seed for reproducibility (blank = 20251),Seed acak agar dapat direproduksi (kosong = 20251)

@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+outputs/single_city/
+docs/word_build/

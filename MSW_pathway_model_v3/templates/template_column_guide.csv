@@ -1,0 +1,30 @@
+column,required,description_en,description_id
+city_id,yes,Unique id without spaces,Kode unik tanpa spasi
+city_name,yes,Name of the city/regency,Nama kota/kabupaten
+province,no,Province,Provinsi
+grid_region,yes,"Grid: Jamali, Sumatera or Mahakam","Sistem listrik: Jamali, Sumatera, atau Mahakam"
+tonnage_tpd,yes,"Waste to be managed, t/day (wet)","Timbulan/sampah yang dikelola, ton/hari (basah)"
+tonnage_year,yes,Year the tonnage refers to,Tahun data tonase
+tonnage_is_2025,no,yes if the tonnage already refers to 2025,yes bila tonase sudah tahun 2025
+growth_rate,no,"Annual growth of tonnage, fraction (e.g. 0.017); blank = fallback 1.73%","Laju pertumbuhan per tahun, pecahan (mis. 0.017); kosong = 1,73%"
+composition_year,yes,Year of the composition sampling,Tahun sampling komposisi
+organik_lumped,no,yes if food and garden waste are reported together as 'organik' in sisa_makanan,yes bila sampah organik digabung di sisa_makanan
+lat,no,Latitude of the facility site (decimal degrees),Lintang lokasi fasilitas
+lon,no,Longitude of the facility site,Bujur lokasi fasilitas
+kiln_road_km,no,"Road distance to the nearest cement kiln, km (overrides lat/lon)","Jarak jalan ke pabrik semen terdekat, km"
+managed_share,no,Share of the tonnage collected/managed today (0-1),Porsi sampah yang terkelola saat ini (0-1)
+managed_share_definition,no,What the managed share measures (free text),Definisi indikator terkelola
+source,no,Source document and page,Dokumen sumber dan halaman
+pct_sisa_makanan,no,Wet-mass % of sisa_makanan (blank = not reported),% berat basah sisa_makanan (kosong = tidak dilaporkan)
+pct_daun_kering,no,Wet-mass % of daun_kering (blank = not reported),% berat basah daun_kering (kosong = tidak dilaporkan)
+pct_kertas_kardus,no,Wet-mass % of kertas_kardus (blank = not reported),% berat basah kertas_kardus (kosong = tidak dilaporkan)
+pct_kayu,no,Wet-mass % of kayu (blank = not reported),% berat basah kayu (kosong = tidak dilaporkan)
+pct_plastik,no,Wet-mass % of plastik (blank = not reported),% berat basah plastik (kosong = tidak dilaporkan)
+pct_logam,no,Wet-mass % of logam (blank = not reported),% berat basah logam (kosong = tidak dilaporkan)
+pct_kain,no,Wet-mass % of kain (blank = not reported),% berat basah kain (kosong = tidak dilaporkan)
+pct_karet_kulit,no,Wet-mass % of karet_kulit (blank = not reported),% berat basah karet_kulit (kosong = tidak dilaporkan)
+pct_sterofoam,no,Wet-mass % of sterofoam (blank = not reported),% berat basah sterofoam (kosong = tidak dilaporkan)
+pct_b3,no,Wet-mass % of b3 (blank = not reported),% berat basah b3 (kosong = tidak dilaporkan)
+pct_elektronik,no,Wet-mass % of elektronik (blank = not reported),% berat basah elektronik (kosong = tidak dilaporkan)
+pct_lain_lain,no,Wet-mass % of lain_lain (blank = not reported),% berat basah lain_lain (kosong = tidak dilaporkan)
+pct_kaca,no,Wet-mass % of kaca (blank = not reported),% berat basah kaca (kosong = tidak dilaporkan)

@@ -1,0 +1,89 @@
+group,check,result,detail
+blank vs zero,Blank DOCf in source stays blank in output (not coerced to 0),PASS,"source blanks 53, output blanks 56"
+blank vs zero,Rubber/leather DOCf blank in material tables; model value only in register scenario,PASS,C12 docf_rubber 0 (0-0.5)
+blank vs zero,"Benchmark blanks are not zero (e.g. 4.3, 9.3, 9.4 remain blank)",PASS,
+blank vs zero,Glass blank (not reported) distinguished from glass folded or reported,PASS,
+blank vs zero,Parser: blank glass and reported-zero glass give the same shares (no imputation),PASS,
+blank vs zero,Parser rejects the old input file (no 2025 columns),PASS,"tmpz6pxlp5t.csv is not a v3 input; missing columns: ['Q2025_tpd', 'M_dom_tpd_2025', 'M_nd_"
+taxonomy,"(level, code) unique in crosswalk",PASS,102 rows
+taxonomy,"(level, code) unique in parameters",PASS,102 rows
+taxonomy,"(level, code) unique in benchmarks",PASS,92 rows
+taxonomy,"Counts: 10 Level I, 36 Level II, 56 Level III",PASS,
+taxonomy,Every Level II/III parent exists (6.* cross-parent documented),PASS,[]
+taxonomy,Cross-parent metal rows carry a crosswalk note,PASS,
+taxonomy,Same code at different levels never collides (keys 'L{level}:{code}' unique),PASS,
+mass balance,M_dom_2025 + M_nd_2025 = Q2025 (all 21),PASS,max error 1.00e-04 t/d
+mass balance,Each stream scaled by the same factor,PASS,
+mass balance,Level I sums to 100% per stream (42 streams),PASS,max |dev| 1.0e-08
+mass balance,Level I tonnes sum to the 2025 stream mass,PASS,
+mass balance,Level II sums to its Level I parent,PASS,max |dev| 1.0e-08 pp
+mass balance,Terminal partition sums to 100% per stream (no parent lost),PASS,78 leaves; max |dev| 7.0e-08
+parent-child,Catalogued Level III children sum to their Level II parent (6.* to 6.1 + 6.2),PASS,max |dev| 3.0e-08 pp
+parent-child,Level III detail file is a partial coverage (not forced to 100%),PASS,coverage 76.8-93.7% of stream
+parent-child,Conditional benchmark shares sum to 1 for complete sibling sets,PASS,11 complete sets
+parent-child,No conditional share computed for incomplete sibling sets,PASS,"incomplete parents: ['2.2', '3.7', '4', '4.4', '9']"
+parent-child,"Benchmarks labelled as foreign (Denmark, residual household waste)",PASS,
+projection,"Q2025 = Qt (1+g)^(2025-t), applied once",PASS,
+projection,Exponent is 0 where the tonnage is already 2025,PASS,10 rows already 2025
+projection,"Overview totals: year left blank (unverified), not labelled as 2025 observation",PASS,8 overview rows
+projection,Projected alternative reported for every overview row with an older composition year,PASS,
+projection,"Composition carries no growth factor (shares only, treatment declared)",PASS,
+projection,"Composition sampling year, tonnage source year and baseline year stored separately",PASS,
+Qmanaged,Qmanaged_M1_tpd <= Q2025,PASS,19 locations with a value
+Qmanaged,Qmanaged_M2_tpd <= Q2025,PASS,21 locations with a value
+Qmanaged,"Serang baseline uses observed 7.45%, the 14% target only as scenario",PASS,
+Qmanaged,Padang 93.71% labelled provisional; model series uses TPA-only lower bound,PASS,
+Qmanaged,Status-index series and local series kept in separate columns (no silent mixing),PASS,
+wet/dry,DOC_dry x (1 - IPCC moisture) reproduces IPCC wet DOC (single moisture correction),PASS,max |dev| 0.005
+wet/dry,L2/L3 DOC_wet_derived = DOC_dry x (1 - moisture),PASS,
+wet/dry,All model LHV values declared on a dry basis; plastic uses the LHV (not HHV) median,PASS,
+wet/dry,Landfill DOCf and AD methane yield are separate parameters (no BMP as DOCf),PASS,
+wet/dry,"Grass, wood and soil separated: humid soil not given grass DOC; woody material DOCf 0.10",PASS,
+wet/dry,"Composite products have no whole-product proxy (4.3, 4.4.1, 4.4.2, 5.3.2, WEEE, HHW, batteries)",PASS,
+wet/dry,Normalisation factor recorded for every stream (Pemalang 100.10% -> factor 0.999),PASS,
+provenance,"Every input row has source document, pages and quality flags",PASS,
+provenance,Every Table 2 parameter has a status column filled,PASS,
+provenance,"Every register row has source, status (V/L/A) and evidence type",PASS,
+provenance,"Every non-blank material parameter has a status, a source URL and a locator",PASS,71 rows with values
+provenance,Parent-category proxies keep their proxy status,PASS,
+provenance,Benchmark values carry source table and geography,PASS,
+provenance,"Heuristic Dirichlet concentrations declared as heuristic, not calibrated",PASS,
+CED/LU,"Every CED/LU factor has unit, source, status and evidence type",PASS,
+CED/LU,Ranges are ordered (low <= central <= high),PASS,
+CED/LU,Land take is non-negative for every option and location,PASS,
+CED/LU,WtE takes less land than landfilling the same tonne (ash only),PASS,
+CED/LU,WtE and RDF are net fossil-energy savers; landfill is a small consumer,PASS,
+CED/LU,Landfill land take reproduces 1/(rho H) x gross factor,PASS,0.0813 m2/t
+CED/LU,Adding CED/LU leaves G and C unchanged,PASS,
+template,"Template round trip reproduces the v3 results (Pati, Kota Magelang)",PASS,max |diff| 6.6e-06
+template,Validator rejects a composition far from 100% and an unknown grid,PASS,2 errors
+template,"Blank glass in the template is 'not reported', not zero",PASS,
+template,Template tonnage projected once: Q2025 = Qt (1.02)^3,PASS,
+v3.2 data,"Every secondary-data item has a verification result, evidence and method",PASS,23 items
+v3.2 data,"Corrected register values are the ones used (o_rdf 18.4, p_rdf 1.15, cap low 0.20, c_sl low 9)",PASS,
+v3.2 data,"Grid factors from ESDM 2018 (Jamali 0.877, Sumatera 0.832, Mahakam 1.128)",PASS,"{'Jamali': 0.877, 'Sumatera': 0.832, 'Mahakam': 1.128}"
+v3.2 data,"Status V kept only for values confirmed in the 2026-10 check (y_ch4, K_wte, o_wte, p_el)",PASS,"y_ch4, K_wte, o_wte, p_el"
+v3.2 data,Every register row records its v3.1 status and the 2026-10 verification outcome,PASS,
+v3.2 data,"Scenario/realism parameters have source, status and use (main case or scenario)",PASS,
+v3.2 data,"Main case: no glass imputation, no pseudocount, RDF NCV multiplier 1",PASS,
+v3.2 model,"AD-feed penalty changes only S3 and S5 (SL, S1, S2, S4 identical)",PASS,
+v3.2 model,AD-feed penalty makes S3 and S5 dearer and less climate-beneficial,PASS,
+v3.2 model,Glass imputation leaves locations that report glass unchanged,PASS,
+v3.2 model,"Glass imputation adds glass only where glass is not reported, shares still sum to 1",PASS,1 locations without glass
+v3.2 model,RDF NCV stress lowers delivered RDF energy by the multiplier (0.78),PASS,18.1 -> 14.1 MJ/kg
+v3.2 decision,P(best | carbon value) sums to 1 over options in every location,PASS,range 1.000 to 1.000
+v3.2 decision,Monte Carlo standard error of P(best) is at most 0.5/sqrt(N),PASS,
+v3.2 decision,EVPI >= 0 and every (net) EVPPI <= EVPI,PASS,EVPI 2.86 USD/t
+v3.2 decision,Break-even value makes the option's carbon-inclusive cost equal SL's,PASS,"S2 p_rdf* = 3.172 USD/GJ, gap -0.000 USD/t"
+v3.2 decision,Explicit hand recalculation (Kota Padang) reproduces every model output,PASS,
+v3.2 wording,No 'statistical tie' and no 'social cost' used as the decision metric in code or tool,PASS,
+one-city tool,"Padang example template reproduces the 21-location results for Padang (G, C, CED, LU)",PASS,max |diff| 1.2e-04
+one-city tool,CSV and XLSX templates give the same input,PASS,
+one-city tool,Blank template is rejected with the missing required fields listed,PASS,11 errors
+one-city tool,"Blank glass in the example is 'not reported', not zero",PASS,
+one-city tool,A local value replaces the default and keeps its relative range; a fresh model keeps the default,PASS,
+projection 2045,Grid factor follows the linear path to zero in 2060 (2045: 1 - 20/35 = 0.4286; 2060: 0),PASS,
+projection 2045,Grid driver changes WtE GHG by exactly kWh x EF x (1 - grid factor); landfill and PHB unchanged,PASS,
+projection 2045,"Escalation changes costs only (G identical) and scales p_el, O&M and landfill cost by (1+e)^20",PASS,
+projection 2045,Tonnage grows once from 2025 at each location's rate (single projection kept),PASS,
+projection 2045,One-city projection (notebook) reproduces the 21-location projection for Padang,PASS,

@@ -1,0 +1,9 @@
+indicator,model_21_locations,reference_low,reference_high,reference,verdict
+bulk moisture (-),0.39 to 0.60 (median 0.51),0.5,0.6,"0.554, raw MSW at Cilacap before biodrying (single site); the 0.53-0.56 and 0.64-0.66 values cited in v3.1 could not be confirmed and were removed",median within reference
+LHV as received (MJ/kg),5.0 to 9.5 (median 7.2),6.28,8.97,"6.28 (Yuliani et al. 2022, design basis) and 6.86-8.97 as received (Prabowo et al. 2019, HHV/LHV basis not stated in the abstract)",median within reference
+HHV of dry matter (MJ/kg),15.3 to 20.3 (median 18.1),,,not compared: no reference with a stated dry basis,no reference (reported for transparency)
+L0 at MCF = 1 (kg CH4/t),34 to 65 (median 45),,,no Indonesian measurement,no reference (reported for transparency)
+RDF yield (t/t MSW),0.17 to 0.38 (median 0.27),0.2,0.42,"0.20-0.42, Indonesian RDF plants (GIZ 2023; not re-verified in v3.2)",median within reference
+RDF heating value (MJ/kg),15.0 to 19.8 (median 17.5),15.0,16.7,"15-16.7, Cilacap RDF (3,991 kcal/kg at 24% moisture; about 15 after biodrying)",range overlaps reference
+WtE net electricity (kWh/t),248 to 474 (median 360),385.0,473.0,"385 net (Yuliani et al. 2022: 24.08 MW from 1,500 t/d) to 473 (Azis et al. 2021: 19.7 MW from 1,000 t/d); v3.1 quoted 632 kWh/t, which is not in the source",range overlaps reference
+carbon in biogas / carbon in food,0.74,0.0,1.0,must be below 1 (mass balance),median within reference

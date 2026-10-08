@@ -1,0 +1,62 @@
+key,id,central,low,high,unit,stage,meaning,source,status,evidence_type,status_v3_1,verification_2026_10,verification_note
+g_default,H11,0.0173,0.0065,0.0254,1/yr,H,Tonnage growth rate where the RIPS gives none (median of six RIPS rates),RIPS of six locations,A,assumption,A,not verified in this session,
+gamma,H12,0.27,0.04,0.62,-,H,Garden share of lumped 'organik' (median and range of 8 locations reporting both),input_kota; Edjabou et al. 2017,A,assumption,A,not verified in this session,
+yard,H13,1.0,0.5,1.0,-,H,Share of 'kayu' treated as garden where kayu >= 10% and no leaf category exists,RIPS notes,A,assumption,A,not verified in this session,
+alpha_hi,H14,80.0,80.0,80.0,-,H,"Dirichlet concentration, unflagged composition (heuristic, not statistically calibrated)",Analyst heuristic,A,heuristic,A,not verified in this session,
+alpha_lo,H15,40.0,40.0,40.0,-,H,"Dirichlet concentration, flagged composition (heuristic, not statistically calibrated)",Analyst heuristic,A,heuristic,A,not verified in this session,
+F,C8,0.5,0.475,0.525,-,C,Methane fraction of landfill gas,IPCC 2006 V5 Ch3,L,literature default,L,not verified in this session,
+doc_k,C9,1.0,0.8,1.2,x,C,Multiplier on DOC x DOCf (default uncertainty +-20%),IPCC 2006 V5 Ch3 Table 3.5,L,literature default,L,not verified in this session,
+h_k,C10,0.9,0.78,1.02,x,C,Calibration factor on legacy dry-matter LHV (not applied to the Gotze plastic value),Prabowo et al. 2019 (bulk HHV),L,calibration,V,not verified in this session,
+h_plastic_k,C10b,1.0,0.9,1.1,x,C,"Uncertainty multiplier on plastic dry LHV (aggregate median, resin mix unknown)",Analyst range around Gotze et al. 2016 median,A,assumption,A,not verified in this session,
+efg_k,C11,1.0,0.7,1.1,x,C,Multiplier on grid emission factor (lower bound = decarbonising grid),ESDM factors via JCM 2022,A,assumption,A,not verified in this session,
+docf_rubber,C12,0.0,0.0,0.5,-,C,DOCf of rubber/leather: gap scenario (0 = not degradable; 0.5 = IPCC 2006 generic default),IPCC 2006 V5 Ch3 (generic DOCf 0.5); no fraction-specific value,A,scenario (data gap),A,not verified in this session,
+mcf_od,B5,0.8,0.4,0.8,-,B,"Methane correction factor, open dump",IPCC 2006 V5 Ch3 Table 3.1,L,literature default,L,not verified in this session,
+mcf_sl,B6,1.0,1.0,1.0,-,B,"Methane correction factor, managed anaerobic landfill",IPCC 2006 V5 Ch3 Table 3.1,L,literature default,L,not verified in this session,
+ox,B7,0.1,0.0,0.1,-,B,"Oxidation in cover soil, sanitary landfill",IPCC 2006 V5 Ch3 Table 3.2,L,literature default,L,not verified in this session,
+cap,B8,0.5,0.2,0.8,-,B,"Lifetime landfill-gas collection efficiency, sanitary landfill","Range bounded by literature: 50-95% in US landfills with effective covers (Barlaz et al. 2009, as cited by US EPA); often below 20-30% in high-food-waste landfills (China, search snippets). Central value is an assumption for a new Indonesian sanitary landfill",A,assumption bounded by literature,A,bounded by literature,50-95% for US landfills with effective covers (Barlaz et al. 2009 via US EPA document); Chinese high-food-waste landfills often below 20-30%; low bound widened from 0.30 to 0.20
+anc_od,B9,1.0,0.0,3.0,kg CO2e/t,B,Diesel for dump operation,Manfredi et al. 2009,L,literature,L,not verified in this session,
+anc_sl,B10,5.0,2.0,10.0,kg CO2e/t,B,Diesel and materials for sanitary landfill operation,Manfredi et al. 2009,L,literature,L,not verified in this session,
+eta_wte,W4,0.18,0.14,0.22,-,S1,Net electrical efficiency of grate incinerator on low-LHV waste,"Astrup et al. 2015; Rand et al. 2000; Indonesian design study: 26% efficiency and 15% own use, i.e. about 22% net (Yuliani et al. 2022, abstract)",L,literature,L,consistent,"Yuliani et al. 2022 (Jurnal Teknologi Lingkungan): 1,500 t/d, LHV 6,276 kJ/kg, 26% efficiency, 15% own use"
+n2o_wte,W5,0.05,0.02,0.08,kg N2O/t,S1,N2O from continuous stoker incineration,IPCC 2006 V5 Ch5 Table 5.6,L,literature default,L,not verified in this session,
+anc_wte,W6,10.0,5.0,30.0,kg CO2e/t,S1,Auxiliary fuel and flue-gas reagents,Astrup et al. 2009,L,literature,L,not verified in this session,
+ash,W7,0.25,0.15,0.3,t/t,S1,Bottom ash and APC residue sent to landfill,Rand et al. 2000,L,literature,L,not verified in this session,
+tau_k,R6,1.0,0.85,1.1,x,S2,Multiplier on RDF transfer coefficients,Nasrullah et al. 2014,L,assumption range,V,not verified in this session,
+omega,R7,0.2,0.15,0.25,-,S2,Target moisture of RDF (off-taker limit 20-25%),GIZ ERiC-DKTI 2023,L,specification,V,not verified in this session,
+q_dry,R8,3.2,2.6,4.0,GJ/t water,S2,Heat to evaporate water in the dryer (self-supplied by burning RDF),Engineering range for rotary dryers,L,engineering range,L,not verified in this session,
+e_rdf,R9,40.0,20.0,70.0,kWh/t,S2,"Electricity for shredding, screening, baling",Engineering range for MT plants,A,assumption,A,not verified in this session,
+psi,R10,0.9,0.8,1.0,-,S2,GJ coal displaced per GJ RDF in the kiln,Silva et al. 2021; Khandelwal et al. 2019,L,literature,L,not verified in this session,
+ef_coal,R11,96.1,94.6,101.0,kg CO2/GJ,S2,Combustion emission factor of displaced coal (sub-bituminous),IPCC 2006 V2 Ch2 Table 2.3,L,literature default,L,not verified in this session,
+ef_truck,R12,0.1,0.06,0.15,kg CO2e/t-km,S2,Truck transport of RDF incl. empty return,GLEC Framework,L,literature,L,not verified in this session,
+tort,R13,1.3,1.2,1.5,x,S2,Road distance / straight-line distance to nearest kiln,Analyst assumption,A,assumption,A,not verified in this session,
+anc_rdf,R14,3.0,1.0,6.0,kg CO2e/t,S2,Diesel for loaders at the RDF plant,Analyst assumption,A,assumption,A,not verified in this session,
+kappa,A6,0.7,0.5,0.9,-,S3,Share of food waste captured into the digester,Mayer et al. 2019,L,literature,L,not verified in this session,
+vs_ts,A7,0.87,0.8,0.92,-,S3,Volatile solids / total solids of food waste,Zhang et al. 2007,L,literature,L,not verified in this session,
+y_ch4,A8,0.36,0.28,0.44,Nm3 CH4/kg VS,S3,"Methane yield of source-separated food waste realised in a digester (BMP-type parameter, not landfill DOCf)",Zhang et al. 2007: 348 mL/g VS after 10 d and 435 mL/g VS after 28 d in batch tests (abstract confirmed),V,literature,V,confirmed,Zhang et al. 2007 (Bioresource Technology): 348 and 435 mL CH4/g VS after 10 and 28 days
+eta_chp,A9,0.36,0.32,0.4,-,S3,Electrical efficiency of biogas engine,Mayer et al. 2019,L,literature,L,not verified in this session,
+par_ad,A10,0.2,0.1,0.3,-,S3,"Own electricity use (pulping, mixing, dewatering)",Mayer et al. 2019,L,literature,L,not verified in this session,
+fug_ad,A11,0.05,0.01,0.1,-,S3,Fugitive methane from the biogas plant (share of methane produced),IPCC 2006 V5 Ch4 (unintentional leakage); Table 4.1 default 0.8 g CH4/kg wet waste (range 0-8) seen in search snippet: the 5% used here (about 2.8 kg/t feed) is conservative for AD,L,literature default,L,partly confirmed,IPCC 2006 V5 Ch4 Table 4.1: 0.8 g CH4/kg wet waste (0-8); model 5% of produced CH4 is conservative
+anc_ad,A12,3.0,1.0,6.0,kg CO2e/t,S3,Diesel for loaders at the AD plant (per t feed),Analyst assumption,A,assumption,A,not verified in this session,
+pre,A13,0.4,0.25,0.6,-,S3,Front-end separation of food from mixed waste: share of RDF-line cost and electricity,Analyst assumption,A,assumption,A,not verified in this session,
+dig,A14,0.2,0.1,0.35,t/t feed,S3,Dewatered digestate sent to the residue landfill,Analyst assumption,A,assumption,A,not verified in this session,
+r_phb,P6,2.3,2.0,2.8,t CH4/t PHB,S4,Methane per tonne PHB (1.79 as carbon + 0.52 for process energy),Chidambarampadmavathy et al. 2017,L,literature,V,not verified in this session,
+ef_phb,P7,0.5,0.0,1.5,kg CO2e/kg,S4,Nutrients and extraction chemicals,Rostkowski et al. 2012,L,literature,L,not verified in this session,
+ef_pp,P8,1.9,1.6,3.4,kg CO2e/kg,S4,Cradle-to-gate footprint of displaced polypropylene,PlasticsEurope; Chidambarampadmavathy et al. 2017,L,literature,L,not verified in this session,
+sub_pp,P9,1.0,0.7,1.0,kg/kg,S4,kg PP displaced per kg PHB,Chidambarampadmavathy et al. 2017,L,literature,L,not verified in this session,
+r,T7,0.1,0.08,0.12,1/yr,T,"Real discount rate, same for all pathways",Analyst assumption,A,assumption,A,not verified in this session,
+n,T8,20.0,15.0,30.0,yr,T,"Economic lifetime, same for all pathways",Analyst assumption,A,assumption,A,not verified in this session,
+b,T9,0.7,0.6,0.85,-,T,"Capacity exponent for CAPEX scaling, same for all units",Tsilemou & Panagiotakopoulos 2006,L,literature,L,not verified in this session,
+K_wte,T10,120000000.0,100000000.0,200000000.0,USD @1000 t/d,T,WtE CAPEX at reference capacity,"Azis et al. 2021: USD 102.2 M for 1,000 t/d; Yuliani et al. 2022: Rp 2.2 bn per t/d, about USD 135 M per 1,000 t/d (abstracts confirmed)",V,literature range,V,confirmed,"Azis et al. 2021 (Sustainability): USD 102.2 M for 1,000 t/d; Yuliani et al. 2022: Rp 2.2 bn per t/d"
+o_wte,T11,27.0,21.0,37.0,USD/t,T,WtE O&M,"Azis et al. 2021: USD 12.1 M/yr at 1,000 t/d (about 33 USD/t); Yuliani et al. 2022: Rp 167 M/yr per t/d (about 28 USD/t) (abstracts confirmed)",V,literature,V,confirmed,Azis et al. 2021: USD 12.1 M/yr; Yuliani et al. 2022: Rp 167 M/yr per t/d
+K_rdf,T12,12300000.0,9000000.0,16000000.0,USD @300 t/d,T,RDF plant CAPEX at reference capacity,"GIZ ERiC-DKTI 2023 (report exists; its figure not verified). Cross-check: Cilacap TPST/RDF Rp 81.2 bn for 120 t/d, scaled to 300 t/d with b = 0.7 = about USD 9.5 M (search snippet)",L,literature (partly verified),L,partly confirmed,GIZ ERiC-DKTI 2023 report exists (LCDI repository) but its figure could not be read; Cilacap RDF Rp 81.2 bn for 120 t/d (news)
+o_rdf,T13,18.4,12.0,24.5,USD/t,T,RDF plant O&M,"CORRECTED: Indonesian comparative data give Rp 300,000-400,000 per t processed (COSTING journal, search snippet) = 18.4-24.5 USD/t; low bound = previous central (12 USD/t)",L,literature (search snippet),L,corrected,"12 -> 18.4 USD/t: RDF O&M Rp 300,000-400,000/t (COSTING journal, Indonesian comparison)"
+K_ad,T14,7000000.0,4000000.0,14000000.0,USD @100 t/d,T,AD plant CAPEX at reference feed capacity,GIZ 2017 in UNDP 2021; Aleluia & Ferrao 2017,L,literature,L,not verified in this session,
+o_ad,T15,14.0,10.6,30.0,USD/t feed,T,AD plant O&M,GIZ 2017 in UNDP 2021,L,literature,V,not verified in this session,
+c_sl,T16,20.0,9.0,30.0,USD/t @500 t/d,T,Full cost of sanitary landfill with gas collection and flare,"World Bank 2024 guidelines (figure not verified); Indonesia: controlled landfill about Rp 145,000/t (Kulon Progo 2025) and central-government standard Rp 400,000/t (BPK news, search snippet); Cointreau-Levine 2000: 8-15 USD/t for middle-income countries",L,literature (search snippet),L,partly confirmed,"Rp 145,000/t controlled landfill (Kulon Progo 2025), Rp 400,000/t central-government standard (BPK news); low bound 12 -> 9 USD/t"
+e_sl,T17,0.3,0.2,0.4,-,T,Scale elasticity of landfill cost per tonne,Tsilemou & Panagiotakopoulos 2006,L,literature,L,not verified in this session,
+c_od,T18,4.0,2.0,8.0,USD/t,T,Cost of operating an open dump,Analyst assumption,A,assumption,A,not verified in this session,
+c_phb,T19,6.8,4.8,9.6,USD/kg @500 t/a,T,PHB production cost excl. methane feedstock,Listewnik et al. in Chidambarampadmavathy 2017; Levett et al. 2016,A,assumption,A,not verified in this session,
+e_phb,T20,0.083,0.05,0.15,-,T,Scale elasticity of PHB unit cost,Levett et al. 2016,A,assumption,A,not verified in this session,
+p_el,T21,0.07,0.05,0.1,USD/kWh,T,Market value of electricity (grid generation cost),Kepmen ESDM 169/2021 (BPP; figure not verified); Zeng et al. 2024: current Indonesian electricity price 0.069 USD/kWh (abstract confirmed),V,literature,V,confirmed,Zeng et al. 2024 (Sustainability): Indonesian electricity price 0.069 USD/kWh
+p_rdf,T22,1.15,0.58,1.34,USD/GJ,T,Price of RDF at kiln gate,"CORRECTED: Rp 150,000-350,000 per t RDF reported for Bantargebang/DKI and Rp 300,000/t elsewhere (news, search snippets), converted at 16 GJ/t (Cilacap RDF about 16.7 MJ/kg) and IDR 16,300/USD",L,literature (search snippet),L,corrected,"1.6 -> 1.15 USD/GJ: RDF Rp 150,000-350,000/t (DKI Bantargebang), Rp 300,000/t (news); 16 GJ/t"
+p_phb,T23,4.0,2.5,6.0,USD/kg,T,Selling price of PHB,Market reports; Levett et al. 2016,L,literature,L,not verified in this session,
+c_truck,T24,0.1,0.05,0.15,USD/t-km,T,Cost of trucking RDF,Analyst assumption,A,assumption,A,not verified in this session,

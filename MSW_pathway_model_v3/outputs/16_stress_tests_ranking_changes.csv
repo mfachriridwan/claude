@@ -1,0 +1,36 @@
+scenario,carbon_value,n_locations,n_changed,changed
+moisture_high_bound,0,21,0,
+moisture_high_bound,2,21,0,
+moisture_high_bound,25,21,0,
+moisture_high_bound,50,21,0,
+moisture_high_bound,100,21,17,"Kab. Wonogiri (S5->SL), Kab. Kendal (S5->SL), Kab. Pekalongan (S5->SL), Kota Padang (S5->SL), Kab. Pemalang (S5->SL), Kab. Sragen (S5->SL), Kab. Indramayu (S5->SL), Kab. Magelang (S5->SL), Kab. Brebes (S5->SL), Kab. Nganjuk (S5->SL), Kab. Cianjur (S5->SL), Kota Pekalongan (S5->SL), Kota Semarang (S5->SL), Kota Magelang (S5->SL), Kab. Bogor (S5->SL), Kab. Kutai Kartanegara (S1->SL), Kab. Pandeglang (S5->SL)"
+rdf_ncv_stress,0,21,0,
+rdf_ncv_stress,2,21,0,
+rdf_ncv_stress,25,21,0,
+rdf_ncv_stress,50,21,0,
+rdf_ncv_stress,100,21,17,"Kab. Wonogiri (S5->SL), Kab. Kendal (S5->SL), Kab. Pekalongan (S5->SL), Kota Padang (S5->SL), Kab. Pemalang (S5->SL), Kab. Sragen (S5->SL), Kab. Indramayu (S5->SL), Kab. Magelang (S5->SL), Kab. Brebes (S5->SL), Kab. Nganjuk (S5->SL), Kab. Cianjur (S5->SL), Kota Pekalongan (S5->SL), Kota Semarang (S5->SL), Kota Magelang (S5->SL), Kab. Bogor (S5->S3), Kota Denpasar (S5->SL), Kab. Pandeglang (S5->SL)"
+glass_imputed,0,21,0,
+glass_imputed,2,21,0,
+glass_imputed,25,21,0,
+glass_imputed,50,21,0,
+glass_imputed,100,21,0,
+dirichlet_pseudocount,0,21,0,
+dirichlet_pseudocount,2,21,0,
+dirichlet_pseudocount,25,21,0,
+dirichlet_pseudocount,50,21,0,
+dirichlet_pseudocount,100,21,2,"Kab. Temanggung (SL->S5), Kab. Serang (SL->S5)"
+AD_feed_optimistic,0,21,0,
+AD_feed_optimistic,2,21,0,
+AD_feed_optimistic,25,21,0,
+AD_feed_optimistic,50,21,0,
+AD_feed_optimistic,100,21,2,"Kab. Temanggung (SL->S5), Kab. Serang (SL->S5)"
+moisture_IPCC_default,0,21,0,
+moisture_IPCC_default,2,21,0,
+moisture_IPCC_default,25,21,0,
+moisture_IPCC_default,50,21,7,"Kota Padang (SL->S5), Kab. Wonogiri (SL->S1), Kota Semarang (SL->S1), Kab. Bogor (SL->S1), Kab. Pekalongan (SL->S5), Kota Denpasar (SL->S1), Kab. Pati (SL->S5)"
+moisture_IPCC_default,100,21,7,"Kab. Wonogiri (S5->S1), Kab. Nganjuk (S5->S1), Kota Semarang (S5->S1), Kab. Bogor (S5->S1), Kab. Temanggung (SL->S5), Kota Denpasar (S5->S1), Kab. Serang (SL->S5)"
+phb_large_scale_cost,0,21,20,"Kota Pekalongan (SL->S4), Kab. Pemalang (SL->S4), Kab. Temanggung (SL->S4), Kab. Sragen (SL->S4), Kab. Kutai Kartanegara (SL->S4), Kab. Pandeglang (SL->S4), Kab. Wonogiri (SL->S4), Kab. Kendal (SL->S4), Kab. Pekalongan (SL->S4), Kab. Pati (SL->S4), Kota Padang (SL->S4), Kab. Magelang (SL->S4), Kab. Brebes (SL->S4), Kab. Nganjuk (SL->S4), Kab. Indramayu (SL->S4), Kab. Serang (SL->S4), Kab. Cianjur (SL->S4), Kota Semarang (SL->S4), Kota Denpasar (SL->S4), Kab. Bogor (SL->S4)"
+phb_large_scale_cost,2,21,20,"Kota Pekalongan (SL->S4), Kab. Pemalang (SL->S4), Kab. Sragen (SL->S4), Kab. Temanggung (SL->S4), Kab. Kutai Kartanegara (SL->S4), Kab. Pandeglang (SL->S4), Kab. Wonogiri (SL->S4), Kab. Kendal (SL->S4), Kab. Pekalongan (SL->S4), Kab. Pati (SL->S4), Kota Padang (SL->S4), Kab. Magelang (SL->S4), Kab. Brebes (SL->S4), Kab. Nganjuk (SL->S4), Kab. Indramayu (SL->S4), Kab. Serang (SL->S4), Kab. Cianjur (SL->S4), Kota Semarang (SL->S4), Kota Denpasar (SL->S4), Kab. Bogor (SL->S4)"
+phb_large_scale_cost,25,21,20,"Kota Pekalongan (SL->S4), Kab. Pemalang (SL->S4), Kab. Temanggung (SL->S4), Kab. Pandeglang (SL->S4), Kab. Sragen (SL->S4), Kab. Wonogiri (SL->S4), Kab. Kendal (SL->S4), Kab. Kutai Kartanegara (SL->S4), Kab. Magelang (SL->S4), Kota Padang (SL->S4), Kab. Brebes (SL->S4), Kab. Nganjuk (SL->S4), Kab. Pekalongan (SL->S4), Kab. Serang (SL->S4), Kab. Indramayu (SL->S4), Kab. Pati (SL->S4), Kab. Cianjur (SL->S4), Kota Semarang (SL->S4), Kota Denpasar (SL->S4), Kab. Bogor (SL->S4)"
+phb_large_scale_cost,50,21,20,"Kab. Temanggung (SL->S4), Kab. Pandeglang (SL->S4), Kab. Pemalang (SL->S4), Kota Pekalongan (SL->S4), Kab. Kendal (SL->S4), Kab. Serang (SL->S4), Kab. Kutai Kartanegara (SL->S4), Kab. Brebes (SL->S4), Kab. Sragen (SL->S4), Kab. Nganjuk (SL->S4), Kab. Magelang (SL->S4), Kota Padang (SL->S4), Kab. Wonogiri (SL->S4), Kab. Indramayu (SL->S4), Kab. Cianjur (SL->S4), Kota Semarang (SL->S4), Kab. Bogor (SL->S4), Kab. Pekalongan (SL->S4), Kota Denpasar (SL->S4), Kab. Pati (SL->S4)"
+phb_large_scale_cost,100,21,20,"Kab. Pati (S5->S4), Kab. Wonogiri (S5->S4), Kab. Kendal (S5->S4), Kab. Pekalongan (S5->S4), Kota Padang (S5->S4), Kab. Pemalang (S5->S4), Kab. Sragen (S5->S4), Kab. Indramayu (S5->S4), Kab. Magelang (S5->S4), Kab. Brebes (S5->S4), Kab. Nganjuk (S5->S4), Kab. Cianjur (S5->S4), Kota Pekalongan (S5->S4), Kota Semarang (S5->S4), Kab. Bogor (S5->S4), Kab. Temanggung (SL->S4), Kab. Kutai Kartanegara (S1->S4), Kota Denpasar (S5->S4), Kab. Pandeglang (S5->S4), Kab. Serang (SL->S4)"

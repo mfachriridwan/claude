@@ -1,0 +1,127 @@
+[
+  {
+    "path": "01_original_claude/MSW_Methodology_v2_EN.pdf",
+    "bytes": 815966,
+    "sha256": "c50575cc3aba1a85203b04ffd7b091dfd7a003acc2e5940aa9a8d17a567b4f4c"
+  },
+  {
+    "path": "01_original_claude/MSW_pathway_model_v2.ipynb",
+    "bytes": 375967,
+    "sha256": "e4cb2e2a52e75756b40dbef4f83100eb9937d1a341a48ae641db8a9aa7c2a326"
+  },
+  {
+    "path": "01_original_claude/input_kota.csv",
+    "bytes": 11149,
+    "sha256": "89de661f1790044eab72ae3b39f25e30d22f5fa481760411c4556ee2a9597b28"
+  },
+  {
+    "path": "01_original_claude/msw_pathway_model_v2.py",
+    "bytes": 37440,
+    "sha256": "1413a5ae76aae64ea339300a5a49967bc5a88f9e92a6e67521b1319b2a3cd360"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/ASSUMPTION_SOURCE_AUDIT.md",
+    "bytes": 5572,
+    "sha256": "cccdc580b0d9a61f6ea5ab01a2d8d049811898ee3fe0e9f31d6f911349fb2d64"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/METHODOLOGY.md",
+    "bytes": 4391,
+    "sha256": "04f273f17b2313447756536fe831646cde6bb9d8b2cd85985d3555f4ebcd2f7b"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/RIPS_fraction_levels_10_36_56.xlsx",
+    "bytes": 414641,
+    "sha256": "60f8138e0742dae7178610d622924c551c584d8527f761d45b7304a3d3b02001"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/input_kota_level1.csv",
+    "bytes": 132995,
+    "sha256": "81463f1a00832c2cfe969c45db5ed733b2ccdcef0d6667cd128ee0338a71262d"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/input_kota_level2.csv",
+    "bytes": 492679,
+    "sha256": "8c8ca32268701a621ee91d2c94eecd353c34006cace559d99001041a5f0345dd"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/input_kota_level3_detail.csv",
+    "bytes": 842256,
+    "sha256": "99fd70a25b1a0de292573fdd574e738e25efcf134a224ac469ab51218b950aea"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/validation_audit.csv",
+    "bytes": 2627,
+    "sha256": "909c9c735a80ebdcbd32b8336c9b61df6adc6bd13f0d737cbef8b697f9c7414e"
+  },
+  {
+    "path": "02_taxonomy_and_allocations/waste_fraction_taxonomy.csv",
+    "bytes": 8551,
+    "sha256": "005e21e017dc17c5d0c68ef3ba6d0340b9204be22f4d5a0b38d52c8d4fb49fc8"
+  },
+  {
+    "path": "03_baseline_2025/README.md",
+    "bytes": 4948,
+    "sha256": "42bb6e356fa241bef0cc3671a280aa63bf1a2932e8a22bd1f8f8e15eaa53118e"
+  },
+  {
+    "path": "03_baseline_2025/city_composition_source_audit.csv",
+    "bytes": 12923,
+    "sha256": "c748b6c3c7152cb5aceb9df70324b4af0e4c7dcf4a862149ab82a0d88303ce87"
+  },
+  {
+    "path": "03_baseline_2025/input_kota_2025_claude_ready.csv",
+    "bytes": 22799,
+    "sha256": "624927b54b6f41c39575da53a58eef4f539cc125f547696507764a1271eade75"
+  },
+  {
+    "path": "03_baseline_2025/qmanaged_2025_source_audit.csv",
+    "bytes": 5241,
+    "sha256": "81ce8ed7bd2545e5e2066e98929954be6e5b57002b0ca08230bb2238c307a45b"
+  },
+  {
+    "path": "03_baseline_2025/table2_fraction_properties_IPCC_2019.csv",
+    "bytes": 4975,
+    "sha256": "88164ed139f104e55f952c3e71bcb2d42c868cf7c80fdafaa879292aad93bfda"
+  },
+  {
+    "path": "03_baseline_2025/validation.json",
+    "bytes": 80,
+    "sha256": "bb7f97725c0d3efa99ce1e319d1c107fac4747916cfd49b2eb1e1645554ccd3a"
+  },
+  {
+    "path": "04_fraction_literature/README.md",
+    "bytes": 5760,
+    "sha256": "66ff980f06118362a97207158c9569175447223bfc783c5c3d0655cb46266765"
+  },
+  {
+    "path": "04_fraction_literature/Table2_and_Fraction_Literature.xlsx",
+    "bytes": 23481,
+    "sha256": "c9ce2cc9af967d59d20c41fca364e38dc05dc20f1e3df2b539ff9b1bef43a567"
+  },
+  {
+    "path": "04_fraction_literature/fraction_level2_level3_composition_benchmarks.csv",
+    "bytes": 23516,
+    "sha256": "e48dfa34b05d89005662cf3c711959522090a90ba940f7f6db411dbdbbdbd02b"
+  },
+  {
+    "path": "04_fraction_literature/fraction_level2_level3_parameters.csv",
+    "bytes": 28043,
+    "sha256": "ad35cfdc20a6602ca49d85e76ccd922abe6bca2c43d4bb7bf929f789563502e6"
+  },
+  {
+    "path": "04_fraction_literature/literature_observations.csv",
+    "bytes": 2259,
+    "sha256": "513ee13fe9502419c86bf725fca125a3693fad6bf9f26d72f400e8ef14e50946"
+  },
+  {
+    "path": "PROMPT_FOR_CLAUDE.md",
+    "bytes": 7596,
+    "sha256": "a4ff98c29c22315a602bc565d536884d9ee1671a33c9812ed867ca66de1802e0"
+  },
+  {
+    "path": "START_HERE.md",
+    "bytes": 1821,
+    "sha256": "cb174805d523beb5023f6770a045aaa9a546f5605e6693ad2b4ee7093b9a86d0"
+  }
+]

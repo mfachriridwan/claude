@@ -1,0 +1,25 @@
+{
+ "N": 40000,
+ "seed": 7,
+ "dirichlet_alpha0": 45.54558934581961,
+ "comp_mean": {
+  "food": 0.4599,
+  "garden": 0.0679,
+  "paper": 0.1089,
+  "wood": 0.0477,
+  "textile": 0.0205,
+  "rubber": 0.0074,
+  "plastic": 0.1805,
+  "metal": 0.0155,
+  "glass": 0.0168,
+  "other": 0.0749
+ },
+ "q_range": [
+  50,
+  3000
+ ],
+ "km_range": [
+  10,
+  400
+ ]
+}
