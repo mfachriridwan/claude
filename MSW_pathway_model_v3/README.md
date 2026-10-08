@@ -15,7 +15,7 @@ python run_projection_2045.py   # 2045 vs 2025 (grid to net zero in 2060, real c
 python validate_v3.py           # 88 checks -> outputs/validation_report.md
 python make_colab_notebook.py   # writes MSW_Decision_Tool_Colab.ipynb (several cities)
 python make_single_city_template.py && python make_single_city_colab.py   # one-city template + notebook
-python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py && python docs/make_projection_2045_pdfs.py && python docs/make_math_model_pdf.py && python docs/make_graphical_abstract.py && python docs/make_word_versions.py
+python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && python docs/make_padang_example_pdf.py && python docs/make_projection_2045_pdfs.py && python docs/make_math_model_pdf.py && python docs/make_graphical_abstract.py && python docs/make_word_versions.py && python run_parameter_influence.py && python docs/make_math_explanation_docx.py
 ```
 **One city (recommended for readers of the article):** open `MSW_Single_City_Colab.ipynb` in Google Colab. Fill in `templates/single_city_template.xlsx` (or the three CSV files `templates/single_city_city_data.csv`, `single_city_composition.csv`, `single_city_local_parameters.csv`) for your city, or type the values in the notebook, and run all cells. Step 9 of the notebook projects the city to 2045 (grid to net zero in 2060, real cost escalation). A filled example for Kota Padang is in `templates/single_city_example_kota_padang.xlsx`; it reproduces the worked example of the article.
 
@@ -44,6 +44,7 @@ python docs/make_methodology_pdf.py && python docs/make_manuscript_pdf.py && pyt
 | `docs/MSW_Methodology_v3_EN.pdf` | Methodology v3.2 |
 | `docs/Graphical_Abstract_EN.pdf`, `docs/Research_Flow_Diagram_EN.pdf` | Graphical abstract and research flow diagram (vector PDF + 300 dpi PNG; `docs/make_graphical_abstract.py`) |
 | `docs/*.docx` (manuscript, methodology, mathematical model) | Word versions with native, editable Word equations (`docs/make_word_versions.py`; needs pandoc, e.g. `pip install pypandoc_binary python-docx`) |
+| `docs/MSW_Mathematical_Model_Explained_ID.docx` | Explanation (Indonesian) of every equation and symbol and of how each variable moves the results, with measured one-at-a-time effects (`run_parameter_influence.py`, `docs/make_math_explanation_docx.py`) |
 | `docs/MSW_Mathematical_Model_EN.pdf` | Every equation of the model, with symbols, data keys and values |
 | `docs/MSW_Manuscript_v3_EN.pdf` | Draft journal article (authors still need to confirm the author list and declarations) |
 | `CHANGELOG_AND_SOURCE_DECISIONS.md` | Changes, source decisions, data gaps, remaining assumptions |

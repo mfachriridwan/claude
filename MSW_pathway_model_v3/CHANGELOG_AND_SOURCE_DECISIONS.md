@@ -366,3 +366,13 @@ The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are 
   - All three files pass the docx schema validation.
   - Equations round-trip from Word back to LaTeX.
 - **Not done:** a rendered preview in Word layout, because LibreOffice is unavailable in the build environment.
+
+## v3.2 addendum: explanation of the mathematical model (Word)
+- **`docs/MSW_Mathematical_Model_Explained_ID.docx`** is written in Indonesian, with the English technical terms used in the article.
+  - It covers all 45 equations, numbered as in `MSW_Mathematical_Model_EN`, as editable Word equations.
+  - For each equation: what it computes; a symbol table (meaning, unit, central value and range read from `data/*.csv`, data key); and how each variable moves the results (direction and mechanism).
+  - It also contains an influence map, a ranking of all parameters, and a summary of the variables that decide the choice.
+- **Measured effects.** The effect sizes come from `run_parameter_influence.py`, which writes `outputs/parameter_influence*.csv`.
+  - Method: one input at a time is set to its low and its high value, with the others central; results are medians over 21 locations.
+  - Recorded: the change in GHG and cost of each option, the carbon-inclusive cost gap between RDF + AD and the landfill at 50 USD/t, and the number of locations whose best option changes at 100 USD/t.
+- **Result.** The inputs that move the gap most are landfill-gas capture (`cap`), moisture as received, RDF O&M, AD CAPEX and landfill cost.
