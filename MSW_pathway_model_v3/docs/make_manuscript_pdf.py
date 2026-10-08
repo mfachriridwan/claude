@@ -440,6 +440,72 @@ A(P("The study is an ex-ante screening assessment, not an evaluation of plants. 
     f"approximate the model ({100*d['cart_acc']['acc_test']:.0f}% accuracy) within the range of observed compositions. The "
     "value-of-information estimates use a regression approximation and depend on the assumed input ranges."))
 
+A(P("4.6 Methodological challenges and future work", "h2"))
+INF = pd.read_csv(OUT / "parameter_influence.csv").set_index("key")
+_gb = float(pd.read_csv(OUT / "parameter_influence_base_gap.csv", index_col=0).value["gap50"])
+_ver = pd.read_csv(DATA / "secondary_data_verification.csv"); _reg = d["reg"]
+_prim = d["prim"].set_index("option")
+_g = lambda k: f"{INF.loc[k, 'gap50_lo']:+.1f} to {INF.loc[k, 'gap50_hi']:+.1f}"
+_n = lambda k: int(max(INF.loc[k, "n_change100_lo"], INF.loc[k, "n_change100_hi"]))
+_vg = N["voi_top"][100]
+A(P("The limitations above are not equally consequential. Table 7 ranks the methodological challenges of this study by how "
+    "much they can change the answer to the research question, using the model itself as the yardstick: the one-at-a-time "
+    "swing of the carbon-inclusive cost gap between RDF + AD and the landfill at 50 USD/t CO<sub>2</sub>e (base value "
+    f"{_gb:+.1f} USD/t; negative means RDF + AD is cheaper), the number of locations whose preferred option changes at "
+    "100 USD/t, the stress tests (Table 2b) and the value of information (Table 6). The ranking shows that the most "
+    "consequential challenges are data challenges that local measurement can resolve, rather than structural features of the "
+    "model."))
+rows = [["#", "Challenge", "Evidence from this study", "How it was handled here", "What would resolve it"],
+        ["1", "Landfill-gas collection efficiency is not measured at any study site",
+         f"Gap {_g('cap')} USD/t over its range (0.20&ndash;0.80); preferred option changes in up to {_n('cap')} locations at 100 USD/t; "
+         f"second-largest group EVPPI ({_vg.set_index('group').median_evppi.iloc[1]:.2f} USD/t at 100 USD/t)",
+         "Wide range from the literature; scenario and VOI analysis", "Pumping tests or flux measurements at operating sanitary landfills (priority 1)"],
+        ["2", "Moisture and heating value of waste as received are not measured locally",
+         f"Gap {_g('wetness')} USD/t between moisture bounds; upper bound returns {int(st.loc['moisture_high_bound', 100])} of 21 "
+         f"locations to the landfill at 100 USD/t; largest group EVPPI ({_vg.set_index('group').median_evppi.iloc[0]:.2f} USD/t)",
+         "Calibrated assumption, common wetness draw, IPCC and high-bound scenarios",
+         "Waste characterisation with proximate analysis at the facility gate, wet and dry season (priority 1)"],
+        ["3", "Composition is a sampling-year proxy with inconsistent categories and no replicates",
+         f"Sampling years {inp.composition_sampling_year.min()}&ndash;{inp.composition_sampling_year.max()}; lumped organics and "
+         "missing glass in some RIPS; Dirichlet concentration is heuristic",
+         "Provenance labels, harmonisation rules L/W, glass imputation and pseudocount scenarios (at most 2 changes)",
+         "Standardised sorting campaigns (SNI 19-3964-1994) with replicates to calibrate the concentration"],
+        ["4", "Secondary data verified only at abstract level; RIPS source files not re-checked",
+         f"{(_reg.status == 'V').sum()} of {len(_reg)} register values confirmed (status V); {(_reg.status == 'L').sum()} literature values "
+         f"still status L; {len(_ver)} items re-checked, {int(_ver.result.str.startswith('corrected').sum())} corrected",
+         "Item-level verification file with evidence and method; corrected values used",
+         "Full-text check of every status L value and of the RIPS tables before publication"],
+        ["5", "Plant costs are class-5 estimates with few Indonesian data points",
+         f"RDF O&amp;M: gap {_g('o_rdf')} USD/t; AD CAPEX: {_g('K_ad')} USD/t, against a base gap of {_gb:.1f} USD/t",
+         "Wide triangular ranges, Monte Carlo, break-even targets", "Cost data from Indonesian RDF, AD and WtE projects and tenders"],
+        ["6", "No facility exists, so outcomes cannot be validated", "Validation limited to verification, benchmarks of intermediate quantities and stress tests",
+         "Four validation layers; framing as ex-ante decision support", "Monitoring of pilot plants and re-running the model with their data"],
+        ["7", "Static per-tonne inventory", "No first-order decay of landfill gas; no kiln decarbonisation; grid credit evaluated at one year",
+         "2045 projection with grid path and escalation", "Time-resolved landfill model and lifetime-averaged grid credits"],
+        ["8", "Inputs sampled independently", "Moisture, heating value and DOC are linked physically; costs co-vary",
+         "One common wetness draw for all fractions", "Correlated sampling (e.g. copulas) for moisture-LHV-DOC and for costs"],
+        ["9", "Single valued impact in the decision", "Carbon-inclusive cost values only GHG; air pollution, health, leachate, jobs and acceptance excluded",
+         "CED and land take reported; limits stated", "Multi-criteria extension with local air-quality and social indicators"],
+        ["10", "Decision depends on a policy carbon value and hard feasibility thresholds",
+         f"Landfill preferred up to 50 USD/t, RDF + AD near 100 USD/t; result at 100 USD/t fragile (stress tests change "
+         f"{int(st.loc['rdf_ncv_stress', 100])} of 21)", "Fixed carbon values with standard errors; stress tests",
+         "Explicit policy scenarios for carbon price and tariff trajectories"],
+        ["11", "Decision rules approximate the model", f"Tree accuracy {100 * d['cart_acc']['acc_test']:.0f}%; PRIM density for RDF + AD "
+         f"{_prim.loc['S5', 'density']:.2f}; valid within the observed composition range", "Rules reported with purity, coverage and density",
+         "More locations, especially outside Java, to widen the condition space"],
+        ["12", "Limited regional coverage", f"{(inp.province == 'Jawa Tengah').sum()} of 21 locations in Central Java; one each in Sumatra, Kalimantan and Bali",
+         "One-city tool and template for new locations", "Applying the tool to cities in Sumatra, Kalimantan, Sulawesi and eastern Indonesia"]]
+A(table(rows, [0.5, 3.0, 4.6, 4.0, 4.5]))
+A(P("Table 7. Methodological challenges ranked by their measured influence on the decision (one-at-a-time ranges from "
+    "outputs/parameter_influence.csv; group EVPPI at 100 USD/t CO<sub>2</sub>e from Table 6).", "cap"))
+A(P("Future work should therefore proceed in the order of Table 7. The first two items, landfill-gas collection and the "
+    "properties of waste as received, carry most of the value of information and are field measurements rather than model "
+    "developments; a city should commission them whenever their cost is below the corresponding EVPPI per year. Full-text verification of the remaining "
+    "literature values (item 4) is a precondition for publication. Correlated sampling, a time-resolved landfill model and "
+    "multi-criteria extension (items 7&ndash;9) are model developments that matter mainly for the high-carbon-value results. "
+    "Applying the released one-city tool to new regions (item 12) is the most direct way to test whether the decision rules "
+    "hold beyond Java."))
+
 # ------------------------------------------------------------------------------------------- 5
 A(P("5. Conclusions", "h1"))
 A(P("An ex-ante, provenance-aware screening of six MSW options for 21 Indonesian cities and regencies, made before any of "

@@ -376,3 +376,10 @@ The 21 RIPS compositions and tonnages were not re-verified (the source PDFs are 
   - Method: one input at a time is set to its low and its high value, with the others central; results are medians over 21 locations.
   - Recorded: the change in GHG and cost of each option, the carbon-inclusive cost gap between RDF + AD and the landfill at 50 USD/t, and the number of locations whose best option changes at 100 USD/t.
 - **Result.** The inputs that move the gap most are landfill-gas capture (`cap`), moisture as received, RDF O&M, AD CAPEX and landfill cost.
+
+## v3.2 addendum: methodological challenges and future work
+- **New manuscript section** 4.6 "Methodological challenges and future work", in both the PDF and the Word version.
+- **Table 7** ranks 12 challenges by their measured influence on the decision.
+  - The measures used: the one-at-a-time swing of the carbon-inclusive cost gap between RDF + AD and the landfill, the locations whose preferred option changes, the stress tests, and the EVPPI.
+  - Each row gives the evidence from this study, how the challenge was handled here, and what would resolve it.
+- **Top two challenges:** landfill-gas collection and the properties of waste as received. Both are data challenges that field measurement can resolve.
